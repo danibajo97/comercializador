@@ -1,0 +1,53 @@
+@font-face {
+  font-family: 'Futura-Bold';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Futura-Bold'), url(../fonts/futur.ttf) format('truetype');
+}
+
+@font-face {
+  font-family: 'Futura BdCn BT';
+  font-style: normal;
+  font-weight: bold;
+  src: local('Futura BdCn BT'),
+    url(../fonts/FuturaBoldfont.ttf) format('truetype');
+}
+
+@font-face {
+  font-family: 'Futura Md BT';
+  font-style: italic;
+  font-weight: bold;
+  src: local('Futura Md BT'),
+    url(../fonts/FuturaBoldItalicfont.ttf) format('truetype');
+}
+
+@font-face {
+  font-family: 'Futura Bk BT';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Futura Bk BT'),
+    url(../fonts/FuturaBookfont.ttf) format('truetype');
+}
+
+@font-face {
+  font-family: 'Futura XBIkCnIt BT';
+  font-style: italic;
+  font-weight: bolder;
+  src: local('Futura XBIkCnIt BT'),
+    url(../fonts/tt0205m_.ttf) format('truetype');
+}
+
+@font-face {
+  font-family: 'Futura';
+  font-style: normal;
+  font-weight: normal;
+  src: local('Futura'), url(../fonts/unicode.futurab.ttf) format('truetype');
+}
+
+@font-face {
+  font-family: 'Futura-Black';
+  font-style: normal;
+  font-weight: normal;
+  src: local('Futura-Black'),
+    url(../fonts/unicode.futurabb.ttf) format('truetype');
+}

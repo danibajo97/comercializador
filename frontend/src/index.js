@@ -4,18 +4,22 @@ import { Provider } from 'react-redux'
 import { BrowserRouter } from 'react-router-dom'
 
 import { store } from './redux/store'
-import App from './views/App'
+import Template from './Template'
 
-import 'rsuite/dist/rsuite.min.css'
+import 'bootstrap/dist/css/bootstrap.css'
+// import 'rsuite/dist/rsuite.min.css'
+
+import './assets/vendor/nucleo/css/nucleo.css'
+import './assets/vendor/futura/css/futura.css'
+import './assets/vendor/fortawesome/fontawesome-free/css/all.min.css'
+import './assets/css/argon-dashboard-react.css'
 
 const root = ReactDOM.createRoot(document.getElementById('root'))
 
 root.render(
-  <React.StrictMode>
-    <Provider store={store}>
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>
-    </Provider>
-  </React.StrictMode>
+  <Provider store={store}>
+    <BrowserRouter>
+      <Template />
+    </BrowserRouter>
+  </Provider>
 )
