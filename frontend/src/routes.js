@@ -1,5 +1,5 @@
-import Persona from './views/persona/index'
-import Home from './views/home/index'
+import Persona from 'views/persona/index'
+import Home from 'views/home/index'
 
 const routes = [
   {

@@ -1,23 +1,23 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
-import api from './userAPI'
+
+import api from 'redux/personas/personasAPI'
 
 const initialState = {
-  users: [],
+  personas: [],
   loading: false,
   error: null
 }
 
-export const usersSlice = createSlice({
-  name: 'users',
+export const persoansSlice = createSlice({
+  name: 'personas',
   initialState,
-  reducers: {},
   extraReducers: (builder) => {
     builder.addCase(getAll.pending, (state, action) => {
       state.loading = true
     })
     builder.addCase(getAll.fulfilled, (state, action) => {
       state.loading = false
-      state.users = action.payload
+      state.personas = action.payload
     })
     builder.addCase(getAll.rejected, (state, action) => {
       state.loading = false
@@ -26,10 +26,10 @@ export const usersSlice = createSlice({
   }
 })
 
-export const getAll = createAsyncThunk('users/getAll', api.getAll)
+export const getAll = createAsyncThunk('personas/getAll', api.getAll)
 
-export const loading = (state) => state.users.loading
-export const users = (state) => state.users.users
-export const error = (state) => state.users.error
+export const loading = (state) => state.personas.loading
+export const personas = (state) => state.personas.personas
+export const error = (state) => state.personas.error
 
-export default usersSlice.reducer
+export default persoansSlice.reducer

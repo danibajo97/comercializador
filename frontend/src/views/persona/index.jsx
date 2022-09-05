@@ -13,12 +13,12 @@ import {
   Row
 } from 'reactstrap'
 
-import { users, loading, error, getAll } from '../../redux/users/usersSlice'
+import { personas, loading, error, getAll } from 'redux/personas/personasSlice'
 
-import { Header } from '../../components'
+import { Header } from 'components'
 
 export default function Persona () {
-  const usersState = useSelector(users)
+  const personasState = useSelector(personas)
   const loadingState = useSelector(loading)
   const errorState = useSelector(error)
   const dispatch = useDispatch()
@@ -50,7 +50,7 @@ export default function Persona () {
                   </tr>
                 </thead>
                 <tbody>
-                  {usersState.map((user) => {
+                  {personasState.map((user) => {
                     return (
                       <tr key={user.id}>
                         <td>

@@ -8,7 +8,7 @@ import {
   CardBody
 } from 'reactstrap'
 
-import { DefaultHeader } from '../../components'
+import { DefaultHeader } from 'components'
 
 export default function Home (props) {
   return (
