@@ -1,6 +1,8 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import { Provider } from 'react-redux'
+import { CustomProvider } from 'rsuite'
+import esES from 'rsuite/locales/es_ES'
 import { BrowserRouter } from 'react-router-dom'
 
 import { store } from './redux/store'
@@ -19,7 +21,9 @@ const root = ReactDOM.createRoot(document.getElementById('root'))
 root.render(
   <Provider store={store}>
     <BrowserRouter>
-      <Template />
+      <CustomProvider locale={esES}>
+        <Template />
+      </CustomProvider>
     </BrowserRouter>
   </Provider>
 )
