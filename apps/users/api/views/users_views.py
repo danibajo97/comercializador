@@ -43,11 +43,6 @@ class UserViewSet(viewsets.GenericViewSet):
             'errors': password_serializer.errors
         }, status=status.HTTP_400_BAD_REQUEST)
 
-    def list(self, request):
-        users = self.get_queryset()
-        users_serializer = self.list_serializer_class(users, many=True)
-        return Response(users_serializer.data, status=status.HTTP_200_OK)
-
     def retrieve(self, request, pk=None):
         user = self.get_object(pk)
         user_serializer = self.serializer_class(user)

@@ -54,7 +54,6 @@ class Logout(GenericAPIView):
 
 
 class RegisterUsersFromVersatErpView(generics.GenericAPIView):
-    permission_classes = [AllowAny]
     model = User
     serializer_class = UserSerializer
 
