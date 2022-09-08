@@ -22,7 +22,7 @@ def activate_code(user, request):
     message['To'] = email_to
     message['Subject'] = 'Activación de la Cuenta'
 
-    content = render_to_string('activate_code/account_verification_email.html', {
+    content = render_to_string('frontend/activate_code/account_verification_email.html', {
         'user': user,
         'domain': current_site,
         'uid': urlsafe_base64_encode(force_bytes(user.pk)),

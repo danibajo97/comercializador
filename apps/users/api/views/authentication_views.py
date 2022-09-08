@@ -1,6 +1,13 @@
+from django.contrib.auth import authenticate
 from django.contrib.auth.tokens import default_token_generator
 from django.db import transaction
 from django.utils.http import urlsafe_base64_decode
+from rest_framework import status, generics
+from rest_framework.generics import GenericAPIView
+from rest_framework.permissions import AllowAny
+from rest_framework.response import Response
+from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework_simplejwt.views import TokenObtainPairView
 
 from apps.users.activate_code import activate_code
 from apps.users.api.serializers.authentication_serializers import (
@@ -8,12 +15,6 @@ from apps.users.api.serializers.authentication_serializers import (
 )
 from apps.users.api.serializers.users_serializers import UserSerializer
 from apps.users.models import User
-from django.contrib.auth import authenticate
-from rest_framework import status, generics
-from rest_framework.generics import GenericAPIView
-from rest_framework.response import Response
-from rest_framework_simplejwt.tokens import RefreshToken
-from rest_framework_simplejwt.views import TokenObtainPairView
 
 
 class Login(TokenObtainPairView):
@@ -53,18 +54,27 @@ class Logout(GenericAPIView):
 
 
 class RegisterUsersFromVersatErpView(generics.GenericAPIView):
+    permission_classes = [AllowAny]
     model = User
     serializer_class = UserSerializer
 
     @transaction.atomic
     def post(self, request):
         emails = []
-        for user in request.data:
-            if self.model.objects.filter(email=user['email']).exists():
+        request_type = isinstance(request.data, dict)
+        if request_type:
+            if self.model.objects.filter(email=request.data['email']).exists():
                 pass
             else:
-                emails.append(user['email'])
-        user_serializer = self.serializer_class(data=request.data, many=True)
+                emails.append(request.data['email'])
+            user_serializer = self.serializer_class(data=request.data)
+        else:
+            for user in request.data:
+                if self.model.objects.filter(email=user['email']).exists():
+                    pass
+                else:
+                    emails.append(user['email'])
+            user_serializer = self.serializer_class(data=request.data, many=True)
         if user_serializer.is_valid():
             user_serializer.save()
             for email in emails:

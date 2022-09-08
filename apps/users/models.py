@@ -26,8 +26,9 @@ class UserManager(BaseUserManager):
 class User(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField('Correo Electrónico', max_length=255, unique=True, )
     name = models.CharField('Nombre', max_length=255, blank=True, null=True)
+    id_erp = models.CharField('id-ERP', max_length=255)
     is_active = models.BooleanField(default=True)
-    is_staff = models.BooleanField(default=False)
+    is_distribuidor = models.BooleanField(default=False)
     is_resetpwd = models.BooleanField(default=False)
     historical = HistoricalRecords()
     objects = UserManager()
