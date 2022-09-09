@@ -39,6 +39,7 @@ local_urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include('rest_framework.urls')),
     path('api-usuarios/', include('apps.users.api.routers')),
+    path('api-convenio/', include('apps.convenio.api.routers')),
     path('api-login/', Login.as_view(), name='login'),
     path('api-logout/', Logout.as_view(), name='logout'),
     path('registro-usuarios/', RegisterUsersFromVersatErpView.as_view(),

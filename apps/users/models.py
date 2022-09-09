@@ -29,6 +29,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     id_erp = models.CharField('id-ERP', max_length=255)
     is_active = models.BooleanField(default=True)
     is_distribuidor = models.BooleanField(default=False)
+    is_staff = models.BooleanField(default=True)
     is_resetpwd = models.BooleanField(default=False)
     historical = HistoricalRecords()
     objects = UserManager()

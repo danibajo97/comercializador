@@ -48,7 +48,7 @@ THIRD_PARTY_APPS = [
 ]
 
 PROJECT_APPS = [
-    'apps.seguridad',
+    'apps.convenio',
     'apps.users',
     'apps.base'
 ]
@@ -170,5 +170,5 @@ EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
-    "http://127.0.0.1:3000",
+    "http://127.0.0.1:8000",
 ]

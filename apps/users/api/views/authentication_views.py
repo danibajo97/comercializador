@@ -9,7 +9,7 @@ from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.views import TokenObtainPairView
 
-from apps.users.activate_code import activate_code
+from apps.users.resources.activate_code import activate_code
 from apps.users.api.serializers.authentication_serializers import (
     CustomTokenObtainPairSerializer, CustomUserSerializer
 )
