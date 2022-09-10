@@ -66,7 +66,7 @@ const Sidebar = (props) => {
       expand='md'
       id='sidenav-main'
     >
-      <Container fluid >
+      <Container fluid>
         {/* Toggler */}
         <button
           className='navbar-toggler'
