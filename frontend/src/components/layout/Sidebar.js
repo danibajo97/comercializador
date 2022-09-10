@@ -78,7 +78,7 @@ const Sidebar = (props) => {
         {/* Brand */}
         {logo
           ? (
-            <NavbarBrand className='pt-3' {...navbarBrandProps}>
+            <NavbarBrand className='pt-0' {...navbarBrandProps}>
               <img
                 alt={logo.imgAlt}
                 className='navbar-brand-img'
@@ -152,7 +152,6 @@ const Sidebar = (props) => {
           </div>
           {/* Navigation */}
           <Nav navbar>{createLinks(routes)}</Nav>
-          {/* Heading */}
         </Collapse>
       </Container>
     </Navbar>

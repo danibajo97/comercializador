@@ -48,15 +48,26 @@ local_urlpatterns = [
 ]
 
 swagger_urlpatterns = [
-    re_path(r'^swagger(?P<format>\.json|\.yaml)$', schema_view.without_ui(cache_timeout=0), name='schema-json'),
-    path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
-    path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
+    # swagger
+    # re_path(r'^swagger(?P<format>\.json|\.yaml)$', schema_view.without_ui(cache_timeout=0), name='schema-json'),
+    path('swagger/', schema_view.with_ui('swagger',
+         cache_timeout=0), name='schema-swagger-ui'),
+    path('redoc/', schema_view.with_ui('redoc',
+         cache_timeout=0), name='schema-redoc'),
+]
+
+urlpatterns = [
+    # admin
+    path('admin/', admin.site.urls),
+    # api
+    path('api/seguridad/', include('api.seguridad.urls')),
+    # template react
+    re_path(r'^.*', TemplateView.as_view(template_name='index.html')),
 ]
 
 jwt_urlpatterns = [
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
-
 ]
 
 urlpatterns = local_urlpatterns + swagger_urlpatterns + jwt_urlpatterns
