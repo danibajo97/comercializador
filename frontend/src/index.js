@@ -4,7 +4,7 @@ import { Provider } from 'react-redux'
 import { CustomProvider } from 'rsuite'
 import esES from 'rsuite/locales/es_ES'
 import { BrowserRouter } from 'react-router-dom'
-import { ToastContainer } from 'react-toastify';
+import { ToastContainer } from 'react-toastify'
 
 import { store } from './redux/store'
 import Template from './Template'
@@ -26,7 +26,7 @@ root.render(
       <CustomProvider locale={esES}>
         <Template />
         <ToastContainer
-          position="top-center"
+          position='top-center'
           autoClose={5000}
           hideProgressBar={false}
           newestOnTop={false}

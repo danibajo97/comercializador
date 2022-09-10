@@ -52,9 +52,7 @@ function CrearConvenio (props) {
                   <Col xs='8'>
                     <h3 className='mb-0'>Crear Convenio</h3>
                   </Col>
-                  <Col className='text-right' xs='4'>
-
-                  </Col>
+                  <Col className='text-right' xs='4' />
                 </Row>
               </CardHeader>
               <CardBody>
@@ -76,7 +74,7 @@ function CrearConvenio (props) {
                   </Col>
                   <Col xs='12' sm='12' md='8' lg='8' xl='9'>
                     <Panel bordered>
-                      <h6 className="heading-small text-muted mb-4">
+                      <h6 className='heading-small text-muted mb-4'>
                         {stepTitle[step]}
                       </h6>
                       {setpRender(step, stepTitle[step])}
