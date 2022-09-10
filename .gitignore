@@ -33,3 +33,13 @@ yarn-error.log*
 # other
 /static
 .vscode
+/comercializador/db.sqlite3
+/.idea/.gitignore
+/.idea/codeStyles/codeStyleConfig.xml
+/.idea/comercializador.iml
+/.idea/misc.xml
+/.idea/modules.xml
+/.idea/inspectionProfiles/profiles_settings.xml
+/.idea/codeStyles/Project.xml
+/.idea/inspectionProfiles/Project_Default.xml
+/.idea/vcs.xml
