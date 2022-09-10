@@ -1,5 +1,5 @@
-import Persona from 'views/persona/index'
 import Home from 'views/home/index'
+import CrearConvenio from 'views/crear_convenio/index'
 
 const routes = [
   {
@@ -7,14 +7,14 @@ const routes = [
     name: 'Inicio',
     icon: 'ni ni-tv-2 text-primary',
     element: <Home />,
-    layout: '/admin'
+    sidebar: true
   },
   {
-    path: '/personas',
-    name: 'Personas',
+    path: '/crear-convenio',
+    name: 'Crear Convenio',
     icon: 'ni ni-planet text-blue',
-    element: <Persona />,
-    layout: '/admin'
+    element: <CrearConvenio />,
+    sidebar: true
   }
 ]
 export default routes

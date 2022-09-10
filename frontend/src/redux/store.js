@@ -1,9 +1,9 @@
 import { configureStore } from '@reduxjs/toolkit'
 
-import personasSliceReducer from 'redux/personas/personasSlice'
+import convenioDatosGeneralesReducer from 'redux/convenioDatosGenerales/convenioDatosGeneralesSlice'
 
 export const store = configureStore({
   reducer: {
-    personas: personasSliceReducer
+    convenio_datos_generales: convenioDatosGeneralesReducer
   }
 })

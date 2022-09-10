@@ -33,16 +33,15 @@ schema_view = get_schema_view(
 
 urlpatterns = [
     # swagger
-    re_path(r'^swagger(?P<format>\.json|\.yaml)$',
-            schema_view.without_ui(cache_timeout=0), name='schema-json'),
-    re_path(r'^swagger/$', schema_view.with_ui('swagger',
-            cache_timeout=0), name='schema-swagger-ui'),
-    re_path(r'^redoc/$', schema_view.with_ui('redoc',
-            cache_timeout=0), name='schema-redoc'),
+    # re_path(r'^swagger(?P<format>\.json|\.yaml)$', schema_view.without_ui(cache_timeout=0), name='schema-json'),
+    path('swagger/', schema_view.with_ui('swagger',
+         cache_timeout=0), name='schema-swagger-ui'),
+    path('redoc/', schema_view.with_ui('redoc',
+         cache_timeout=0), name='schema-redoc'),
     # admin
     path('admin/', admin.site.urls),
-    # template react
-    path('', TemplateView.as_view(template_name='index.html')),
     # api
     path('api/seguridad/', include('api.seguridad.urls')),
+    # template react
+    re_path(r'^.*', TemplateView.as_view(template_name='index.html')),
 ]
