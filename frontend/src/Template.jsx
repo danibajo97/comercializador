@@ -18,7 +18,7 @@ const Template = (props) => {
 
   const getRoutes = (routes) => {
     return routes.map((prop, key) => {
-      if (prop.layout === '/admin') {
+      if (prop.sidebar === true) {
         return (
           <Route
             path={prop.path}

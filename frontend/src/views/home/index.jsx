@@ -4,11 +4,12 @@ import {
   Row,
   Col,
   Container,
-  CardHeader,
-  CardBody
+  CardHeader
 } from 'reactstrap'
 
-import { DefaultHeader } from 'components'
+import { DefaultHeader, Table } from 'components'
+
+import { clienteFinal } from 'constants/mock'
 
 export default function Home (props) {
   return (
@@ -16,22 +17,23 @@ export default function Home (props) {
       <DefaultHeader />
       <Container className='mt--7' fluid>
         <Row>
-          <Col className='order-xl-1'>
+          <Col>
             <Card className='bg-secondary shadow'>
               <CardHeader className='bg-white border-0'>
                 <Row className='align-items-center'>
-                  <Col>
-                    <h3 className='mb-0'>Card</h3>
+                  <Col xs='8'>
+                    <h3 className='mb-0'>Listado de Convenios</h3>
                   </Col>
+                  <Col className='text-right' xs='4' />
                 </Row>
               </CardHeader>
-              <CardBody>
-                <br />
-                <br />
-                <br />
-                <br />
-                <br />
-              </CardBody>
+
+              <Row>
+                <Col>
+                  <Table data={clienteFinal} headers={['Nombre Completo Cliente', 'Correo']} dataKeys={['nombre', 'email']} pagination />
+                </Col>
+              </Row>
+
             </Card>
           </Col>
         </Row>
