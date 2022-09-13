@@ -4,7 +4,7 @@ from apps.base.models import BaseModel
 
 
 class ConvenioWeb(BaseModel):
-    name = models.CharField('Nombre', max_length=255, blank=True, null=True)
+    no_convenio = models.CharField('Nombre', max_length=255, blank=True, null=True)
     id_convenio = models.CharField('id-convenio', max_length=255)
 
     class Meta:

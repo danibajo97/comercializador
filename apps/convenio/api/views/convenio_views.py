@@ -15,12 +15,10 @@ class ConvenioWebViewSet(viewsets.GenericViewSet):
 
     @transaction.atomic
     def create(self, request):
-        user = authenticated_user(request)
-        request.data['authenticated_user'] = user.id_erp
         url = 'http://127.0.0.1:8000/cmz/convenio_externo/'
         response = requests.post(url, json=request.data)
-        if response.status_code == 200:
-            serializer = ConvenioWebSerializer(response.json())
+        if response.status_code == 201:
+            serializer = ConvenioWebSerializer(data=response.json())
             serializer.is_valid(raise_exception=True)
             serializer.save()
             return Response(response.request.data, status=response.status_code)
@@ -46,13 +44,8 @@ class ConvenioWebViewSet(viewsets.GenericViewSet):
         pass
 
     def retrieve(self, request, pk=None):
-        user = authenticated_user(request)
-        params = {
-            'id_contacto': user.id_erp,
-            'idconvenio': request.GET.get('id_convenio'),
-        }
         url = 'http://127.0.0.1:8000/cmz/convenio_externo/' + request.GET.get('id_convenio')
-        response = requests.get(url, params=params)
+        response = requests.get(url)
         if response.status_code == 200:
             return Response(response.json(), status=response.status_code)
         else:
@@ -61,14 +54,9 @@ class ConvenioWebViewSet(viewsets.GenericViewSet):
 
     @transaction.atomic
     def delete(self, request, pk=None):
-        user = authenticated_user(request)
-        params = {
-            'id_contacto': user.id_erp,
-            'id_convenio': request.GET.get('id_convenio'),
-        }
-        url = 'http://127.0.0.1:8000/cmz/negocio_tercero/buscar_contrato/' + request.GET.get('id_convenio'),
-        response = requests.delete(url, params=params)
-        if response.status_code == 200:
+        url = 'http://127.0.0.1:8000/cmz/convenio_externo/' + request.GET.get('id_convenio'),
+        response = requests.delete(url)
+        if response.status_code == 204:
             convenio = ConvenioWeb.objects.filter(name=request.data['id_convenio']).first()
             convenio.delete()
             return Response(status=response.status_code)
