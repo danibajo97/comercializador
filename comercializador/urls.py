@@ -14,6 +14,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
+from django.views.generic import TemplateView
 from django.urls import path, include, re_path
 from drf_yasg import openapi
 from drf_yasg.views import get_schema_view
@@ -44,11 +45,11 @@ local_urlpatterns = [
     path('api-logout/', Logout.as_view(), name='logout'),
     path('registro-usuarios/', RegisterUsersFromVersatErpView.as_view(),
          name='register_users_from_versaterp'),
-    path('activacion/<uidb64>/<token>/', ActivationCodeView.as_view(), name='activation_code'),
+    path('activacion/<uidb64>/<token>/',
+         ActivationCodeView.as_view(), name='activation_code'),
 ]
 
 swagger_urlpatterns = [
-    # swagger
     # re_path(r'^swagger(?P<format>\.json|\.yaml)$', schema_view.without_ui(cache_timeout=0), name='schema-json'),
     path('swagger/', schema_view.with_ui('swagger',
          cache_timeout=0), name='schema-swagger-ui'),
@@ -56,11 +57,9 @@ swagger_urlpatterns = [
          cache_timeout=0), name='schema-redoc'),
 ]
 
-urlpatterns = [
+local_urlpatterns = [
     # admin
     path('admin/', admin.site.urls),
-    # api
-    path('api/seguridad/', include('api.seguridad.urls')),
     # template react
     re_path(r'^.*', TemplateView.as_view(template_name='index.html')),
 ]

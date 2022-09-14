@@ -38,7 +38,7 @@ const Sidebar = (props) => {
             tag={NavLinkRRD}
             onClick={closeCollapse}
           >
-            <i className={prop.icon} />
+            {/* <i className={prop.icon} /> */}
             {prop.name}
           </NavLink>
         </NavItem>
@@ -62,7 +62,7 @@ const Sidebar = (props) => {
 
   return (
     <Navbar
-      className='navbar-vertical fixed-left navbar-light bg-white'
+      className='navbar-horizontal fixed-top navbar-light bg-white shadow'
       expand='md'
       id='sidenav-main'
     >
@@ -79,11 +79,12 @@ const Sidebar = (props) => {
         {logo
           ? (
             <NavbarBrand className='pt-0' {...navbarBrandProps}>
-              <img
+              {/* <img
                 alt={logo.imgAlt}
                 className='navbar-brand-img'
                 src={logo.imgSrc}
-              />
+              /> */}
+              Comercializador
             </NavbarBrand>)
           : null}
         {/* User */}

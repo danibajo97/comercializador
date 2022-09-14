@@ -7,14 +7,14 @@ const routes = [
     name: 'Inicio',
     icon: 'ni ni-tv-2 text-primary',
     element: <Home />,
-    sidebar: true
+    navbar: true
   },
   {
     path: '/crear-convenio',
     name: 'Crear Convenio',
     icon: 'ni ni-planet text-blue',
     element: <CrearConvenio />,
-    sidebar: true
+    navbar: false
   }
 ]
 export default routes

@@ -18,33 +18,32 @@ const Template = (props) => {
 
   const getRoutes = (routes) => {
     return routes.map((prop, key) => {
-      if (prop.sidebar === true) {
-        return (
-          <Route
-            path={prop.path}
-            element={prop.element}
-            key={key}
-          />
-        )
-      } else {
-        return null
-      }
+
+      return (
+        <Route
+          path={prop.path}
+          element={prop.element}
+          key={key}
+        />
+      )
+
     })
   }
 
   return (
     <>
-      <Sidebar
+      {/* <Sidebar
         {...props}
         routes={routes}
         logo={{
           innerLink: '/',
-          imgSrc: require('./assets/img/brand/header.png'),
+          imgSrc: require('./assets/img/brand/icons.png'),
           imgAlt: '...'
         }}
-      />
-      <div className='main-content' ref={mainContent}>
-        <Navbar {...props} />
+      /> */}
+      <Navbar routes={routes} />
+
+      <div className='main-content' ref={mainContent} >
         <Routes>
           {getRoutes(routes)}
         </Routes>

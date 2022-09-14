@@ -7,14 +7,13 @@ import {
   CardHeader
 } from 'reactstrap'
 
-import { DefaultHeader, Table } from 'components'
-
-import { clienteFinal } from 'constants/mock'
+import { Header } from 'components'
+import ConvenioTable from './componente/ConvenioTable'
 
 export default function Home (props) {
   return (
     <>
-      <DefaultHeader />
+      <Header />
       <Container className='mt--7' fluid>
         <Row>
           <Col>
@@ -27,13 +26,11 @@ export default function Home (props) {
                   <Col className='text-right' xs='4' />
                 </Row>
               </CardHeader>
-
               <Row>
                 <Col>
-                  <Table data={clienteFinal} headers={['Nombre Completo Cliente', 'Correo']} dataKeys={['nombre', 'email']} pagination />
+                  <ConvenioTable />
                 </Col>
               </Row>
-
             </Card>
           </Col>
         </Row>
