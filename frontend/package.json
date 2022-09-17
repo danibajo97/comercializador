@@ -28,7 +28,10 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "storybook": "start-storybook -p 6006 -s public",
-    "build-storybook": "build-storybook -s public"
+    "build-storybook": "build-storybook -s public",
+    "lint": "eslint src/* --ext .jsx --ext .js --ignore-pattern src/assets/*",
+    "lint-fix": "eslint src/** --ext .js --ext .jsx --ignore-path src/assets/ --fix",
+    "prepare": "cd .. && husky install"
   },
   "browserslist": {
     "production": [
@@ -54,13 +57,17 @@
     "@storybook/react": "6.5.10",
     "@storybook/testing-library": "0.0.13",
     "babel-plugin-named-exports-order": "0.0.2",
+    "husky": "8.0.0",
     "prop-types": "15.8.1",
     "standard": "17.0.0",
     "webpack": "5.74.0"
   },
   "eslintConfig": {
     "extends": "./node_modules/standard/eslintrc.json",
-    "rules": {},
+    "rules": {
+      "no-console": "warn",
+      "no-alert": "warn"
+    },
     "overrides": [
       {
         "files": [
