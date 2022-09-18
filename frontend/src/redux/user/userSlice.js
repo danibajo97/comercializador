@@ -1,10 +1,10 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
+import { toast } from 'react-toastify'
+
 import api from 'redux/user/userAPI'
 
 const initialState = {
-  user: null,
-  loading: false,
-  error: null
+  user: null
 }
 
 export const userSlice = createSlice({
@@ -14,14 +14,13 @@ export const userSlice = createSlice({
     builder.addCase(getUser.fulfilled, (state, action) => {
       state.user = action.payload
     })
+    builder.addCase(getUser.rejected, (state, action) => {
+      toast.error(action.error.message)
+    })
   }
+
 })
 
 export const getUser = createAsyncThunk('user/getUser', api.getUser)
-
-export const loading = (state) => state.user.loading
-export const error = (state) => state.user.error
-
-export const contrato = (state) => state.user.user
 
 export default userSlice.reducer

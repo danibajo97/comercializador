@@ -4,7 +4,7 @@
 export default {
   getUser,
   login,
-  logout,
+  logout
 }
 
 async function getUser () {
@@ -13,7 +13,7 @@ async function getUser () {
       username: 'comercial',
       firstname: 'Yoelvys',
       lastname: 'Perez Cabrera',
-      email: 'yoelvyspc93@gamil.com',
+      email: 'yoelvyspc93@gamil.com'
     })
   } catch (error) {
     throw error.message
