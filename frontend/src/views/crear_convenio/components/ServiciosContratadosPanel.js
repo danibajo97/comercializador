@@ -48,6 +48,7 @@ const ServiciosContratadosItem = ({ label, rowValue = {}, onChange, rowIndex, ro
           error={rowError?.servicios?.errorMessage}
           onChange={handleChangeName}
           required
+          block
         />
 
       </Col>
@@ -60,7 +61,6 @@ const ServiciosContratadosItem = ({ label, rowValue = {}, onChange, rowIndex, ro
           error={rowError?.cantidad_bd?.errorMessage}
           onChange={handleChangeAmount}
           required
-
         />
       </Col>
     </Row>
@@ -158,6 +158,7 @@ const ServiciosContratadosPanel = () => {
       <Row className='mt-4'>
         <Col xs={24}>
           <Button
+            size='sm'
             appearance='primary'
             onClick={() => {
               formRef.current.check()
