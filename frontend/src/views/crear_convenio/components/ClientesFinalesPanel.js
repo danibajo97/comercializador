@@ -26,11 +26,8 @@ function ClientesFinalesPanel (props) {
   })
 
   const handleSubmit = () => {
-    if (!formRef.current.check()) {
-      console.error('Form Error')
-      return
-    }
-    console.log(formValue, 'Form Value')
+    /* if (!formRef.current.check()) {
+    } */
   }
 
   /* const handleCheckEmail = () => {
@@ -56,12 +53,12 @@ function ClientesFinalesPanel (props) {
     >
       <Row>
         <Col xs='12' sm='12' md='12' lg='12'>
-          <FormField name='cliente_final' label='Cliente Final' accepter={CheckPicker} data={selectData} required />
+          <FormField name='cliente_final' label='Cliente Final' accepter={CheckPicker} data={selectData} required block />
         </Col>
       </Row>
       <Row>
         <Col className='mt-4'>
-          {tableData().length > 0 && <Table data={tableData()} headers={['Nombre Completo Cliente', 'Correo']} dataKeys={['nombre', 'correo']} white />}
+          {tableData().length > 0 && <Table data={tableData()} headers={['Nombre Completo Cliente', 'Correo']} dataKeys={['nombre', 'correo']} height={400} white />}
         </Col>
       </Row>
       <Row>

@@ -8,7 +8,7 @@ import { Form, Button, Divider, ButtonToolbar, Schema, SelectPicker, DatePicker 
 
 import { FormField, Textarea, InputNumber } from 'components'
 
-import { contrato, getBuscarContrato, clienteFinal, getClienteFinal, facturarseA, getFacturarseA } from 'redux/convenioDatosGenerales/convenioDatosGeneralesSlice'
+import { contrato, getBuscarContrato, clienteFinal, getClienteFinal, getFacturarseA } from 'redux/convenioDatosGenerales/convenioDatosGeneralesSlice'
 
 const selectData = ['Eugenia', 'Bryan', 'Linda', 'Nancy', 'Lloyd', 'Alice'].map(item => ({
   label: item,
@@ -18,7 +18,7 @@ const selectData = ['Eugenia', 'Bryan', 'Linda', 'Nancy', 'Lloyd', 'Alice'].map(
 function DatosGeneralesPanel (props) {
   const contratoState = useSelector(contrato)
   const clienteFinalState = useSelector(clienteFinal)
-  const facturarseAState = useSelector(facturarseA)
+  // const facturarseAState = useSelector(facturarseA)
   // const loadingState = useSelector(loading)
   // const errorState = useSelector(error)
   const dispatch = useDispatch()
@@ -72,11 +72,8 @@ function DatosGeneralesPanel (props) {
   })
 
   const handleSubmit = () => {
-    if (!formRef.current.check()) {
-      console.error('Form Error')
-      return
-    }
-    console.log(formValue, 'Form Value')
+    formRef.current.check()
+    // if (!formRef.current.check()) { }
   }
 
   /* const handleCheckEmail = () => {
@@ -96,40 +93,38 @@ function DatosGeneralesPanel (props) {
     >
       <Row>
         <Col xs='12' sm='12' md='12' lg='6'>
-          <FormField name='distribuidor' label='Distribuidor' disabled />
-          <FormField name='fechaEmision' label='Fecha Emisión' accepter={DatePicker} disabled />
+          {/* <FormField name='distribuidor' label='Distribuidor' disabled /> */}
+          <FormField name='nroContrato' label='Nro. Contrato' required />
+          <FormField name='fechaEmision' label='Fecha Emisión' accepter={DatePicker} disabled block />
         </Col>
         <Col xs='12' sm='12' md='12' lg='6'>
-          <FormField name='nroContrato' label='Nro. Contrato' required />
-          <FormField name='fechaVencimiento' label='Fecha Vencimiento' accepter={DatePicker} disabled />
+          <FormField name='nroConvenio' label='Nro. Convenio' required />
+          <FormField name='fechaVencimiento' label='Fecha Vencimiento' accepter={DatePicker} disabled block />
         </Col>
       </Row>
       {contratoState?.fecha_inicial !== undefined &&
-        <div>
+        <>
           <Divider />
           <h6 className='heading-small text-muted mb-4'>
             Datos Convenio
           </h6>
           <Row>
             <Col xs='12' sm='12' md='12' lg='6'>
-              <FormField name='nroConvenio' label='Nro. Convenio' required />
+
               <FormField
-                name='facturarseA' label='Facturarse a' accepter={SelectPicker} data={facturarseAState.map(item => ({
-                  label: item.contacto_cliente,
-                  value: item.id
-                }))} required
+                name='facturarseA' label='Facturarse a' disabled
               />
               <FormField
                 name='cliente' label='Cliente' accepter={SelectPicker} data={clienteFinalState.map(item => ({
                   label: item.nombre,
                   value: item.id
-                }))} required
+                }))} required block
               />
+              <FormField name='cantidadBaseBatos' label='Cantidad de Base de Datos' accepter={InputNumber} required />
             </Col>
             <Col xs='12' sm='12' md='12' lg='6'>
-              <FormField name='fechaEmisionConvenio' label='Fecha Emisión Convenio' accepter={DatePicker} required />
-              <FormField name='solicitadoPor' label='Solicitado Por' accepter={SelectPicker} data={selectData} />
-              <FormField name='cantidadBaseBatos' label='Cantidad de Base de Datos' accepter={InputNumber} required />
+              <FormField name='fechaEmisionConvenio' label='Fecha Emisión Convenio' accepter={DatePicker} required block />
+              <FormField name='solicitadoPor' label='Solicitado Por' accepter={SelectPicker} data={selectData} block />
             </Col>
           </Row>
           <Row>
@@ -137,7 +132,7 @@ function DatosGeneralesPanel (props) {
               <FormField name='observaciones' label='Observaciones' accepter={Textarea} rows={3} />
             </Col>
           </Row>
-        </div>}
+        </>}
       <Row>
         <Col xs='12' className='mt-4'>
           <ButtonToolbar>

@@ -1,11 +1,21 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-
 import { Pagination, Table as TableRS } from 'rsuite'
 
-function Table ({ data, headers, dataKeys, pagination, white }) {
+import { styleHeader, styleCell } from 'constants/styles/table'
+
+export function renderEmpty () {
+  return <div className='text-center text-muted mt-5 mb-5'>No hay elementos disponibles</div>
+}
+
+function Table ({ data, headers, dataKeys, pagination, white, props }) {
   const [limit, setLimit] = React.useState(10)
   const [page, setPage] = React.useState(1)
+
+  const styleHeaderCustom = {
+    ...styleHeader,
+    backgroundColor: !white ? '#F6F9FC' : '#FFFFFF'
+  }
 
   const handleChangeLimit = dataKey => {
     setPage(1)
@@ -18,26 +28,13 @@ function Table ({ data, headers, dataKeys, pagination, white }) {
     return i >= start && i < end
   })
 
-  const styleHeader = {
-    backgroundColor: !white ? '#F6F9FC' : '#FFFFFF',
-    borderColor: '#e9ecef',
-    textTransform: 'uppercase',
-    fontSize: '0.85rem',
-    letterSpacing: '1px',
-    borderBottom: '1px solid #e9ecef'
-  }
-
-  const styleCell = {
-    fontSize: '0.85rem'
-  }
-
   return (
     <>
-      <TableRS data={dataPage} autoHeight>
+      <TableRS data={dataPage} renderEmpty={renderEmpty} {...props}>
         {headers.map((headers, index) => {
           return (
             <TableRS.Column flexGrow={1} key={index}>
-              <TableRS.HeaderCell style={styleHeader}>
+              <TableRS.HeaderCell style={styleHeaderCustom}>
                 {headers}
               </TableRS.HeaderCell>
               <TableRS.Cell dataKey={dataKeys[index]} style={styleCell} />
