@@ -15,26 +15,12 @@ class ConvenioWebViewSet(viewsets.GenericViewSet):
 
     @transaction.atomic
     def create(self, request):
-        user = authenticated_user(request)
-        data = {
-            'id_contacto': user.id_erp,
-            'contrato': request.data['contrato'],
-            'cantidad_bd': request.data['cantidad_bd'],
-            'cliente_final': request.data['cliente_final'],
-            'facturese_a': request.data['facturese_a'],
-            'fecha_emision': request.data['fecha_emision'],
-            'fecha_final': request.data['fecha_final'],
-            'fecha_inicial': request.data['fecha_inicial'],
-            'no_convenio': request.data['no_convenio'],
-            'observaciones': request.data['observaciones'],
-            'solicitado_por': request.data['solicitado_por'],
-        }
-        url = 'http://127.0.0.1:8000/cmz/negocio_tercero/'
-        response = requests.post(url, json=data)
-        if response.status_code == 200:
-            convenio = ConvenioWeb()
-            convenio.name = request.data['no_convenio']
-            convenio.save()
+        url = 'http://127.0.0.1:8000/cmz/convenio_externo/'
+        response = requests.post(url, json=request.data)
+        if response.status_code == 201:
+            serializer = ConvenioWebSerializer(data=response.json())
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
             return Response(response.request.data, status=response.status_code)
         else:
             return Response({'message': "Hubo problemas al conectar con el servidor"},
@@ -42,13 +28,13 @@ class ConvenioWebViewSet(viewsets.GenericViewSet):
 
     def list(self, request):
         user = authenticated_user(request)
-        url = 'http://127.0.0.1:8000/cmz/negocio_tercero/'
+        url = 'http://127.0.0.1:8000/cmz/convenio_externo/'
         params = {
             'id_contacto': user.id_erp,
         }
         response = requests.get(url, params=params)
         if response.status_code == 200:
-            return Response(response.request.data, status=response.status_code)
+            return Response(response.json(), status=response.status_code)
         else:
             return Response({'message': "Hubo problemas al conectar con el servidor"},
                             status=response.status_code)
@@ -58,30 +44,20 @@ class ConvenioWebViewSet(viewsets.GenericViewSet):
         pass
 
     def retrieve(self, request, pk=None):
-        user = authenticated_user(request)
-        params = {
-            'id_contacto': user.id_erp,
-            'no_convenio': request.GET.get('no_convenio'),
-        }
-        url = 'http://127.0.0.1:8000/cmz/negocio_tercero/buscar_contrato/'
-        response = requests.get(url, params=params)
+        url = 'http://127.0.0.1:8000/cmz/convenio_externo/' + request.GET.get('id_convenio')
+        response = requests.get(url)
         if response.status_code == 200:
-            return Response(response.request.data, status=response.status_code)
+            return Response(response.json(), status=response.status_code)
         else:
             return Response({'message': "Hubo problemas al conectar con el servidor"},
                             status=response.status_code)
 
     @transaction.atomic
     def delete(self, request, pk=None):
-        user = authenticated_user(request)
-        params = {
-            'id_contacto': user.id_erp,
-            'no_convenio': request.GET.get('no_convenio'),
-        }
-        url = 'http://127.0.0.1:8000/cmz/negocio_tercero/buscar_contrato/'
-        response = requests.get(url, params=params)
-        if response.status_code == 200:
-            convenio = ConvenioWeb.objects.filter(name=request.data['no_convenio']).first()
+        url = 'http://127.0.0.1:8000/cmz/convenio_externo/' + request.GET.get('id_convenio'),
+        response = requests.delete(url)
+        if response.status_code == 204:
+            convenio = ConvenioWeb.objects.filter(name=request.data['id_convenio']).first()
             convenio.delete()
             return Response(status=response.status_code)
         else:
@@ -89,16 +65,31 @@ class ConvenioWebViewSet(viewsets.GenericViewSet):
                             status=response.status_code)
 
     @action(detail=False, methods=['get'])
-    def buscar_contrato(self, request):
+    def usuarios_finales(self, request):
         user = authenticated_user(request)
         params = {
-            'id_contacto': user.id_erp,
-            'contrato': request.GET.get('contrato'),
+            'idcontacto': user.id_erp,
         }
-        url = 'http://127.0.0.1:8000/cmz/negocio_tercero/buscar_contrato/'
+        url = 'http://127.0.0.1:8000/cmz/convenio_externo/usuarios_finales/'
         response = requests.get(url, params=params)
         if response.status_code == 200:
-            return Response(response.request.data, status=response.status_code)
+            return Response(response.json(), status=response.status_code)
+        else:
+            return Response({'message': "Hubo problemas al conectar con el servidor"},
+                            status=response.status_code)
+
+    @action(detail=False, methods=['get'])
+    def list_servicios(self, request):
+        user = authenticated_user(request)
+        params = {
+            'idcontacto': user.id_erp,
+            'idplazopago': request.GET.get('id_plazopago'),
+            'idconvenio': request.GET.get('id_convenio'),
+        }
+        url = 'http://127.0.0.1:8000/cmz/convenio_externo/list_servicios/'
+        response = requests.get(url, params=params)
+        if response.status_code == 200:
+            return Response(response.json(), status=response.status_code)
         else:
             return Response({'message': "Hubo problemas al conectar con el servidor"},
                             status=response.status_code)
