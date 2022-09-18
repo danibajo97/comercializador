@@ -10,8 +10,10 @@ import { useNavigate } from 'react-router-dom'
 import { Form, Button } from 'rsuite'
 
 import { DefaultHeader, FormField, InputPassword } from 'components'
+import useHeader from 'hooks/useHeader'
 
 export default function Login ({ setHeaderVisible }) {
+  useHeader({ title: 'Inicia Sesión' })
   const navigate = useNavigate()
 
   useEffect(() => { setHeaderVisible(false) }, [])
