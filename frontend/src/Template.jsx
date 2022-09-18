@@ -35,15 +35,6 @@ const Template = (props) => {
 
   return (
     <>
-      {/* <Sidebar
-        {...props}
-        routes={routes}
-        logo={{
-          innerLink: '/',
-          imgSrc: require('./assets/img/brand/icons.png'),
-          imgAlt: '...'
-        }}
-      /> */}
       {headerVisible && <Navbar routes={routes} />}
       <div className='main-content' ref={mainContent}>
         <Routes>

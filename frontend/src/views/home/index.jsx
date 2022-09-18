@@ -13,8 +13,10 @@ import ConvenioTable from './componente/ConvenioTable'
 import ConvenioHeader from './componente/ConvenioHeader'
 import { convenios as convenioData } from 'constants/mock'
 import { estadosConvenios } from 'constants/'
+import useHeader from 'hooks/useHeader'
 
 export default function Home () {
+  useHeader({ title: 'Inicio' })
   const navigate = useNavigate()
   const [convenios, setConvenios] = React.useState(convenioData)
   const [openDrawer, setOpenDrawer] = React.useState(false)
