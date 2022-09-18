@@ -2,7 +2,6 @@ import React from 'react'
 import { Card, CardBody, CardTitle, Container, Row, Col } from 'reactstrap'
 import { Link } from 'react-router-dom'
 
-
 const crearConvenio = () => {
   return (
     <Card className='card-stats mb-4 mb-xl-0' tag={Link} to='/crear-convenio'>

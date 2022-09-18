@@ -95,7 +95,7 @@ const Sidebar = (props) => {
                 <span className='avatar avatar-sm rounded-circle'>
                   <img
                     alt='...'
-                    src={require('../../assets/img/icons/favicon.png')}
+                    src={require('assets/img/icons/favicon.png')}
                   />
                 </span>
               </Media>
