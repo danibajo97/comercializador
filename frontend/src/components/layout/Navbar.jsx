@@ -15,11 +15,12 @@ import {
   Col,
   Row
 } from 'reactstrap'
-import { NavLink as NavLinkRRD, Link } from 'react-router-dom'
+import { NavLink as NavLinkRRD, Link, useNavigate } from 'react-router-dom'
 
 import useUser from 'hooks/useUser'
 
 const Navbar = ({ routes }) => {
+  const navigate = useNavigate()
   const [isOpen, setIsOpen] = useState(false)
   const { user } = useUser()
 
@@ -50,6 +51,11 @@ const Navbar = ({ routes }) => {
         return null
       }
     })
+  }
+
+  const logout = evt => {
+    evt.preventDefault()
+    navigate('/login')
   }
 
   return (
@@ -102,7 +108,7 @@ const Navbar = ({ routes }) => {
                     <span>Accerca de</span>
                   </DropdownItem>
                   <DropdownItem divider />
-                  <DropdownItem href='#pablo' onClick={(e) => e.preventDefault()}>
+                  <DropdownItem href='#pablo' onClick={logout}>
                     <i className='fa fa-power-off' />
                     <span>Logout</span>
                   </DropdownItem>

@@ -2,12 +2,12 @@ import React from 'react'
 import { useLocation, Route, Routes } from 'react-router-dom'
 import { Container } from 'reactstrap'
 
+import ForgotPassword from 'views/login/ForgotPassword'
 import Login from 'views/login/Login'
 import Register from 'views/login/Register'
 import NotFound from 'views/NotFound'
 
-import { Navbar, Footer } from './components'
-
+import { Navbar, Footer } from 'components'
 import routes from './routes'
 
 const Template = (props) => {
@@ -42,6 +42,7 @@ const Template = (props) => {
           {/* Todos los path sin Template */}
           <Route path='/login' element={<Login setHeaderVisible={setHeaderVisible} />} />
           <Route path='/register' element={<Register setHeaderVisible={setHeaderVisible} />} />
+          <Route path='/forgot-password' element={<ForgotPassword setHeaderVisible={setHeaderVisible} />} />
           <Route path='*' element={<NotFound setHeaderVisible={setHeaderVisible} />} />
         </Routes>
         {headerVisible &&
