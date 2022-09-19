@@ -4,7 +4,8 @@ import { toast } from 'react-toastify'
 import api from 'redux/user/userAPI'
 
 const initialState = {
-  user: null
+  user: null,
+  isLogin: false
 }
 
 export const userSlice = createSlice({
@@ -13,6 +14,7 @@ export const userSlice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(getUser.fulfilled, (state, action) => {
       state.user = action.payload
+      state.isLogin = state.user !== null
     })
     builder.addCase(getUser.rejected, (state, action) => {
       toast.error(action.error.message)
