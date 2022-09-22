@@ -71,7 +71,7 @@ export default [
     usuariosfinales: []
   },
   {
-    id: 'a1b0617b-e7db-46b4-986d-a70e603b699b',
+    id: 'a1b0617b-e7db-46b4-986d-a70e603b688b',
     contrato_no: 'VLS-1',
     contacto_id: '69033c67-e021-5b22-ba32-dec0b1d3e449',
     contacto: 'DESOFTs',
@@ -93,7 +93,7 @@ export default [
     usuariosfinales: []
   },
   {
-    id: 'a1b0617b-e7db-46b4-986d-a70e603b699b',
+    id: 'a1b0617b-e7db-46b4-986d-a70e603b677b',
     contrato_no: 'VLS-1',
     contacto_id: '69033c67-e021-5b22-ba32-dec0b1d3e449',
     contacto: 'DESOFTs',
@@ -115,7 +115,7 @@ export default [
     usuariosfinales: []
   },
   {
-    id: 'a1b0617b-e7db-46b4-986d-a70e603b699b',
+    id: 'a1b0617b-e7db-46b4-986d-a70e603b666b',
     contrato_no: 'VLS-1',
     contacto_id: '69033c67-e021-5b22-ba32-dec0b1d3e449',
     contacto: 'DESOFTs',
@@ -137,7 +137,7 @@ export default [
     usuariosfinales: []
   },
   {
-    id: 'a1b0617b-e7db-46b4-986d-a70e603b699b',
+    id: 'a1b0617b-e7db-46b4-986d-a70e603b655b',
     contrato_no: 'VLS-1',
     contacto_id: '69033c67-e021-5b22-ba32-dec0b1d3e449',
     contacto: 'DESOFTs',
@@ -159,7 +159,7 @@ export default [
     usuariosfinales: []
   },
   {
-    id: 'a1b0617b-e7db-46b4-986d-a70e603b699b',
+    id: 'a1b0617b-e7db-46b4-986d-a70e603b644b',
     contrato_no: 'VLS-1',
     contacto_id: '69033c67-e021-5b22-ba32-dec0b1d3e449',
     contacto: 'DESOFTs',
@@ -181,7 +181,7 @@ export default [
     usuariosfinales: []
   },
   {
-    id: 'a1b0617b-e7db-46b4-986d-a70e603b699b',
+    id: 'a1b0617b-e7db-46b4-986d-a70e603b633b',
     contrato_no: 'VLS-1',
     contacto_id: '69033c67-e021-5b22-ba32-dec0b1d3e449',
     contacto: 'DESOFTs',

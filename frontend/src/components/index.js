@@ -7,8 +7,8 @@ import Header from 'components/headers/Header'
 import Table, { renderEmpty } from 'components/table/Table'
 import FormField from 'components/form/FormField'
 import Textarea from 'components/form/Textarea'
-import InputNumber from 'components/form/InputNumber'
 import InputPassword from 'components/form/InputPassword'
+import InputNumber from 'components/form/InputNumber'
 
 export {
   Button,

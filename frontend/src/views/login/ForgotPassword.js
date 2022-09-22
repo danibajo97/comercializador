@@ -12,7 +12,7 @@ import { Form, Button, Schema } from 'rsuite'
 import { DefaultHeader, FormField } from 'components'
 import useHeader from 'hooks/useHeader'
 
-export default function ForgotPassword ({ setHeaderVisible }) {
+export default function ForgotPassword () {
   useHeader({ title: ' Olvidado su Contraseña' })
   const navigate = useNavigate()
 
@@ -22,8 +22,6 @@ export default function ForgotPassword ({ setHeaderVisible }) {
       .isEmail('Por favor, introduce una dirección de correo electrónico válida.')
       .isRequired('Este campo es obligatorio.')
   })
-
-  useEffect(() => { setHeaderVisible(false) }, [])
 
   const irInicioSesion = evt => {
     evt.preventDefault()

@@ -12,11 +12,9 @@ import { Form, Button } from 'rsuite'
 import { DefaultHeader, FormField, InputPassword } from 'components'
 import useHeader from 'hooks/useHeader'
 
-export default function Login ({ setHeaderVisible }) {
+export default function Login () {
   useHeader({ title: 'Inicia Sesión' })
   const navigate = useNavigate()
-
-  useEffect(() => { setHeaderVisible(false) }, [])
 
   const irCrearCuenta = evt => {
     evt.preventDefault()

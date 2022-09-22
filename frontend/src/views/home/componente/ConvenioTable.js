@@ -17,12 +17,12 @@ const ActionCell = ({ rowData, dataKey, ...props }) => {
           const handleSelect = eventKey => {
             onClose()
             switch (eventKey) {
-              case 1: navigate(`/datos-generales/${rowData[dataKey]}`); break
-              case 2: navigate(`/clientes-finales/${rowData[dataKey]}`); break
-              case 3: navigate(`/servicios-contratados/${rowData[dataKey]}`); break
-              case 4: navigate(`/plazos-pagos/${rowData[dataKey]}`); break
-              case 5: console.log(`/eliminar/${rowData[dataKey]}`); break
-              case 6: console.log(`/cancelar/${rowData[dataKey]}`); break
+              case 1: navigate(`/datos-generales/${rowData.id}`); break
+              case 2: navigate(`/clientes-finales/${rowData.id}`); break
+              case 3: navigate(`/servicios-contratados/${rowData.id}`); break
+              case 4: navigate(`/plazos-pagos/${rowData.id}`); break
+              case 5: console.log(`/eliminar/${rowData.id}`); break
+              case 6: console.log(`/cancelar/${rowData.id}`); break
               default: console.log('Error')
             }
           }
@@ -109,13 +109,13 @@ export default function ConvenioTable ({ convenios }) {
   return (
     <>
       <Table data={dataPage} height={450} autoHeight renderEmpty={renderEmpty}>
-        {renderColumn('Comercializador', 'contacto_facturese_a', 2)}
+        {/* renderColumn('Comercializador', 'contacto_facturese_a', 2) */}
         {renderColumn('Nro Contrato', 'contrato_no', 1)}
         {renderColumn('Cliente', 'contacto_cliente_final', 2)}
         {renderColumn('Nro Convenio', 'no_convenio', 1)}
         {renderColumn('Fecha Emisión', 'fecha_emision', 1)}
         {renderColumnEstado('Estado', 'estado', 1)}
-        {renderColumn('Cantidad', 'cantidad_bd', 1)}
+        {renderColumn('Base de Datos', 'cantidad_bd', 1)}
         {renderColumnAccion('id')}
       </Table>
       <Row>

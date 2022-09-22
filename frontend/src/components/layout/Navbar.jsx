@@ -70,6 +70,7 @@ const Navbar = ({ routes }) => {
         <NavbarToggler onClick={toggle} />
         <Collapse isOpen={isOpen} navbar>
           <Nav className='me-auto' navbar>
+            <NavLink to='/' tag={NavLinkRRD} onClick={closeCollapse}>Inicio</NavLink>
             {createLinks(routes)}
           </Nav>
           {user &&
@@ -105,12 +106,12 @@ const Navbar = ({ routes }) => {
                   </DropdownItem>
                   <DropdownItem to='/admin/user-profile' tag={Link}>
                     <i className='ni ni-support-16' />
-                    <span>Accerca de</span>
+                    <span>Acerca de</span>
                   </DropdownItem>
                   <DropdownItem divider />
                   <DropdownItem href='#pablo' onClick={logout}>
                     <i className='fa fa-power-off' />
-                    <span>Logout</span>
+                    <span>Cerrar Sesión</span>
                   </DropdownItem>
                 </DropdownMenu>
               </UncontrolledDropdown>
