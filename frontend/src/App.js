@@ -1,6 +1,4 @@
 import React from 'react'
-
-import routes from 'routes'
 import { useLocation, Route, Routes } from 'react-router-dom'
 
 import ForgotPassword from 'views/login/ForgotPassword'
@@ -9,6 +7,7 @@ import Register from 'views/login/Register'
 import Home from 'views/home/index'
 import Template from 'components/layout/Template'
 import NotFound from 'views/other/NotFound'
+import routes from 'routes'
 
 export default function App () {
   const location = useLocation()
