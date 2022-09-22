@@ -9,7 +9,7 @@ import {
   SelectPicker,
   Row,
   Col,
-  IconButton,
+  IconButton
 
 } from 'rsuite'
 import PlusIcon from '@rsuite/icons/Plus'
@@ -149,10 +149,8 @@ const ServiciosContratadosPanel = () => {
   })
 
   const guardarForm = () => {
-    if (formRef.current.check())
-      toast.success('OK')
+    if (formRef.current.check()) { toast.success('OK') }
   }
-
 
   return (
     <Form

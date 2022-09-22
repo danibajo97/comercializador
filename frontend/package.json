@@ -61,5 +61,23 @@
     "prop-types": "15.8.1",
     "standard": "17.0.0",
     "webpack": "5.74.0"
+  },
+  "eslintConfig": {
+    "extends": "./node_modules/standard/eslintrc.json",
+    "rules": {
+      "no-console": "warn",
+      "no-alert": "warn",
+      "no-unused-vars": "warn"
+    },
+    "overrides": [
+      {
+        "files": [
+          "**/*.stories.*"
+        ],
+        "rules": {
+          "import/no-anonymous-default-export": "off"
+        }
+      }
+    ]
   }
 }

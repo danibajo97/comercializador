@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import {
   Row,
   Col
@@ -24,7 +24,6 @@ function ClientesFinalesPanel (props) {
   const { convenio } = useConvenio({ id })
   useEffect(() => {
     serDB(convenio.cantidad_bd)
-
   }, [convenio])
 
   const formRef = React.useRef()
