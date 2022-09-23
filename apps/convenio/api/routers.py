@@ -7,5 +7,6 @@ router = DefaultRouter()
 
 router.register('convenio', ConvenioWebViewSet, basename="convenio_web")
 router.register('contrato', ContratoWebViewSet, basename="contrato_web")
+router.register('servicio_contratado', ServicioContratadoViewSet, basename="servicio_contratado")
 
 urlpatterns = router.urls
