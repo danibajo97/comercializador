@@ -1,9 +1,6 @@
-from apps.convenio.models import PlazoPagoServicio
-from apps.convenio.api.serializers.convenio_serializers import PlazoPagoServicioSerializer
+
 
 class PlazoPagoServicioViewSet(viewsets.GenericViewSet):
-    model = PlazoPagoServicio
-    serializer_class = PlazoPagoServicioSerializer
 
     @transaction.atomic
     def create(self, request):
