@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from apps.convenio.models import ConvenioWeb
+from apps.convenio.models import ConvenioWeb, PlazoPago, PlazoPagoServicio
 
 
 class ConvenioWebSerializer(serializers.ModelSerializer):
