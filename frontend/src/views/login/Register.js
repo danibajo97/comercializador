@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import {
   Card,
   CardBody,
@@ -12,11 +12,9 @@ import { Form, Button } from 'rsuite'
 import { DefaultHeader, FormField, InputPassword } from 'components'
 import useHeader from 'hooks/useHeader'
 
-export default function Register ({ setHeaderVisible }) {
+export default function Register () {
   useHeader({ title: 'Nueva Cuenta' })
   const navigate = useNavigate()
-
-  useEffect(() => { setHeaderVisible(false) }, [])
 
   const irInicioSesion = evt => {
     evt.preventDefault()

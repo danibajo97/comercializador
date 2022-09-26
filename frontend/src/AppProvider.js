@@ -10,8 +10,8 @@ import { store } from './redux/store'
 export default function AppProvider ({ children }) {
   return (
     <Provider store={store}>
-      <BrowserRouter>
-        <CustomProvider locale={esES}>
+      <CustomProvider locale={esES}>
+        <BrowserRouter>
           {children}
           <ToastContainer
             position='top-center'
@@ -24,8 +24,8 @@ export default function AppProvider ({ children }) {
             draggable
             pauseOnHover
           />
-        </CustomProvider>
-      </BrowserRouter>
+        </BrowserRouter>
+      </CustomProvider>
     </Provider>
   )
 }

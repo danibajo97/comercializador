@@ -1,8 +1,6 @@
 import React from 'react'
 import { Input } from 'rsuite'
 
-export default function InputNumber ({ props }) {
-  return (
-    <Input {...props} as='input' type='number' size='sm' />
-  )
-}
+const InputNumber = (props) => <Input {...props} as='input' type='number' value={props.value ?? 0} />
+
+export default InputNumber

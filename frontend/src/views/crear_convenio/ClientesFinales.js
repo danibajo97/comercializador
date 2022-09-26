@@ -12,12 +12,21 @@ import { useNavigate } from 'react-router-dom'
 
 import { DefaultHeader } from 'components'
 import ClientesFinalesPanel from './components/ClientesFinalesPanel'
+import ClienteForm from './components/ClienteForm'
+import useModal from 'hooks/useModal'
 
-function ClientesFinales (props) {
+function ClientesFinales () {
   const navigate = useNavigate()
+  const { modal, openModal } = useModal({
+    title: 'Nuevo Cliente',
+    renderBody: ({ closeModal }) => {
+      return <ClienteForm closeModal={closeModal} />
+    }
+  })
 
   return (
     <>
+      {modal}
       <DefaultHeader />
       <Container className='mt--7' fluid>
         <Row>
@@ -30,6 +39,14 @@ function ClientesFinales (props) {
 
                   </Col>
                   <Col className='text-right' xs='4'>
+                    <Button
+                      className='mr-2'
+                      size='sm'
+                      appearance='primary'
+                      onClick={openModal}
+                    >
+                      Nuevo Cliente
+                    </Button>
                     <Button
                       size='sm'
                       appearance='default'

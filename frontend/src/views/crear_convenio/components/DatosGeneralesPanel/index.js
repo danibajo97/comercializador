@@ -110,21 +110,17 @@ function DatosGeneralesPanel (props) {
           </h6>
           <Row>
             <Col xs='12' sm='12' md='12' lg='6'>
-
-              <FormField
-                name='facturarseA' label='Facturarse a' disabled
-              />
               <FormField
                 name='cliente' label='Cliente' accepter={SelectPicker} data={clienteFinalState.map(item => ({
                   label: item.nombre,
                   value: item.id
                 }))} required block
               />
-              <FormField name='cantidadBaseBatos' label='Cantidad de Base de Datos' accepter={InputNumber} required />
+              <FormField name='solicitadoPor' label='Solicitado Por' accepter={SelectPicker} data={selectData} block />
             </Col>
             <Col xs='12' sm='12' md='12' lg='6'>
               <FormField name='fechaEmisionConvenio' label='Fecha Emisión Convenio' accepter={DatePicker} required block />
-              <FormField name='solicitadoPor' label='Solicitado Por' accepter={SelectPicker} data={selectData} block />
+              <FormField name='cantidadBaseBatos' label='Cantidad de Base de Datos' accepter={InputNumber} required />
             </Col>
           </Row>
           <Row>
@@ -136,7 +132,7 @@ function DatosGeneralesPanel (props) {
       <Row>
         <Col xs='12' className='mt-4'>
           <ButtonToolbar>
-            <Button appearance='primary' onClick={handleSubmit}>
+            <Button appearance='primary' size='sm' onClick={handleSubmit} disabled={contratoState?.fecha_inicial === undefined}>
               Guardar
             </Button>
           </ButtonToolbar>

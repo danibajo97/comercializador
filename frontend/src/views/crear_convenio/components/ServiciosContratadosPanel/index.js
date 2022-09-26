@@ -1,5 +1,6 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
+import { useParams } from 'react-router-dom'
 import {
   Form,
   Button,
@@ -9,12 +10,15 @@ import {
   Row,
   Col,
   IconButton
+
 } from 'rsuite'
 import PlusIcon from '@rsuite/icons/Plus'
 import MinusIcon from '@rsuite/icons/Minus'
+import { toast } from 'react-toastify'
 
 import { FormField, InputNumber } from 'components'
 import { servicioContratado, getServicioContratado } from 'redux/convenioDatosGenerales/convenioDatosGeneralesSlice'
+import useConvenio from 'hooks/useConvenio'
 
 const ServiciosContratadosItem = ({ label, rowValue = {}, onChange, rowIndex, rowError }) => {
   const servicioContratadoState = useSelector(servicioContratado)
@@ -87,7 +91,7 @@ const ServiciosContratadosInputControl = ({ value = [], onChange, fieldError }) 
     handleChangeServiciosContratados(serviciosContratados.concat([{ servicios: '', cantidad_bd: null }]))
   }
 
-  const label = ['Servicios', 'Cantidad de Base de Datos']
+  const label = ['Servicios', 'Base de Datos']
 
   return (
     <>
@@ -118,22 +122,35 @@ const ServiciosContratadosInputControl = ({ value = [], onChange, fieldError }) 
 
 const ServiciosContratadosPanel = () => {
   const formRef = React.useRef()
+  const [db, serDB] = React.useState(0)
   const [formError, setFormError] = React.useState({})
   const [formValue, setFormValue] = React.useState({
     servicios_contratados: [
-      { servicios: '', cantidad_bd: null }
+      { servicios: '', cantidad_bd: undefined }
     ]
   })
+
+  const params = useParams()
+  const { id } = params
+
+  const { convenio } = useConvenio({ id })
+  useEffect(() => {
+    serDB(convenio.cantidad_bd)
+  }, [convenio])
 
   const { ArrayType, StringType, NumberType, ObjectType } = Schema.Types
   const model = Schema.Model({
     servicios_contratados: ArrayType().of(
       ObjectType().shape({
         servicios: StringType().isRequired('Este campo es obligatorio.'),
-        cantidad_bd: NumberType().isRequired('Este campo es obligatorio.')
+        cantidad_bd: NumberType().max(db, `No puede exceder de ${db} base de dastos.`).isRequired('Este campo es obligatorio.')
       })
     )
   })
+
+  const guardarForm = () => {
+    if (formRef.current.check()) { toast.success('OK') }
+  }
 
   return (
     <Form
@@ -160,9 +177,7 @@ const ServiciosContratadosPanel = () => {
           <Button
             size='sm'
             appearance='primary'
-            onClick={() => {
-              formRef.current.check()
-            }}
+            onClick={guardarForm}
           >
             Guardar
           </Button>

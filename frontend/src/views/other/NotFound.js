@@ -1,16 +1,15 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { Button } from 'rsuite'
 import { useNavigate } from 'react-router-dom'
 
 import svg404 from 'assets/img/404.svg'
+import useHeader from 'hooks/useHeader'
 
-export default function NotFound ({ setHeaderVisible }) {
+export default function NotFound () {
+  useHeader({ title: '404' })
   const navigate = useNavigate()
 
-  useEffect(() => { setHeaderVisible(false) }, [])
-
   const portada = () => {
-    setHeaderVisible(true)
     navigate('/')
   }
 

@@ -1,70 +1,74 @@
-# Getting Started with Create React App
+# Comercializador Web ![version](https://img.shields.io/badge/version-1.0.0-green.svg)
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Este proyecto es creado con las tecnologías [Django](https://www.djangoproject.com/) y [React JS](https://es.reactjs.org/)
 
-## Available Scripts
 
-In the project directory, you can run:
+## Tabla de Contenido
+- [Desarrollo Local](#desarrollo-local)
+  - [Pasos para instalar las dependencias e inicial el servidor del backend](#1---pasos-para-instalar-las-dependencias-e-inicial-el-servidor-del-backend)
+  - [Pasos para instalar las dependencias e inicial el servidor del frontend](#2---pasos-para-instalar-las-dependencias-e-inicial-el-servidor-del-frontend)
+- [Enlaces Útiles](#enlaces-útiles)
 
-### `npm start`
+## Desarrollo Local
+Para configurar un entorno local para el desarrollo, debe seguir los siguientes pasos:
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+### 1 - Pasos para instalar las dependencias e inicial el servidor del backend
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+Instalar la dependencia de virtualenv
+```
+pip install virtualenv
+```
 
-### `npm test`
+Para crear un entorno virtual con virtualenv nos situaremos en el directorio raíz de nuestro proyecto y ejecutaremos el siguiente comando.
+```
+virtualenv env
+```
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Usar el entorno virtual en Linux o en Windows
 
-### `npm run build`
+Linux:
+```
+source env/bin/activate
+```
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Windows:
+```
+source env/bin/activate
+```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+Instalar las dependencias indicadas en el fichero requirements.txt
+```
+pip install -r requirements.txt
+```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+Inicial servidor del backend
+```
+python .\manage.py runserver --settings comercializador.settings.base 
+```
 
-### `npm run eject`
+### 2 - Pasos para instalar las dependencias e inicial el servidor del frontend
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+Entrar a la carpeta del frontend
+```
+cd frontend
+```
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+Instalar las dependencias indicadas en el package.json
+```
+npm install
+```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+Inicial servidor del frontend
+```
+npm start
+```
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+Se ejecutará la aplicación en el modo de desarrollo, abra http://localhost:3000 para verlo en su navegador.
 
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+## Enlaces Útiles
+- Django: https://www.djangoproject.com/
+- Django REST framework: https://www.django-rest-framework.org/
+- Simple JWT: https://django-rest-framework-simplejwt.readthedocs.io/en/latest/index.html
+- React JS: https://es.reactjs.org/
+- React Router: https://reactrouter.com/en/main
+- RSuite JS: https://rsuitejs.com/

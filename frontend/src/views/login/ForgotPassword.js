@@ -7,23 +7,25 @@ import {
   Container
 } from 'reactstrap'
 import { useNavigate } from 'react-router-dom'
-import { Form, Button } from 'rsuite'
+import { Form, Button, Schema } from 'rsuite'
 
-import { DefaultHeader, FormField, InputPassword } from 'components'
+import { DefaultHeader, FormField } from 'components'
 import useHeader from 'hooks/useHeader'
 
-export default function Login () {
-  useHeader({ title: 'Inicia Sesión' })
+export default function ForgotPassword () {
+  useHeader({ title: ' Olvidado su Contraseña' })
   const navigate = useNavigate()
 
-  const irCrearCuenta = evt => {
-    evt.preventDefault()
-    navigate('/register')
-  }
+  const { StringType } = Schema.Types
+  const model = Schema.Model({
+    email: StringType()
+      .isEmail('Por favor, introduce una dirección de correo electrónico válida.')
+      .isRequired('Este campo es obligatorio.')
+  })
 
-  const irForgotPassword = evt => {
+  const irInicioSesion = evt => {
     evt.preventDefault()
-    navigate('/forgot-password')
+    navigate('/login')
   }
 
   return (
@@ -37,18 +39,17 @@ export default function Login () {
                 <Col>
                   <div className='text-center text-muted mb-5'>
                     <h3>Comercializador - Datazucar</h3>
-                    <small>Inicia Sesión con sus Credenciales</small>
+                    <small>Se has olvidado su contraseña</small>
                   </div>
-                  <Form fluid>
+                  <Form model={model} fluid>
                     <Row>
                       <Col xs='12'>
-                        <FormField name='username' label='Usuario' />
-                        <InputPassword name='password' label='Contraseña' />
+                        <FormField name='email' label='Entre su correo' />
                       </Col>
                       <Col xs='12'>
                         <div className='text-center'>
                           <Button className='mt-4' appearance='primary' size='sm'>
-                            Iniciar Sesión
+                            Seguir
                             <i className='fa fa-arrow-right ml-2' />
                           </Button>
                         </div>
@@ -59,22 +60,13 @@ export default function Login () {
               </CardBody>
             </Card>
             <Row className='mt-3'>
-              <Col className='text-left' xs='6'>
+              <Col className='text-center'>
                 <a
                   className='text-muted'
                   href='#pablo'
-                  onClick={irForgotPassword}
+                  onClick={irInicioSesion}
                 >
-                  <small>¿Se te olvidó tu contraseña?</small>
-                </a>
-              </Col>
-              <Col className='text-right' xs='6'>
-                <a
-                  className='text-muted'
-                  href='#pablo'
-                  onClick={irCrearCuenta}
-                >
-                  <small>Crear una nueva cuenta</small>
+                  <small>Ir al Inicia de Sesión</small>
                 </a>
               </Col>
             </Row>

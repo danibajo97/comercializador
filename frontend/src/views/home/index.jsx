@@ -67,18 +67,18 @@ export default function Home () {
             <Card className='bg-secondary shadow'>
               <CardHeader className='bg-white border-0'>
                 <Row className='align-items-center'>
-                  <Col xs='4'>
+                  <Col xs='12' sm='4'>
                     <h3 className='mb-0'>Listado de Convenios</h3>
                   </Col>
-                  <Col className='text-right' xs='8'>
+                  <Col className='text-right' xs='12' sm='8'>
                     <Button appearance='primary' size='sm' onClick={newConvenio}>
                       <i className='fa fa-plus mr-2' />
                       Nuevo Convenio
                     </Button>
-                    <Button className='ml-2' appearance='primary' color='green' size='sm' onClick={() => setOpenDrawer(true)}>
+                    {/* <Button className='ml-2' appearance='primary' color='green' size='sm' onClick={() => setOpenDrawer(true)}>
                       <i className='fa fa-filter mr-2' />
                       Filtro
-                    </Button>
+                    </Button> */}
                     <CheckPicker onSelect={onSelectEstado} className='ml-2' data={estadoData} style={{ width: 180 }} cleanable={false} searchable={false} size='sm' placeholder='Estado' />
                   </Col>
                 </Row>

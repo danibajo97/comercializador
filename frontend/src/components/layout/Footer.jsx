@@ -7,14 +7,9 @@ const Footer = () => {
         <Col xl='6'>
           <div className='copyright text-center text-xl-left text-muted'>
             © {new Date().getFullYear()}{' '}
-            <a
-              className='font-weight-bold ml-1'
-              href='#'
-            // rel="noopener noreferrer"
-            // target="_blank"
-            >
+            <span className='font-weight-bold ml-1 text-primary'>
               Datazucar
-            </a>
+            </span>
           </div>
         </Col>
 
