@@ -1,7 +1,7 @@
 import DatosGenerales from 'views/crear_convenio/DatosGenerales'
 import ClientesFinales from 'views/crear_convenio/ClientesFinales'
 import ServiciosContratados from 'views/crear_convenio/ServiciosContratados'
-import CrearConvenio from 'views/crear_convenio/index'
+import PlazosPago from 'views/crear_convenio/PlazosPago'
 
 const routes = [
   {
@@ -33,10 +33,10 @@ const routes = [
     navbar: false
   },
   {
-    path: 'crear-convenio',
-    name: 'Crear Convenio',
+    path: 'plazos-pago/:id',
+    name: 'Plazos de Pago',
     icon: 'ni ni-planet text-blue',
-    element: <CrearConvenio />,
+    element: <PlazosPago />,
     navbar: false
   }
 ]
