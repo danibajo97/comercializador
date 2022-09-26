@@ -1,4 +1,4 @@
-# Comercializador Web ![version](https://img.shields.io/badge/version-1.0.0-green.svg)
+# Comercializador Web v1.0.0
 
 Este proyecto es creado con las tecnologías [Django](https://www.djangoproject.com/) y [React JS](https://es.reactjs.org/)
 
@@ -33,7 +33,7 @@ source env/bin/activate
 
 Windows:
 ```
-source env/bin/activate
+env\Scripts\activate.bat
 ```
 
 Instalar las dependencias indicadas en el fichero requirements.txt
