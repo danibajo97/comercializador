@@ -12,7 +12,12 @@ export default {
 
 async function getBuscarContrato ({ numero, contacto }) {
   try {
-    /* const response = await axios.get(`${API_URL}/cmz/contrato_externo/buscar_contrato/?numero=${numero}&idcontacto=${contacto}`)
+    /* const response = await axios.get(`${API_URL}/cmz/contrato_externo/buscar_contrato/`, {
+      params: {
+        numero,
+        idcontacto: contacto
+      }
+    })
     console.log({ response });
     const data = await response.data */
     const data = buscarContrato

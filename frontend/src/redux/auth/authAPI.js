@@ -1,5 +1,5 @@
-// import axios from 'axios'
-// const API_URL = process.env.REACT_APP_API_URL
+import axios from 'axios'
+const API_URL = process.env.REACT_APP_API_URL
 
 export default {
   getUser,
@@ -20,9 +20,21 @@ async function getUser () {
   }
 }
 
-async function login () {
+async function login ({ username, password }) {
+  const config = {
+    header: {
+      'Content-Type': 'application/json'
+    }
+  }
+
+  const body = JSON.stringify({
+    username,
+    password
+  })
+
   try {
-    return Promise.resolve(true)
+    const response = await axios.post(`${API_URL}/api/token/`, body, config)
+    return await response.data
   } catch (error) {
     throw error.message
   }
