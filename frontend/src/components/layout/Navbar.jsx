@@ -17,12 +17,12 @@ import {
 } from 'reactstrap'
 import { NavLink as NavLinkRRD, Link, useNavigate } from 'react-router-dom'
 
-import useUser from 'hooks/useUser'
+import useAuth from 'hooks/useAuth'
 
 const Navbar = ({ routes }) => {
   const navigate = useNavigate()
   const [isOpen, setIsOpen] = useState(false)
-  const { user } = useUser()
+  const { user } = useAuth()
 
   const toggle = () => {
     setIsOpen(!isOpen)
@@ -63,7 +63,7 @@ const Navbar = ({ routes }) => {
       <NavbarReact
         className='navbar-horizontal navbar-light bg-white fixed-top shadow-lg'
         style={{ paddingTop: '0.3em', paddingBottom: '0.3em' }}
-        expand='lg'
+        expand='md'
         id='sidenav-main'
       >
         <NavbarBrand tag={Link} to='/'>Comercializador</NavbarBrand>
@@ -78,7 +78,7 @@ const Navbar = ({ routes }) => {
               <UncontrolledDropdown nav inNavbar>
                 <DropdownToggle className='pr-0' nav>
                   <Media className='align-items-center'>
-                    <span className='avatar avatar-sm rounded-circle mr-2 d-none d-lg-block'>
+                    <span className='avatar avatar-sm rounded-circle mr-2 d-none d-md-block'>
                       <img
                         alt='...'
                         src={require('assets/img/icons/favicon.png')}
