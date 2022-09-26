@@ -1,12 +1,12 @@
 import { useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 
-import { getUser } from 'redux/user/userSlice'
+import { getUser } from 'redux/auth/authSlice'
 
-export default function useUser () {
+export default function useAuth () {
   const dispatch = useDispatch()
-  const user = useSelector(state => state.user.user)
-  const isLogin = useSelector(state => state.user.isLogin)
+  const user = useSelector(state => state.auth.user)
+  const isLogin = useSelector(state => state.auth.isLogin)
 
   useEffect(() => {
     dispatch(getUser())
