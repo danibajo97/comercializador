@@ -1,17 +1,17 @@
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Badge, Row, Col } from 'reactstrap'
-import { Popover, Whisper, Dropdown, IconButton, Table, Pagination } from 'rsuite'
+import { Popover, Whisper, Dropdown, IconButton, Table as TableRS, Pagination } from 'rsuite'
 import MoreIcon from '@rsuite/icons/legacy/More'
 
-import { styleHeader, styleCell } from 'constants/styles/table'
+import Table from 'components/table/Table'
 import { estadosConvenios } from 'constants/'
 import { renderEmpty } from 'components'
 
 const ActionCell = ({ rowData, dataKey, ...props }) => {
   const navigate = useNavigate()
   return (
-    <Table.Cell {...props} className='link-group'>
+    <TableRS.Cell {...props} className='link-group'>
       <Whisper
         placement='bottomEnd' trigger='click' speaker={({ onClose, left, top, className }, ref) => {
           const handleSelect = eventKey => {
@@ -20,7 +20,7 @@ const ActionCell = ({ rowData, dataKey, ...props }) => {
               case 1: navigate(`/datos-generales/${rowData.id}`); break
               case 2: navigate(`/clientes-finales/${rowData.id}`); break
               case 3: navigate(`/servicios-contratados/${rowData.id}`); break
-              case 4: navigate(`/plazos-pagos/${rowData.id}`); break
+              case 4: navigate(`/plazos-pago/${rowData.id}`); break
               case 5: console.log(`/eliminar/${rowData.id}`); break
               case 6: console.log(`/cancelar/${rowData.id}`); break
               default: console.log('Error')
@@ -32,7 +32,7 @@ const ActionCell = ({ rowData, dataKey, ...props }) => {
                 <Dropdown.Item eventKey={1} disabled={rowData.estado >= 3}>Datos Generales</Dropdown.Item>
                 <Dropdown.Item eventKey={2} disabled={rowData.cantidad_bd <= 1}>Gestión de Clientes Finales</Dropdown.Item>
                 <Dropdown.Item eventKey={3}>Servicios Contratados</Dropdown.Item>
-                <Dropdown.Item eventKey={4} hidden>Asociando Plazos de Pagos</Dropdown.Item>
+                <Dropdown.Item eventKey={4}>Asociando Plazos de Pagos</Dropdown.Item>
                 <Dropdown.Item divider />
                 <Dropdown.Item eventKey={5} hidden={rowData.estado >= 3}>Eliminar</Dropdown.Item>
                 <Dropdown.Item eventKey={6} hidden={rowData.estado <= 2}>Cancelar</Dropdown.Item>
@@ -41,9 +41,9 @@ const ActionCell = ({ rowData, dataKey, ...props }) => {
           )
         }}
       >
-        <IconButton appearance='subtle' icon={<MoreIcon />} />
+        <IconButton className='mt--2 mb--2' size='sm' appearance='subtle' icon={<MoreIcon />} />
       </Whisper>
-    </Table.Cell>
+    </TableRS.Cell>
   )
 }
 
@@ -62,24 +62,13 @@ export default function ConvenioTable ({ convenios }) {
     return i >= start && i < end
   })
 
-  const renderColumn = (header, dataKey, flex) => {
-    return (
-      <Table.Column flexGrow={flex}>
-        <Table.HeaderCell style={styleHeader}>
-          {header}
-        </Table.HeaderCell>
-        <Table.Cell dataKey={dataKey} style={styleCell} />
-      </Table.Column>
-    )
-  }
-
   const renderColumnEstado = (header, dataKey, flex) => {
     return (
-      <Table.Column flexGrow={flex}>
-        <Table.HeaderCell style={styleHeader}>
+      <TableRS.Column flexGrow={flex}>
+        <TableRS.HeaderCell style={Table.styleHeader}>
           {header}
-        </Table.HeaderCell>
-        <Table.Cell style={styleCell}>
+        </TableRS.HeaderCell>
+        <TableRS.Cell style={Table.styleCell}>
           {rowData => {
             return (
               <div className='mt--1'>
@@ -90,32 +79,31 @@ export default function ConvenioTable ({ convenios }) {
               </div>
             )
           }}
-        </Table.Cell>
-      </Table.Column>
+        </TableRS.Cell>
+      </TableRS.Column>
     )
   }
 
   const renderColumnAccion = (dataKey) => {
     return (
-      <Table.Column width={100}>
-        <Table.HeaderCell style={styleHeader}>
+      <TableRS.Column width={100}>
+        <TableRS.HeaderCell style={Table.styleHeader}>
           Acciones
-        </Table.HeaderCell>
-        <ActionCell dataKey={dataKey} style={styleCell} />
-      </Table.Column>
+        </TableRS.HeaderCell>
+        <ActionCell dataKey={dataKey} style={Table.styleCell} />
+      </TableRS.Column>
     )
   }
 
   return (
     <>
       <Table data={dataPage} height={450} autoHeight renderEmpty={renderEmpty}>
-        {/* renderColumn('Comercializador', 'contacto_facturese_a', 2) */}
-        {renderColumn('Nro Contrato', 'contrato_no', 1)}
-        {renderColumn('Cliente', 'contacto_cliente_final', 2)}
-        {renderColumn('Nro Convenio', 'no_convenio', 1)}
-        {renderColumn('Fecha Emisión', 'fecha_emision', 1)}
+        {Table.Column({ header: 'Nro Contrato', dataKey: 'contrato_no', flex: 1 })}
+        {Table.Column({ header: 'Cliente', dataKey: 'contacto_cliente_final', flex: 1 })}
+        {Table.Column({ header: 'Nro Convenio', dataKey: 'no_convenio', flex: 1 })}
+        {Table.Column({ header: 'Fecha Emisión', dataKey: 'fecha_emision', flex: 1 })}
         {renderColumnEstado('Estado', 'estado', 1)}
-        {renderColumn('Base de Datos', 'cantidad_bd', 1)}
+        {Table.Column({ header: 'Base de Datos', dataKey: 'cantidad_bd', flex: 1 })}
         {renderColumnAccion('id')}
       </Table>
       <Row>

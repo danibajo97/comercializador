@@ -1,34 +1,38 @@
-import React from 'react'
+import React, { useState } from 'react'
 import {
   Card,
-  Row,
-  Col,
   Container,
   CardHeader,
   CardBody
 } from 'reactstrap'
-import { Button, Panel } from 'rsuite'
+import {
+  Row,
+  Col,
+  Button
+} from 'rsuite'
 import { useNavigate } from 'react-router-dom'
 
 import { DefaultHeader } from 'components'
-import DatosGeneralesPanel from './components/DatosGeneralesPanel'
+import AsociarPlazosPago from './components/PlazosPagoPanel/AsociarPlazosPago'
+import AsociarServicios from './components/PlazosPagoPanel/AsociarServicios'
 
-function DatosGenerales (props) {
+function PlazosPago (props) {
   const navigate = useNavigate()
+  const [selectedId, setSelectedId] = useState(null)
 
   return (
     <>
       <DefaultHeader />
       <Container className='mt--7' fluid>
         <Row>
-          <Col>
+          <Col xs={24}>
             <Card className='bg-secondary shadow'>
               <CardHeader className='bg-white border-0'>
                 <Row className='align-items-center'>
-                  <Col xs='8'>
-                    <h3 className='mb-0'>Convenios <span className='text-muted'>(Datos Generales)</span></h3>
+                  <Col xs={16}>
+                    <h3 className='mb-0'>Convenios <span className='text-muted'>(Plazos de Pago)</span></h3>
                   </Col>
-                  <Col className='text-right' xs='4'>
+                  <Col className='text-right' xs={8}>
                     <Button
                       size='sm'
                       appearance='default'
@@ -42,10 +46,15 @@ function DatosGenerales (props) {
               </CardHeader>
               <CardBody>
                 <Row>
-                  <Col xs='12'>
-                    <Panel bordered>
-                      <DatosGeneralesPanel />
-                    </Panel>
+                  <Col xs={24}>
+                    <Row>
+                      <Col xs={24} sm={24} md={24} lg={12} className='mb-3'>
+                        <AsociarPlazosPago setSelectedId={setSelectedId} />
+                      </Col>
+                      <Col xs={24} sm={24} md={24} lg={12}>
+                        <AsociarServicios id={selectedId} />
+                      </Col>
+                    </Row>
                   </Col>
                 </Row>
               </CardBody>
@@ -57,4 +66,4 @@ function DatosGenerales (props) {
   )
 }
 
-export default DatosGenerales
+export default PlazosPago

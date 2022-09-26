@@ -7,9 +7,10 @@ import { useParams } from 'react-router-dom'
 import { Form, ButtonToolbar, Button, Schema, CheckPicker } from 'rsuite'
 import { toast } from 'react-toastify'
 
-import { FormField, Table } from 'components'
+import { FormField } from 'components'
 import { clienteFinal } from 'constants/mock'
 import useConvenio from 'hooks/useConvenio'
+import Table from 'components/table/Table'
 
 const selectData = clienteFinal.map(item => ({
   label: item.nombre,
@@ -62,23 +63,33 @@ function ClientesFinalesPanel (props) {
     }
   }
 
+  const onClean = () => {
+    setFormValue({
+      cliente_final: []
+    })
+  }
+
   return (
     <Form
       fluid
       ref={formRef}
-      // onChange={setFormValue}
+      // onChange={onSelectClienteFinal}
       // onCheck={setFormError}
       formValue={formValue}
       model={model}
     >
       <Row>
-        <Col xs='12' sm='12' md='12' lg='12'>
-          <FormField name='cliente_final' label='Cliente Final' accepter={CheckPicker} data={selectData} onSelect={onSelectClienteFinal} required block />
+        <Col xs='12'>
+          <FormField name='cliente_final' label='Cliente Final' accepter={CheckPicker} data={selectData} onSelect={onSelectClienteFinal} required block onClean={onClean} />
         </Col>
       </Row>
       <Row>
         <Col className='mt-4'>
-          {tableData().length > 0 && <Table data={tableData()} headers={['Nombre Completo Cliente', 'Correo']} dataKeys={['nombre', 'correo']} height={400} white />}
+          {tableData().length > 0 &&
+            <Table data={tableData()} autoHeight>
+              {Table.Column({ header: 'Nombre Completo Cliente', dataKey: 'nombre', flex: 1, white: true })}
+              {Table.Column({ header: 'Correo', dataKey: 'correo', flex: 1, white: true })}
+            </Table>}
         </Col>
       </Row>
       <Row>

@@ -128,16 +128,16 @@ function DatosGeneralesPanel (props) {
               <FormField name='observaciones' label='Observaciones' accepter={Textarea} rows={3} />
             </Col>
           </Row>
-          <Row>
-            <Col xs='12' className='mt-4'>
-              <ButtonToolbar>
-                <Button appearance='primary' onClick={handleSubmit}>
-                  Guardar
-                </Button>
-              </ButtonToolbar>
-            </Col>
-          </Row>
         </>}
+      <Row>
+        <Col xs='12' className='mt-4'>
+          <ButtonToolbar>
+            <Button appearance='primary' size='sm' onClick={handleSubmit} disabled={contratoState?.fecha_inicial === undefined}>
+              Guardar
+            </Button>
+          </ButtonToolbar>
+        </Col>
+      </Row>
     </Form>
   )
 }
