@@ -15,14 +15,13 @@ import {
   Col,
   Row
 } from 'reactstrap'
-import { NavLink as NavLinkRRD, Link, useNavigate } from 'react-router-dom'
+import { NavLink as NavLinkRRD, Link } from 'react-router-dom'
 
 import useAuth from 'hooks/useAuth'
 
 const Navbar = ({ routes }) => {
-  const navigate = useNavigate()
   const [isOpen, setIsOpen] = useState(false)
-  const { user } = useAuth()
+  const { user, logout } = useAuth()
 
   const toggle = () => {
     setIsOpen(!isOpen)
@@ -53,11 +52,6 @@ const Navbar = ({ routes }) => {
     })
   }
 
-  const logout = evt => {
-    evt.preventDefault()
-    navigate('/login')
-  }
-
   return (
     <>
       <NavbarReact
@@ -85,12 +79,12 @@ const Navbar = ({ routes }) => {
                       />
                     </span>
                     <Media className=''>
-                      <Row className='mr--7'>
+                      <Row style={{ marginRight: -200 }}>
                         <Col xs='12' className='mb-0 mt-0 text-md font-weight-bold'>
-                          {user.firstname}
+                          {user.name}
                         </Col>
                         <Col xs='12' className='mb-0 mt-0 text-sm'>
-                          {user.lastname}
+                          {user.email}
                         </Col>
                       </Row>
                     </Media>
@@ -109,7 +103,7 @@ const Navbar = ({ routes }) => {
                     <span>Acerca de</span>
                   </DropdownItem>
                   <DropdownItem divider />
-                  <DropdownItem href='#pablo' onClick={logout}>
+                  <DropdownItem onClick={() => logout()}>
                     <i className='fa fa-power-off' />
                     <span>Cerrar Sesión</span>
                   </DropdownItem>
