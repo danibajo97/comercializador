@@ -7,43 +7,52 @@ export default {
   logout
 }
 
-async function getUser () {
+async function login ({ email, password }) {
+  const options = {
+    method: 'POST',
+    url: `${API_URL}/api-login/`,
+    headers: { 'Content-Type': 'application/json' },
+    data: { email, password }
+  }
+
   try {
-    return Promise.resolve({
-      username: 'comercial',
-      firstname: 'Yoelvys',
-      lastname: 'Perez Cabrera',
-      email: 'yoelvyspc93@gamil.com'
-    })
+    const response = await axios(options)
+    const data = await response.data
+    return data
   } catch (error) {
-    throw error.message
+    throw error?.response?.data?.error
   }
 }
 
-async function login ({ username, password }) {
-  const config = {
-    header: {
-      'Content-Type': 'application/json'
-    }
-  }
-
-  const body = JSON.stringify({
-    username,
-    password
-  })
-
+async function getUser () {
   try {
-    const response = await axios.post(`${API_URL}/api/token/`, body, config)
-    return await response.data
+    const access = await window.localStorage.getItem('access')
+    if (access !== null) {
+      return Promise.resolve({
+        email: 'yoelvyspc93@gmail.com',
+        name: 'Yoelvys Perez Cabrera'
+      })
+    } else return Promise(null)
   } catch (error) {
-    throw error.message
+    throw error?.response?.data?.error
   }
 }
 
 async function logout () {
+  const access = await window.localStorage.getItem('access')
+  const options = {
+    method: 'POST',
+    url: `${API_URL}/api-logout/`,
+    headers: { Authorization: `JWT ${access}` },
+    data: { refresh_token: `${access}` }
+  }
+
   try {
+    // const response = await axios(options)
+    // console.log({ response })
     return Promise.resolve(true)
   } catch (error) {
-    throw error.message
+    console.log({ error })
+    throw error?.message
   }
 }

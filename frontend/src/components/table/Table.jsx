@@ -96,7 +96,7 @@ export default class Table extends Component {
 
   render () {
     return (
-      <TableRS data={this.props.data} height={this.props.height} autoHeight={this.props.autoHeight} renderEmpty={renderEmpty} {...this.props} cellBordered>
+      <TableRS data={this.props.data} autoHeight={this.props.autoHeight} renderEmpty={renderEmpty} {...this.props} cellBordered>
         {this.props.children}
       </TableRS>
     )

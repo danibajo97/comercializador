@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import {
   Card,
   CardBody,
@@ -7,14 +7,33 @@ import {
   Container
 } from 'reactstrap'
 import { useNavigate } from 'react-router-dom'
-import { Form, Button } from 'rsuite'
+import { Form, Button, Schema } from 'rsuite'
 
 import { DefaultHeader, FormField, InputPassword } from 'components'
 import useHeader from 'hooks/useHeader'
+import useAuth from 'hooks/useAuth'
 
 export default function Login () {
-  useHeader({ title: 'Inicia Sesión' })
+  const { isAuth, loading, login } = useAuth()
   const navigate = useNavigate()
+
+  useHeader({ title: 'Inicia Sesión' })
+
+  const formRef = React.useRef()
+  const [formValue, setFormValue] = useState({
+    email: '',
+    password: ''
+  })
+
+  const { StringType } = Schema.Types
+  const model = Schema.Model({
+    email: StringType().isEmail('Este campo no es un correo.').isRequired('Este campo es obligatorio.'),
+    password: StringType().isRequired('Este campo es obligatorio.')
+  })
+
+  useEffect(() => {
+    if (isAuth) navigate('/')
+  }, [isAuth])
 
   const irCrearCuenta = evt => {
     evt.preventDefault()
@@ -24,6 +43,12 @@ export default function Login () {
   const irForgotPassword = evt => {
     evt.preventDefault()
     navigate('/forgot-password')
+  }
+
+  const handleSubmit = () => {
+    if (formRef.current.check()) {
+      login({ email: formValue.email, password: formValue.password })
+    }
   }
 
   return (
@@ -39,15 +64,22 @@ export default function Login () {
                     <h3>Comercializador - Datazucar</h3>
                     <small>Inicia Sesión con sus Credenciales</small>
                   </div>
-                  <Form fluid>
+                  <Form
+                    fluid
+                    ref={formRef}
+                    onChange={setFormValue}
+                    // onCheck={setFormError}
+                    formValue={formValue}
+                    model={model}
+                  >
                     <Row>
                       <Col xs='12'>
-                        <FormField name='username' label='Usuario' />
+                        <FormField name='email' label='Correo' />
                         <InputPassword name='password' label='Contraseña' />
                       </Col>
                       <Col xs='12'>
                         <div className='text-center'>
-                          <Button className='mt-4' appearance='primary' size='sm'>
+                          <Button className='mt-4' appearance='primary' size='sm' onClick={handleSubmit} loading={loading}>
                             Iniciar Sesión
                             <i className='fa fa-arrow-right ml-2' />
                           </Button>

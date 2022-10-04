@@ -9,8 +9,8 @@ import {
 import { Button, CheckPicker, Drawer, Placeholder } from 'rsuite'
 import { useNavigate } from 'react-router-dom'
 
-import ConvenioTable from './componente/ConvenioTable'
-import ConvenioHeader from './componente/ConvenioHeader'
+import ConvenioTable from './components/ConvenioTable'
+import ConvenioHeader from './components/ConvenioHeader'
 import { convenios as convenioData } from 'constants/mock'
 import { estadosConvenios } from 'constants/'
 import useHeader from 'hooks/useHeader'
