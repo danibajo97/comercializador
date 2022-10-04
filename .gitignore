@@ -6,6 +6,10 @@
 /.pnp
 .pnp.js
 
+# Compiled source #
+*.pyo
+*.pyc
+
 # testing
 /coverage
 
