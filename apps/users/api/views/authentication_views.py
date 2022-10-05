@@ -1,56 +1,12 @@
-from django.contrib.auth import authenticate
 from django.contrib.auth.tokens import default_token_generator
 from django.db import transaction
 from django.utils.http import urlsafe_base64_decode
 from rest_framework import status, generics
-from rest_framework.generics import GenericAPIView
-from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
-from rest_framework_simplejwt.tokens import RefreshToken
-from rest_framework_simplejwt.views import TokenObtainPairView
 
-from apps.users.resources.activate_code import activate_code
-from apps.users.api.serializers.authentication_serializers import (
-    CustomTokenObtainPairSerializer, CustomUserSerializer
-)
 from apps.users.api.serializers.users_serializers import UserSerializer
 from apps.users.models import User
-
-
-class Login(TokenObtainPairView):
-    serializer_class = CustomTokenObtainPairSerializer
-
-    def post(self, request, *args, **kwargs):
-        username = request.data.get('email', '')
-        password = request.data.get('password', '')
-        user = authenticate(
-            username=username,
-            password=password
-        )
-
-        if user:
-            login_serializer = self.serializer_class(data=request.data)
-            if login_serializer.is_valid():
-                user_serializer = CustomUserSerializer(user)
-                return Response({
-                    'token': login_serializer.validated_data.get('access'),
-                    'refresh_token': login_serializer.validated_data.get('refresh'),
-                    'user': user_serializer.data,
-                    'message': 'Inicio de Sesion Existoso'
-                }, status=status.HTTP_200_OK)
-            return Response({'error': 'Contraseña o nombre de usuario incorrectos'}, status=status.HTTP_400_BAD_REQUEST)
-        return Response({'error': 'Contraseña o nombre de usuario incorrectos'}, status=status.HTTP_400_BAD_REQUEST)
-
-
-class Logout(GenericAPIView):
-    def post(self, request):
-        try:
-            refresh_token = request.data["refresh_token"]
-            token = RefreshToken(refresh_token)
-            token.blacklist()
-            return Response({'message': 'Sesion cerrada exitosamente!'}, status=status.HTTP_205_RESET_CONTENT)
-        except Exception:
-            return Response({'error': 'Error al cerrar sesion'}, status=status.HTTP_400_BAD_REQUEST)
+from apps.users.resources.activate_code import activate_code
 
 
 class RegisterUsersFromVersatErpView(generics.GenericAPIView):
@@ -102,4 +58,20 @@ class ActivationCodeView(generics.GenericAPIView):
         else:
             return Response({
                 'message': 'Usted no esta registrado en el sistema.'
+            }, status=status.HTTP_400_BAD_REQUEST)
+
+
+class AuthenticatedUser(generics.GenericAPIView):
+
+    def get(self, request):
+        current_user = request.user
+        if current_user:
+            return Response({
+                'email': current_user.email,
+                'name': current_user.name,
+                'last_name': current_user.last_name,
+            }, status=status.HTTP_200_OK)
+        else:
+            return Response({
+                'message': 'No hay usuario autenticado en el sistema.'
             }, status=status.HTTP_400_BAD_REQUEST)
