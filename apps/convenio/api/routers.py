@@ -2,6 +2,7 @@ from rest_framework.routers import DefaultRouter
 
 from apps.convenio.api.views.contrato_views import ContratoWebViewSet
 from apps.convenio.api.views.convenio_views import ConvenioWebViewSet
+from apps.convenio.api.views.servicio_contratado_views import ServicioContratadoViewSet
 
 router = DefaultRouter()
 

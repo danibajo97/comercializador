@@ -22,16 +22,17 @@ class ContratoWebViewSet(viewsets.GenericViewSet):
             return Response({'message': "Hubo problemas al conectar con el servidor"},
                             status=response.status_code)
 
-    @action(detail=False, methods=['get'])
-    def cliente_final(self, request):
-        user = authenticated_user(request)
-        params = {
-            'idcontacto': user.id_erp,
-        }
-        url = 'http://127.0.0.1:8000/cmz/contrato_externo/cliente_final/'
-        response = requests.get(url, params=params)
-        if response.status_code == 200:
-            return Response(response.json(), status=response.status_code)
-        else:
-            return Response({'message': "Hubo problemas al conectar con el servidor"},
-                            status=response.status_code)
+
+@action(detail=False, methods=['get'])
+def cliente_final(self, request):
+    user = authenticated_user(request)
+    params = {
+        'idcontacto': user.id_erp,
+    }
+    url = 'http://127.0.0.1:8000/cmz/contrato_externo/cliente_final/'
+    response = requests.get(url, params=params)
+    if response.status_code == 200:
+        return Response(response.json(), status=response.status_code)
+    else:
+        return Response({'message': "Hubo problemas al conectar con el servidor"},
+                        status=response.status_code)
