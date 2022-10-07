@@ -1,22 +1,20 @@
 import threading
 import time
 import requests
-import schedule
 
 from apps.base.response_base import ResponseBase
-from comercializador.settings import VERSAT_ERP_URL
+from comercializador.settings import VERSAT_ERP_URL, VERSAT_ERP_TIME_MINUTES_AUTHENTICATED, VERSAT_ERP_USERNAME, VERSAT_ERP_PASSWORD
 
 
 class AuthenticatedThread(threading.Thread):
-    __minutes = 10
 
     def authenticated_versat(self):
-        print('Iniciando conexion a %s/' % VERSAT_ERP_URL)
+        print('Starting Connection to %s/' % VERSAT_ERP_URL)
 
         url = '%s/%s' % (VERSAT_ERP_URL, 'api/token/')
         payload = {
-            "username": "dalia",
-            "password": "A*123456.a"
+            "username": VERSAT_ERP_USERNAME,
+            "password": VERSAT_ERP_PASSWORD
         }
         headers = {"Content-Type": "application/json"}
 
@@ -27,20 +25,16 @@ class AuthenticatedThread(threading.Thread):
                 response_base = ResponseBase()
                 response_base.setToken(token['access'])
 
-                print('Autentificacion satisfactoria!!!')
-                print('Bearer %s' % token['access'])
+                print('Successful Authentication!!!')
             else:
-                print('Error en la autentificacion, code: %s' %
-                      response.status_code)
+                print('Authentication Error, Code: %s' % response.status_code)
         except Exception as exception:
-            print('Error en la autentificacion!!!', str(exception))
+            print('Authentication Error!!!', str(exception))
 
     def run(self):
-        self.authenticated_versat()
-        schedule.every(self.__minutes).minutes.do(self.authenticated_versat)
         while True:
-            schedule.run_pending()
-            time.sleep(self.__minutes * 1000)
+            self.authenticated_versat()
+            time.sleep(VERSAT_ERP_TIME_MINUTES_AUTHENTICATED * 60)
 
 
 class AuthenticatedVersat(object):
