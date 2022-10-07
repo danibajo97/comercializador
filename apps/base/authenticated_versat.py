@@ -3,7 +3,7 @@ import time
 import requests
 
 from apps.base.response_base import ResponseBase
-from comercializador.settings import VERSAT_ERP_URL, VERSAT_ERP_TIME_AUTHENTICATED, VERSAT_ERP_USERNAME, VERSAT_ERP_PASSWORD
+from comercializador.settings import VERSAT_ERP_URL, VERSAT_ERP_TIME_MINUTES_AUTHENTICATED, VERSAT_ERP_USERNAME, VERSAT_ERP_PASSWORD
 
 
 class AuthenticatedThread(threading.Thread):
@@ -34,7 +34,7 @@ class AuthenticatedThread(threading.Thread):
     def run(self):
         while True:
             self.authenticated_versat()
-            time.sleep(VERSAT_ERP_TIME_AUTHENTICATED * 1000)
+            time.sleep(VERSAT_ERP_TIME_MINUTES_AUTHENTICATED * 60)
 
 
 class AuthenticatedVersat(object):
