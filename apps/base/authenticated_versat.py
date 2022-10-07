@@ -28,7 +28,6 @@ class AuthenticatedThread(threading.Thread):
                 response_base.setToken(token['access'])
 
                 print('Autentificacion satisfactoria!!!')
-                print('Bearer %s' % token['access'])
             else:
                 print('Error en la autentificacion, code: %s' %
                       response.status_code)
