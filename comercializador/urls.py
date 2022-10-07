@@ -14,7 +14,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path, include, re_path
 from django.views.generic import TemplateView
 from drf_yasg import openapi
 from drf_yasg.views import get_schema_view
@@ -40,15 +40,14 @@ schema_view = get_schema_view(
 local_urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include('rest_framework.urls')),
-    path('api-usuarios/', include('apps.users.api.routers')),
-    path('api-acceso/', include('apps.convenio.api.routers')),
+    path('api-usuarios/', include('apps.users.urls')),
+    path('api-acceso/', include('apps.convenio.urls')),
     path('registro-usuarios/', RegisterUsersFromVersatErpView.as_view(),
          name='register_users_from_versaterp'),
     path('usuario-autenticado/', AuthenticatedUser.as_view(),
          name='authenticated_user'),
     path('activacion/<uidb64>/<token>/',
-         ActivationCodeView.as_view(), name='activation_code'),
-    path('', TemplateView.as_view(template_name='index.html')),
+         ActivationCodeView.as_view(), name='activation_code')
 ]
 
 swagger_urlpatterns = [
@@ -65,4 +64,9 @@ jwt_urlpatterns = [
     path('api/token/verify/', TokenVerifyView.as_view(), name='token_verify'),
 ]
 
-urlpatterns = local_urlpatterns + swagger_urlpatterns + jwt_urlpatterns
+react_urlpatterns = [
+    re_path(r'^.*', TemplateView.as_view(template_name='index.html'))
+]
+
+urlpatterns = local_urlpatterns + swagger_urlpatterns + \
+    jwt_urlpatterns + react_urlpatterns
