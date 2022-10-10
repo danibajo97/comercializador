@@ -20,14 +20,14 @@ class ResponseBase(object):
     def __getURL(self, url):
         return '%s/%s' % (VERSAT_ERP_URL, url)
 
-    def get(self, url, params):
+    def get(self, url, params=None):
         return requests.get(self.__getURL(url), headers=self.__getHeaders(), params=params)
 
     def post(self, url, params=None, json=None):
         return requests.post(self.__getURL(url), headers=self.__getHeaders(), params=params, json=json)
 
-    def put(self, url, params):
-        return requests.put(self.__getURL(url), headers=self.__getHeaders(), params=params)
+    def put(self, url, params=None, json=None):
+        return requests.put(self.__getURL(url), headers=self.__getHeaders(), params=params, json=json)
 
-    def delete(self, url, params):
+    def delete(self, url, params=None):
         return requests.delete(self.__getURL(url), headers=self.__getHeaders(), params=params)
