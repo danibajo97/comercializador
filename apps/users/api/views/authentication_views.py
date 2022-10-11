@@ -4,6 +4,7 @@ from django.utils.http import urlsafe_base64_decode
 from rest_framework import status, generics
 from rest_framework.response import Response
 
+from apps.base.response_base import ResponseBase
 from apps.users.api.serializers.users_serializers import UserSerializer
 from apps.users.models import User
 from apps.users.resources.activate_code import activate_code
@@ -62,16 +63,19 @@ class ActivationCodeView(generics.GenericAPIView):
 
 
 class AuthenticatedUser(generics.GenericAPIView):
+    responsebase = ResponseBase()
 
     def get(self, request):
         current_user = request.user
         if current_user:
-            return Response({
-                'email': current_user.email,
-                'name': current_user.name,
-                'last_name': current_user.last_name,
-            }, status=status.HTTP_200_OK)
+            url = '%s%s/' % ('cmz/contacto_externo/', current_user.id_erp)
+            response = self.responsebase.get(url=url)
+            if response.status_code == 200:
+                return Response({'Versat-response': response.json()},
+                                status=response.status_code)
+            else:
+                return Response({'Comercializador-response': 'Error al conectar con el Servidor'},
+                                status=response.status_code)
         else:
-            return Response({
-                'message': 'No hay usuario autenticado en el sistema.'
-            }, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'Comercializador-response': 'No hay usuario autenticado en el sistema'},
+                            status=status.HTTP_400_BAD_REQUEST)

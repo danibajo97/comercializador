@@ -17,7 +17,7 @@ class ConvenioWebViewSet(viewsets.GenericViewSet):
         params = {
             'authenticated-user': user.id_erp,
         }
-        response = self.responsebase.post(url=url, data=request.data, params=params)
+        response = self.responsebase.post(url=url, json=request.data, params=params)
         if response.status_code == 201:
             return Response({'Comercializador-response': 'Creado correctamente',
                              'Versat-response': response.json()}, status=response.status_code)
