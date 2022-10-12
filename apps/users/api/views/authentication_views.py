@@ -69,15 +69,20 @@ class AuthenticatedUser(generics.GenericAPIView):
     def get(self, request):
         current_user = request.user
         if current_user:
-            return Response({
-                'email': current_user.email,
-                'name': current_user.name,
-                'last_name': current_user.last_name,
-                'distribuidor': {
-                    'id': 'f8a95b2b-a037-5d67-a126-c70657685274',
-                    'name': 'DeSoft VC'
-                }
-            }, status=status.HTTP_200_OK)
+            url = '%s%s/' % ('cmz/contacto_externo/', current_user.id_erp)
+            response = self.responsebase.get(url=url)
+            if response.status_code == 200:
+                return Response({'Versat-response': response.json(),
+                                 'Comercializador-response': {
+                                     'email': current_user.email,
+                                     'name': current_user.name,
+                                     'last_name': current_user.last_name,
+                                 }
+                                 },
+                                status=response.status_code)
+            else:
+                return Response({'Comercializador-response': 'Error al conectar con el Servidor'},
+                                status=response.status_code)
         else:
             return Response({'Comercializador-response': 'No hay usuario autenticado en el sistema'},
                             status=status.HTTP_400_BAD_REQUEST)
