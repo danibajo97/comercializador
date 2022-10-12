@@ -65,7 +65,7 @@ jwt_urlpatterns = [
 ]
 
 react_urlpatterns = [
-    re_path(r'^.*', TemplateView.as_view(template_name='index.html'))
+    # re_path(r'^.*', TemplateView.as_view(template_name='index.html'))
 ]
 
 urlpatterns = local_urlpatterns + swagger_urlpatterns + \
