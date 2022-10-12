@@ -1,12 +1,11 @@
 import React from 'react'
 import { useLocation, Route, Routes } from 'react-router-dom'
 
-import ForgotPassword from 'views/login/ForgotPassword'
-import Login from 'views/login/Login'
-import Register from 'views/login/Register'
-import Home from 'views/home/index'
-import Template from 'components/layout/Template'
-import NotFound from 'views/other/NotFound'
+import ForgotPassword from 'pages/login/ForgotPassword'
+import Login from 'pages/login/Login'
+import Home from 'pages/home/index'
+import NotFound from 'pages/other/NotFound'
+import Template from 'layout/Template'
 import routes from 'routes'
 
 export default function App () {
@@ -34,7 +33,6 @@ export default function App () {
       <Routes>
         <Route path='*' element={<NotFound />} />
         <Route path='login' element={<Login />} />
-        <Route path='register' element={<Register />} />
         <Route path='forgot-password' element={<ForgotPassword />} />
         <Route element={<Template routes={routes} />}>
           <Route index element={<Home />} />
