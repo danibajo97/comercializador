@@ -30,7 +30,8 @@ class RegisterUsersFromVersatErpView(generics.GenericAPIView):
                     pass
                 else:
                     emails.append(user['email'])
-            user_serializer = self.serializer_class(data=request.data, many=True)
+            user_serializer = self.serializer_class(
+                data=request.data, many=True)
         if user_serializer.is_valid():
             user_serializer.save()
             for email in emails:
@@ -47,7 +48,7 @@ class ActivationCodeView(generics.GenericAPIView):
         try:
             uid = urlsafe_base64_decode(uidb64).decode()
             user = self.model.objects.filter(pk=uid).first()
-        except(TypeError, ValueError, OverflowError, self.model.DoesNotExist):
+        except (TypeError, ValueError, OverflowError, self.model.DoesNotExist):
             user = None
 
         if user is not None and default_token_generator.check_token(user, token):
@@ -68,14 +69,15 @@ class AuthenticatedUser(generics.GenericAPIView):
     def get(self, request):
         current_user = request.user
         if current_user:
-            url = '%s%s/' % ('cmz/contacto_externo/', current_user.id_erp)
-            response = self.responsebase.get(url=url)
-            if response.status_code == 200:
-                return Response({'Versat-response': response.json()},
-                                status=response.status_code)
-            else:
-                return Response({'Comercializador-response': 'Error al conectar con el Servidor'},
-                                status=response.status_code)
+            return Response({
+                'email': current_user.email,
+                'name': current_user.name,
+                'last_name': current_user.last_name,
+                'distribuidor': {
+                    'id': 'f8a95b2b-a037-5d67-a126-c70657685274',
+                    'name': 'DeSoft VC'
+                }
+            }, status=status.HTTP_200_OK)
         else:
             return Response({'Comercializador-response': 'No hay usuario autenticado en el sistema'},
                             status=status.HTTP_400_BAD_REQUEST)

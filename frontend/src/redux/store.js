@@ -2,15 +2,13 @@ import { configureStore } from '@reduxjs/toolkit'
 
 import authReducer from 'redux/auth/authSlice'
 
-import convenioDatosGeneralesReducer from 'redux/convenioDatosGenerales/convenioDatosGeneralesSlice'
-import convenioClientesFinalesReducer from 'redux/convenioClientesFinales/convenioClientesFinalesSlice'
-import convenioServiciosContratadosReducer from 'redux/convenioServiciosContratados/convenioServiciosContratadosSlice'
+import datosGeneralesReducer from 'redux/datosGenerales/datosGeneralesSlice'
+import convenioReducer from 'redux/convenio/convenioSlice'
 
 export const store = configureStore({
   reducer: {
     auth: authReducer,
-    convenio_datos_generales: convenioDatosGeneralesReducer,
-    convenio_clientes_finales: convenioClientesFinalesReducer,
-    convenio_servicios_contratados: convenioServiciosContratadosReducer
+    datosGenerales: datosGeneralesReducer,
+    convenio: convenioReducer
   }
 })

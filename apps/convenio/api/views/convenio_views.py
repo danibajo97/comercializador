@@ -17,7 +17,8 @@ class ConvenioWebViewSet(viewsets.GenericViewSet):
         params = {
             'authenticated-user': user.id_erp,
         }
-        response = self.responsebase.post(url=url, json=request.data, params=params)
+        response = self.responsebase.post(
+            url=url, json=request.data, params=params)
         if response.status_code == 201:
             return Response({'Comercializador-response': 'Creado correctamente',
                              'Versat-response': response.json()}, status=response.status_code)
@@ -28,7 +29,8 @@ class ConvenioWebViewSet(viewsets.GenericViewSet):
     def list(self, request):
         user = authenticated_user(request)
         if request.GET.get('id_convenio'):
-            url = '%s%s/' % ('cmz/convenio_externo/', request.GET.get('id_convenio'))
+            url = '%s%s/' % ('cmz/convenio_externo/',
+                             request.GET.get('id_convenio'))
         else:
             url = 'cmz/convenio_externo/'
         params = {
@@ -39,14 +41,15 @@ class ConvenioWebViewSet(viewsets.GenericViewSet):
                         status=response.status_code)
 
     @transaction.atomic
-    def put(self, request):
+    def put(self, request, pk):
         user = authenticated_user(request)
-        url = '%s%s/' % ('cmz/convenio_externo/', request.GET.get('id_convenio'))
+        url = '%s%s/' % ('cmz/convenio_externo/', pk)
         params = {
             'authenticated-user': user.id_erp,
         }
         print(request.data)
-        response = self.responsebase.put(url=url, params=params, json=request.data)
+        response = self.responsebase.put(
+            url=url, params=params, json=request.data)
         if response.status_code == 200:
             return Response({'Comercializador-response': 'Actualizado Correctamente',
                              'Versat-response': response.json()}, status=response.status_code)
@@ -55,9 +58,9 @@ class ConvenioWebViewSet(viewsets.GenericViewSet):
                             status=response.status_code)
 
     @transaction.atomic
-    def delete(self, request):
+    def delete(self, request, pk):
         user = authenticated_user(request)
-        url = '%s%s/' % ('cmz/convenio_externo/', request.GET.get('id_convenio'))
+        url = '%s%s/' % ('cmz/convenio_externo/', pk)
         params = {
             'authenticated-user': user.id_erp,
         }

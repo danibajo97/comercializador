@@ -18,7 +18,7 @@ async function login ({ email, password }) {
     const response = await axios(options)
     return response.data
   } catch (error) {
-    throw new Error('Credenciales no validas.')
+    throw new Error('Error al listar el usuario autenticado.')
   }
 }
 

@@ -1,8 +1,8 @@
-import DatosGenerales from 'views/crear_convenio/DatosGenerales'
-import ClientesFinales from 'views/crear_convenio/ClientesFinales'
-import ServiciosContratados from 'views/crear_convenio/ServiciosContratados'
-import PlazosPago from 'views/crear_convenio/PlazosPago'
-import Clientes from 'views/clientes'
+import DatosGenerales from 'pages/crear_convenio/DatosGenerales'
+import ClientesFinales from 'pages/crear_convenio/ClientesFinales'
+import ServiciosContratados from 'pages/crear_convenio/ServiciosContratados'
+import PlazosPago from 'pages/crear_convenio/PlazosPago'
+import Clientes from 'pages/clientes'
 
 const routes = [
   {
