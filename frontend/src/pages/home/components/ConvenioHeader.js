@@ -23,7 +23,7 @@ const ConvenioHeader = ({ totalConvenio, totalConfirmado, totalEdicion }) => {
                         >
                           Distribuidor
                         </CardTitle>
-                        <span className='h2 font-weight-bold mb-0'>{user?.distribuidor?.name || 'Cargando...'}</span>
+                        <span className='h2 font-weight-bold mb-0'>{user?.distribuidor?.nombre || 'Cargando...'}</span>
                       </div>
                       <Col className='col-auto'>
                         <div className='icon icon-shape bg-info text-white rounded-circle shadow'>

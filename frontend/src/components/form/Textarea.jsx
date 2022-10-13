@@ -1,8 +1,6 @@
-import React from 'react'
+import React, { forwardRef } from 'react'
 import { Input } from 'rsuite'
 
-export default function Textarea ({ props }) {
-  return (
-    <Input {...props} as='textarea' />
-  )
-}
+const Textarea = forwardRef((props, ref) => <Input {...props} as='textarea' ref={ref} />)
+
+export default Textarea

@@ -37,7 +37,6 @@ db.sqlite3
 # other
 /static
 .vscode
-/comercializador/db.sqlite3
 /.idea/.gitignore
 /.idea/codeStyles/codeStyleConfig.xml
 /.idea/comercializador.iml
