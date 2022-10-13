@@ -36,18 +36,17 @@ class ServicioContratadoViewSet(viewsets.GenericViewSet):
             'authenticated-user': user.id_erp,
         }
         response = self.responsebase.get(url=url, params=params)
-        return Response({'Versat-response': response.json()},
-                        status=response.status_code)
+        return Response(response.json(), status=response.status_code)
 
     @transaction.atomic
-    def put(self, request, pk):
+    def update(self, request, pk):
         user = authenticated_user(request)
-        url = '%s%s/' % ('cmz/servicio_contratado_externo/', pk)
         params = {
             'authenticated-user': user.id_erp,
         }
+        url = 'cmz/servicio_contratado_externo/%s/' % pk
         response = self.responsebase.put(
-            url=url, params=params, json=request.data)
+            url=url, json=request.data, params=params)
         if response.status_code == 200:
             return Response({'Comercializador-response': 'Actualizado Correctamente',
                              'Versat-response': response.json()}, status=response.status_code)
@@ -56,13 +55,19 @@ class ServicioContratadoViewSet(viewsets.GenericViewSet):
                             status=response.status_code)
 
     @transaction.atomic
-    def delete(self, request, pk):
-        user = authenticated_user(request)
-        url = '%s%s/' % ('cmz/servicio_contratado_externo/', pk)
-        params = {
-            'authenticated-user': user.id_erp,
-        }
-        response = self.responsebase.delete(url=url, params=params)
+    def retrieve(self, request, pk):
+        url = 'cmz/servicio_contratado_externo/%s/' % pk
+        response = self.responsebase.get(url=url)
+        if response.status_code == 200:
+            return Response(response.json(), status=response.status_code)
+        else:
+            return Response({'Versat-response': response.json()},
+                            status=response.status_code)
+
+    @transaction.atomic
+    def destroy(self, request, pk):
+        url = 'cmz/servicio_contratado_externo/%s/' % pk
+        response = self.responsebase.delete(url=url)
         if response.status_code == 204:
             return Response({'Comercializador-response': 'Eliminado correctamente'},
                             status=response.status_code)

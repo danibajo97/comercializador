@@ -59,7 +59,6 @@ class ConvenioWebViewSet(viewsets.GenericViewSet):
     def retrieve(self, request, pk):
         url = 'cmz/convenio_externo/%s/' % pk
         response = self.responsebase.get(url=url)
-        print(response)
         if response.status_code == 200:
             return Response(response.json(), status=response.status_code)
         else:
