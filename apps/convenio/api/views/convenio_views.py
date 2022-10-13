@@ -47,7 +47,6 @@ class ConvenioWebViewSet(viewsets.GenericViewSet):
         params = {
             'authenticated-user': user.id_erp,
         }
-        print(request.data)
         response = self.responsebase.put(
             url=url, params=params, json=request.data)
         if response.status_code == 200:
