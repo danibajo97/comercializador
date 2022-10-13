@@ -1,26 +1,31 @@
 import React, { useEffect } from 'react'
-import { useParams } from 'react-router-dom'
-import {
-  Form,
-  Button,
-  ButtonGroup,
-  Schema,
-  SelectPicker,
-  Row,
-  Col,
-  IconButton
-
-} from 'rsuite'
+import { useParams, useNavigate } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux'
+import { Form, Button, ButtonGroup, Schema, SelectPicker, Row, Col, IconButton } from 'rsuite'
 import PlusIcon from '@rsuite/icons/Plus'
 import MinusIcon from '@rsuite/icons/Minus'
 import { toast } from 'react-toastify'
 
 import { FormField, InputNumber } from 'components'
+import { getListadoServicios, retrieveConvenio } from 'redux/convenio/convenioSlice'
 
 const ServiciosContratadosItem = ({ label, rowValue = {}, onChange, rowIndex, rowError }) => {
-  React.useEffect(() => {
-    // getServicioContratado()
+  const dispatch = useDispatch()
+  const convenio = useSelector(state => state.convenio.convenio)
+  const listadoServicios = useSelector(state => state.convenio.listadoServicios)
+
+  const params = useParams()
+  const { id } = params
+
+  useEffect(() => {
+    if (id !== undefined) { dispatch(retrieveConvenio({ id })) }
   }, [])
+
+  useEffect(() => {
+    if (convenio !== null) {
+      dispatch(getListadoServicios({ convenio: convenio.id, plazopago: null }))
+    }
+  }, [convenio])
 
   const handleChangeName = value => {
     onChange(rowIndex, { ...rowValue, servicios: value })
@@ -38,7 +43,7 @@ const ServiciosContratadosItem = ({ label, rowValue = {}, onChange, rowIndex, ro
           label={labelServicio}
           name='servicios'
           accepter={SelectPicker}
-          data={[].map(item => ({
+          data={listadoServicios.map(item => ({
             label: item.producto_nombre,
             value: item.id
           }))}

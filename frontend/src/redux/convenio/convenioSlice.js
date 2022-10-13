@@ -10,7 +10,8 @@ const initialState = {
   isConvenios: OPERATIONS.NONE,
   isAdd: OPERATIONS.NONE,
   isUpdate: OPERATIONS.NONE,
-  isDelete: OPERATIONS.NONE
+  isDelete: OPERATIONS.NONE,
+  listadoServicios: []
 }
 
 export const convenioSlice = createSlice({
@@ -91,6 +92,15 @@ export const convenioSlice = createSlice({
       state.isDelete = OPERATIONS.REJECTED
       toast.error(action.error.message)
     })
+
+    // LISTADO_SERVICIOS ACCION
+    builder.addCase(getListadoServicios.fulfilled, (state, action) => {
+      state.listadoServicios = action.payload
+    })
+    builder.addCase(getListadoServicios.rejected, (state, action) => {
+      state.listadoServicios = []
+      toast.error(action.error.message)
+    })
   }
 })
 
@@ -99,6 +109,8 @@ export const retrieveConvenio = createAsyncThunk('convenio/retrieveConvenio', ap
 export const addConvenio = createAsyncThunk('convenio/addConvenio', api.addConvenio)
 export const updateConvenio = createAsyncThunk('convenio/updateConvenio', api.updateConvenio)
 export const deleteConvenio = createAsyncThunk('convenio/deleteConvenio', api.deleteConvenio)
+
+export const getListadoServicios = createAsyncThunk('convenio/getListadoServicios', api.getListadoServicios)
 
 export const { stateResetOperation } = convenioSlice.actions
 

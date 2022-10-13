@@ -7,7 +7,8 @@ export default {
   retrieveConvenio,
   addConvenio,
   updateConvenio,
-  deleteConvenio
+  deleteConvenio,
+  getListadoServicios
 }
 
 async function getConveniosAll ({ page = 1 }) {
@@ -21,8 +22,8 @@ async function getConveniosAll ({ page = 1 }) {
     }
   }
   try {
-    const response = await axios(options)
-    return response.data.results
+    const { data } = await axios(options)
+    return data.results
   } catch (error) {
     throw new Error('Error al listar los convenios.')
   }
@@ -36,8 +37,8 @@ async function retrieveConvenio ({ id }) {
     headers: { Authorization: `Bearer ${access}` }
   }
   try {
-    const response = await axios(options)
-    return response.data
+    const { data } = await axios(options)
+    return data
   } catch (error) {
     throw new Error('Error al buscar el convenio.')
   }
@@ -90,5 +91,24 @@ async function deleteConvenio ({ id }) {
     }
   } catch (error) {
     throw new Error('Error al eliminar el convenio.')
+  }
+}
+
+async function getListadoServicios ({ convenio, plazopago }) {
+  const access = await window.sessionStorage.getItem('access')
+  const options = {
+    method: 'GET',
+    url: `${API_URL}/api-acceso/convenio/list_servicios/`,
+    headers: { Authorization: `Bearer ${access}` },
+    params: {
+      id_convenio: convenio,
+      id_plazopago: plazopago
+    }
+  }
+  try {
+    const { data } = await axios(options)
+    return data
+  } catch (error) {
+    throw new Error('Error al buscar el listado de servicios.')
   }
 }

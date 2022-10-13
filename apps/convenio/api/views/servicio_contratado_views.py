@@ -1,9 +1,9 @@
+from apps.users.resources.authenticated_user import authenticated_user
 from django.db import transaction
 from rest_framework import viewsets
 from rest_framework.response import Response
 
 from apps.base.response_base import ResponseBase
-from apps.users.resources.authenticated_user import authenticated_user
 
 
 class ServicioContratadoViewSet(viewsets.GenericViewSet):
