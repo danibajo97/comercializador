@@ -1,8 +1,9 @@
-import requests
 from django.db import transaction
 from rest_framework import viewsets
-from rest_framework.decorators import action
 from rest_framework.response import Response
+
+from apps.base.response_base import ResponseBase
+from apps.users.resources.authenticated_user import authenticated_user
 
 
 class ServicioContratadoViewSet(viewsets.GenericViewSet):
@@ -53,13 +54,16 @@ class ServicioContratadoViewSet(viewsets.GenericViewSet):
                             status=response.status_code)
 
     @transaction.atomic
-    def delete(self, request):
-
-        url = 'http://127.0.0.1:8000/cmz/servicio_contratado_externo/' + request.GET.get('id_servicio_contratado')
-        response = requests.delete(url)
-
+    def delete(self, request, pk):
+        user = authenticated_user(request)
+        url = '%s%s/' % ('cmz/servicio_contratado_externo/', pk)
+        params = {
+            'authenticated-user': user.id_erp,
+        }
+        response = self.responsebase.delete(url=url, params=params)
         if response.status_code == 204:
-            return Response(status=response.status_code)
+            return Response({'Comercializador-response': 'Eliminado correctamente'},
+                            status=response.status_code)
         else:
-            return Response({'message': "Hubo problemas al conectar con el servidor"},
+            return Response({'Versat-response': response.json()},
                             status=response.status_code)
