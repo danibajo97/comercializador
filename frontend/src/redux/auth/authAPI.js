@@ -15,8 +15,8 @@ async function login ({ email, password }) {
     data: { email, password }
   }
   try {
-    const response = await axios(options)
-    return response.data
+    const { data } = await axios(options)
+    return data
   } catch (error) {
     throw new Error('Credenciales no validas.')
   }
@@ -31,7 +31,11 @@ async function getUser () {
   }
   try {
     const response = await axios(options)
-    return response.data
+    const { comercializador, versat } = response.data
+    return {
+      ...comercializador,
+      distribuidor: versat
+    }
   } catch (error) {
     throw new Error('Error al listar el usuario autenticado.')
   }

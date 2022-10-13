@@ -43,7 +43,7 @@ async function retrieveConvenio ({ id }) {
   }
 }
 
-async function addConvenio (params) {
+async function addConvenio ({ params }) {
   const access = await window.sessionStorage.getItem('access')
   const options = {
     method: 'POST',

@@ -10,15 +10,16 @@ import OPERATIONS from 'constants/operationsRedux'
 import useAuth from 'hooks/useAuth'
 
 import { getBuscarContrato, getClientesFinales } from 'redux/datosGenerales/datosGeneralesSlice'
-import { addConvenio, retrieveConvenio } from 'redux/convenio/convenioSlice'
+import { addConvenio, updateConvenio, retrieveConvenio, stateResetOperation } from 'redux/convenio/convenioSlice'
 
-function DatosGeneralesPanel (props) {
+function DatosGeneralesPanel () {
   const { user } = useAuth()
   const dispatch = useDispatch()
   const contrato = useSelector(state => state.datosGenerales.contrato)
   const clientesFinales = useSelector(state => state.datosGenerales.clientesFinales)
 
   const isAdd = useSelector(state => state.convenio.isAdd)
+  const isUpdate = useSelector(state => state.convenio.isUpdate)
   const convenio = useSelector(state => state.convenio.convenio)
 
   const navigate = useNavigate()
@@ -39,19 +40,36 @@ function DatosGeneralesPanel (props) {
   })
 
   useEffect(() => {
-    if (id !== undefined) { retrieveConvenio({ id }) }
-  }, [])
-
-  console.log({ isAdd })
+    if (convenio !== null) {
+      setFormValue({
+        nroContrato: convenio.contrato_no,
+        nroConvenio: convenio.no_convenio,
+        fechaEmisionConvenio: date.toJSDate({ date: convenio.fecha_emision }),
+        solicitadoPor: convenio.solicitado_por,
+        cliente: convenio.cliente_final,
+        cantidadBaseDatos: convenio.cantidad_bd,
+        observaciones: convenio.observaciones,
+        facturese_a: user.distribuidor.id
+      })
+    }
+  }, [convenio])
 
   const { nroContrato, fechaEmision, fechaVencimiento } = formValue
+
+  useEffect(() => {
+    dispatch(getClientesFinales())
+    if (id !== undefined) { dispatch(retrieveConvenio({ id })) }
+
+    return () => {
+      dispatch(stateResetOperation())
+    }
+  }, [])
+
+  console.log({ isAdd, isUpdate })
+
   React.useEffect(() => {
     dispatch(getBuscarContrato({ contrato: nroContrato }))
   }, [nroContrato])
-
-  React.useEffect(() => {
-    dispatch(getClientesFinales())
-  }, [])
 
   React.useEffect(() => {
     setFormValue({
@@ -85,26 +103,28 @@ function DatosGeneralesPanel (props) {
     observaciones: StringType()
   })
 
+  useEffect(() => {
+    if (isAdd === OPERATIONS.FULFILLED || isUpdate === OPERATIONS.FULFILLED) {
+      navigate('/')
+    }
+  }, [isAdd, isUpdate])
+
   const handleSubmit = async () => {
     if (formRef.current.check()) {
-      const fechaEmisionConvenio = date.dateFormat({ date: formValue.fechaEmisionConvenio })
-
+      const params = {
+        cantidad_bd: formValue.cantidadBaseDatos,
+        cliente_final: formValue.cliente,
+        contrato: contrato.idcontrato,
+        facturese_a: user.distribuidor.id,
+        fecha_emision: date.toISODate({ date: formValue.fechaEmisionConvenio }),
+        no_convenio: formValue.nroConvenio,
+        observaciones: formValue.observaciones,
+        solicitado_por: ''
+      }
       if (id === undefined) {
-        dispatch(addConvenio({
-          cantidad_bd: formValue.cantidadBaseDatos,
-          cliente_final: formValue.cliente,
-          contrato: '7aad845a-a666-4bf5-b631-b4b3e1a66aba',
-          facturese_a: user.distribuidor.id,
-          fecha_emision: fechaEmisionConvenio,
-          no_convenio: formValue.nroConvenio,
-          observaciones: formValue.observaciones,
-          solicitado_por: ''
-        }))
-        if (isAdd === OPERATIONS.FULFILLED) {
-          setTimeout(() => {
-            navigate('/')
-          }, 2000)
-        }
+        dispatch(addConvenio({ params }))
+      } else {
+        dispatch(updateConvenio({ id, params }))
       }
     }
   }
@@ -159,7 +179,7 @@ function DatosGeneralesPanel (props) {
         <Col xs={24} className='mt-4'>
           <ButtonToolbar>
             <Button appearance='primary' size='sm' onClick={handleSubmit} disabled={contrato?.fecha_inicial === undefined} loading={isAdd === OPERATIONS.PENDING}>
-              Guardar
+              {id === undefined ? 'Guardar' : 'Editar'}
             </Button>
           </ButtonToolbar>
         </Col>
