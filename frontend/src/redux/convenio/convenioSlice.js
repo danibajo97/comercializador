@@ -16,6 +16,13 @@ const initialState = {
 export const convenioSlice = createSlice({
   name: 'convenio',
   initialState,
+  reducers: {
+    stateResetOperation: (state) => {
+      state.isAdd = OPERATIONS.NONE
+      state.isUpdate = OPERATIONS.NONE
+      state.isDelete = OPERATIONS.NONE
+    }
+  },
   extraReducers: (builder) => {
     // GET_CONVENIO_ALL ACCION
     builder.addCase(getConveniosAll.pending, (state, action) => {
@@ -92,5 +99,7 @@ export const retrieveConvenio = createAsyncThunk('convenio/retrieveConvenio', ap
 export const addConvenio = createAsyncThunk('convenio/addConvenio', api.addConvenio)
 export const updateConvenio = createAsyncThunk('convenio/updateConvenio', api.updateConvenio)
 export const deleteConvenio = createAsyncThunk('convenio/deleteConvenio', api.deleteConvenio)
+
+export const { stateResetOperation } = convenioSlice.actions
 
 export default convenioSlice.reducer

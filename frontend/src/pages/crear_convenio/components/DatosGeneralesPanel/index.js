@@ -10,7 +10,7 @@ import OPERATIONS from 'constants/operationsRedux'
 import useAuth from 'hooks/useAuth'
 
 import { getBuscarContrato, getClientesFinales } from 'redux/datosGenerales/datosGeneralesSlice'
-import { addConvenio, updateConvenio, retrieveConvenio } from 'redux/convenio/convenioSlice'
+import { addConvenio, updateConvenio, retrieveConvenio, stateResetOperation } from 'redux/convenio/convenioSlice'
 
 function DatosGeneralesPanel () {
   const { user } = useAuth()
@@ -54,18 +54,22 @@ function DatosGeneralesPanel () {
     }
   }, [convenio])
 
+  const { nroContrato, fechaEmision, fechaVencimiento } = formValue
+
   useEffect(() => {
+    dispatch(getClientesFinales())
     if (id !== undefined) { dispatch(retrieveConvenio({ id })) }
+
+    return () => {
+      dispatch(stateResetOperation())
+    }
   }, [])
 
-  const { nroContrato, fechaEmision, fechaVencimiento } = formValue
+  console.log({ isAdd, isUpdate })
+
   React.useEffect(() => {
     dispatch(getBuscarContrato({ contrato: nroContrato }))
   }, [nroContrato])
-
-  React.useEffect(() => {
-    dispatch(getClientesFinales())
-  }, [])
 
   React.useEffect(() => {
     setFormValue({
@@ -99,43 +103,28 @@ function DatosGeneralesPanel () {
     observaciones: StringType()
   })
 
+  useEffect(() => {
+    if (isAdd === OPERATIONS.FULFILLED || isUpdate === OPERATIONS.FULFILLED) {
+      navigate('/')
+    }
+  }, [isAdd, isUpdate])
+
   const handleSubmit = async () => {
     if (formRef.current.check()) {
+      const params = {
+        cantidad_bd: formValue.cantidadBaseDatos,
+        cliente_final: formValue.cliente,
+        contrato: contrato.idcontrato,
+        facturese_a: user.distribuidor.id,
+        fecha_emision: date.toISODate({ date: formValue.fechaEmisionConvenio }),
+        no_convenio: formValue.nroConvenio,
+        observaciones: formValue.observaciones,
+        solicitado_por: ''
+      }
       if (id === undefined) {
-        dispatch(addConvenio({
-          cantidad_bd: formValue.cantidadBaseDatos,
-          cliente_final: formValue.cliente,
-          contrato: '7aad845a-a666-4bf5-b631-b4b3e1a66aba',
-          facturese_a: user.distribuidor.id,
-          fecha_emision: date.toISODate({ date: formValue.fechaEmisionConvenio }),
-          no_convenio: formValue.nroConvenio,
-          observaciones: formValue.observaciones,
-          solicitado_por: ''
-        }))
-        setTimeout(() => {
-          if (isAdd === OPERATIONS.FULFILLED) {
-            navigate('/')
-          }
-        }, 2000)
+        dispatch(addConvenio({ params }))
       } else {
-        dispatch(updateConvenio({
-          id,
-          params: {
-            cantidad_bd: formValue.cantidadBaseDatos,
-            cliente_final: formValue.cliente,
-            contrato: '7aad845a-a666-4bf5-b631-b4b3e1a66aba',
-            facturese_a: user.distribuidor.id,
-            fecha_emision: date.toISODate({ date: formValue.fechaEmisionConvenio }),
-            no_convenio: formValue.nroConvenio,
-            observaciones: formValue.observaciones,
-            solicitado_por: ''
-          }
-        }))
-        setTimeout(() => {
-          if (isUpdate === OPERATIONS.FULFILLED) {
-            navigate('/')
-          }
-        }, 2000)
+        dispatch(updateConvenio({ id, params }))
       }
     }
   }
