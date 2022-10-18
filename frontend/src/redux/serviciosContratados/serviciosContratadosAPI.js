@@ -25,29 +25,19 @@ async function getServiciosContratadosAll ({ convenio }) {
   }
 }
 
-async function addServiciosContratados ({ params }) {
+async function addServiciosContratados ({ convenio, params }) {
   const access = await window.sessionStorage.getItem('access')
-  const options = ({ data }) => {
-    return {
-      method: 'POST',
-      url: `${API_URL}/api-acceso/servicio_contratado/`,
-      headers: { Authorization: `Bearer ${access}` },
-      data
+  const options = {
+    method: 'POST',
+    url: `${API_URL}/api-acceso/servicio_contratado/crear_o_actualizar/`,
+    headers: { Authorization: `Bearer ${access}` },
+    data: {
+      convenio,
+      servicios: params
     }
   }
   try {
-    const promiseAll = params.map(data => {
-      return new Promise((resolve, reject) => {
-        resolve(axios(options({ data })))
-      })
-    })
-    Promise.all(promiseAll)
-      .then(() => {
-        return 'Se adicionó el servicio correctamente.'
-      })
-      .catch(() => {
-        throw new Error('Error al adicionar el servicio.')
-      })
+    await axios(options)
     return 'Se adicionó el servicio correctamente.'
   } catch (error) {
     throw new Error('Error al adicionar el servicio.')

@@ -24,6 +24,8 @@ export const convenioSlice = createSlice({
       state.isUpdate = OPERATIONS.NONE
       state.isDelete = OPERATIONS.NONE
       state.isListServicios = OPERATIONS.NONE
+      state.convenios = []
+      state.convenio = null
     }
   },
   extraReducers: (builder) => {

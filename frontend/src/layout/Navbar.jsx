@@ -18,10 +18,12 @@ import {
 import { NavLink as NavLinkRRD, Link } from 'react-router-dom'
 
 import useAuth from 'hooks/useAuth'
+import useUserOptions from 'hooks/useUserOptions'
 
 const Navbar = ({ routes }) => {
   const [isOpen, setIsOpen] = useState(false)
   const { user, logout } = useAuth()
+  const { changePasswordModal, openChangePasswordModal, contactUsModalModal, openContactUsModalModal } = useUserOptions()
 
   const toggle = () => {
     setIsOpen(!isOpen)
@@ -53,6 +55,7 @@ const Navbar = ({ routes }) => {
 
   return (
     <>
+      {changePasswordModal}{contactUsModalModal}
       <NavbarReact
         className='navbar-horizontal navbar-light bg-white fixed-top shadow-lg'
         style={{ paddingTop: '0.3em', paddingBottom: '0.3em' }}
@@ -93,13 +96,17 @@ const Navbar = ({ routes }) => {
                   <DropdownItem className='noti-title' header tag='div'>
                     <h6 className='text-overflow m-0'>Opciones</h6>
                   </DropdownItem>
-                  <DropdownItem to='/admin/user-profile' tag={Link}>
-                    <i className='ni ni-single-02' />
+                  <DropdownItem to='/admin/user-profile' tag={Link} hidden>
+                    <i className='fa fa-user' />
                     <span>Mi perfil</span>
                   </DropdownItem>
-                  <DropdownItem to='/admin/user-profile' tag={Link}>
-                    <i className='ni ni-support-16' />
-                    <span>Acerca de</span>
+                  <DropdownItem onClick={openChangePasswordModal}>
+                    <i className='fa fa-key' />
+                    <span>Cambiar Contraseña</span>
+                  </DropdownItem>
+                  <DropdownItem onClick={openContactUsModalModal}>
+                    <i className='fa fa-envelope' />
+                    <span>Contáctenos</span>
                   </DropdownItem>
                   <DropdownItem divider />
                   <DropdownItem onClick={() => logout()}>

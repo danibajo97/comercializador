@@ -25,6 +25,16 @@ const ServiciosContratadosItem = ({ label, rowValue = {}, onChange, rowIndex, ro
   return (
     <>
       <Row className='mb-3'>
+        <Col xs={24} sm={7} hidden>
+          <FormField
+            label='Id'
+            name='id'
+            value={rowValue.id}
+            // error={rowError?.id?.errorMessage}
+            // onChange={handleChangeAmount}
+            hidden
+          />
+        </Col>
         <Col xs={24} sm={17}>
           <FormField
             label={labelServicio}
@@ -117,7 +127,7 @@ const ServiciosContratadosPanel = () => {
   const [formError, setFormError] = React.useState({})
   const [formValue, setFormValue] = React.useState({
     servicios_contratados: [
-      { servicios: '', cantidad_bd: undefined }
+      { id: undefined, servicios: '', cantidad_bd: undefined }
     ]
   })
 
@@ -144,7 +154,7 @@ const ServiciosContratadosPanel = () => {
 
   useEffect(() => {
     const data = serviciosContratados.map(sc => {
-      return { servicios: sc.servicio, cantidad_bd: sc.cantidad }
+      return { id: sc.id, servicios: sc.servicio, cantidad_bd: sc.cantidad }
     })
     if (data.length > 0) { setFormValue({ servicios_contratados: data }) }
   }, [serviciosContratados])
@@ -168,9 +178,10 @@ const ServiciosContratadosPanel = () => {
 
   const guardarForm = () => {
     if (formRef.current.check()) {
-      const params = formValue.servicios_contratados.map(sc => {
+      const params = formValue.servicios_contratados.map((sc, index) => {
         const servicio = listadoServicios.find(ls => ls.id === sc.servicios)
         return {
+          id: sc.id,
           convenio: convenio.id,
           servicio: servicio.id,
           cantidad: sc.cantidad_bd,
@@ -178,15 +189,19 @@ const ServiciosContratadosPanel = () => {
           precio: servicio.precio_moneda
         }
       })
-      dispatch(addServiciosContratados({ params }))
+      const a = { convenio: convenio.id, params }
+      console.log({ a })
+      dispatch(addServiciosContratados(a))
     }
   }
+
+  const hasError = () => Object.keys(formError).length !== 0
 
   const renderForm = () => {
     return (
       <Form
         fluid
-        checkTrigger='blur'
+        checkTrigger='change'
         ref={formRef}
         onChange={setFormValue}
         onCheck={setFormError}
@@ -206,7 +221,7 @@ const ServiciosContratadosPanel = () => {
         <Row className='mt-4'>
           <Col xs={24}>
             <Button
-              disabled={isList !== OPERATIONS.FULFILLED}
+              disabled={hasError()}
               size='sm'
               appearance='primary'
               onClick={guardarForm}

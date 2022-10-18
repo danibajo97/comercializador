@@ -17,6 +17,7 @@ export const serviciosContratadosSlice = createSlice({
     stateResetOperation: (state) => {
       state.isList = OPERATIONS.NONE
       state.isAdd = OPERATIONS.NONE
+      state.serviciosContratados = []
     }
   },
   extraReducers: (builder) => {
