@@ -1,25 +1,47 @@
 import React, { useEffect } from 'react'
+import { useParams } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux'
 import {
   Row,
   Col
 } from 'reactstrap'
-import { useParams } from 'react-router-dom'
 import { Form, ButtonToolbar, Button, Schema, CheckPicker } from 'rsuite'
 import { toast } from 'react-toastify'
 
 import { FormField } from 'components'
-import { clienteFinal } from 'constants/mock'
 import Table from 'components/table/Table'
 
-const selectData = clienteFinal.map(item => ({
-  label: item.nombre,
-  value: item.id
-}))
+import { retrieveConvenio, stateResetOperation as stateResetOperationConvenio } from 'redux/convenio/convenioSlice'
+import { getListaClientesFinales, stateResetOperation as stateResetOperationClientesFinales } from 'redux/clientesFinales/clientesFinalesSlice'
 
-function ClientesFinalesPanel (props) {
+function ClientesFinalesPanel () {
+  const dispatch = useDispatch()
   const [db, serDB] = React.useState(2)
   const params = useParams()
   const { id } = params
+
+  const convenio = useSelector(state => state.convenio.convenio)
+  const listClientesFinales = useSelector(state => state.clientesFinales.listClientesFinales)
+  const isListClientesFinales = useSelector(state => state.clientesFinales.isListClientesFinales)
+
+  console.log({ listClientesFinales, isListClientesFinales })
+
+  useEffect(() => {
+    if (id !== undefined) {
+      dispatch(retrieveConvenio({ id }))
+      dispatch(getListaClientesFinales({ convenio: id }))
+    }
+    return () => {
+      dispatch(stateResetOperationConvenio())
+      dispatch(stateResetOperationClientesFinales())
+    }
+  }, [])
+
+  useEffect(() => {
+    if (convenio !== null) {
+      serDB(convenio.cantidad_bd)
+    }
+  }, [convenio])
 
   const formRef = React.useRef()
   const [formValue, setFormValue] = React.useState({
@@ -40,7 +62,7 @@ function ClientesFinalesPanel (props) {
   }
 
   const tableData = () => {
-    return clienteFinal.map(data => {
+    return listClientesFinales.map(data => {
       if (formValue.cliente_final.includes(data.id)) { return data } else return undefined
     }).filter(data => data !== undefined)
   }
@@ -70,14 +92,19 @@ function ClientesFinalesPanel (props) {
     >
       <Row>
         <Col xs='12'>
-          <FormField name='cliente_final' label='Cliente Final' accepter={CheckPicker} data={selectData} onSelect={onSelectClienteFinal} required block onClean={onClean} />
+          <FormField
+            name='cliente_final' label='Cliente Final' accepter={CheckPicker} data={listClientesFinales.map(cliente => ({
+              label: cliente.nombre,
+              value: cliente.id
+            }))} onSelect={onSelectClienteFinal} onClean={onClean} required block
+          />
         </Col>
       </Row>
       <Row>
         <Col className='mt-4'>
           {tableData().length > 0 &&
             <Table data={tableData()} autoHeight>
-              {Table.Column({ header: 'Nombre Completo Cliente', dataKey: 'nombre', flex: 1, white: true })}
+              {Table.Column({ header: 'Nombre Completo Cliente', dataKey: 'nombre_completo', flex: 1, white: true })}
               {Table.Column({ header: 'Correo', dataKey: 'correo', flex: 1, white: true })}
             </Table>}
         </Col>
@@ -85,7 +112,7 @@ function ClientesFinalesPanel (props) {
       <Row>
         <Col xs='12' className='mt-4'>
           <ButtonToolbar>
-            <Button appearance='primary' onClick={handleSubmit}>
+            <Button appearance='primary' size='sm' onClick={handleSubmit}>
               Guardar
             </Button>
           </ButtonToolbar>

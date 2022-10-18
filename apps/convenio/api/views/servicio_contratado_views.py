@@ -12,13 +12,10 @@ class ServicioContratadoViewSet(viewsets.GenericViewSet):
 
     def list(self, request):
         user = authenticated_user(request)
-        if request.GET.get('id_servicio_contratado'):
-            url = '%s%s/' % ('cmz/servicio_contratado_externo/',
-                             request.GET.get('id_servicio_contratado'))
-        else:
-            url = 'cmz/servicio_contratado_externo/'
+        url = 'cmz/servicio_contratado_externo/'
         params = {
             'authenticated-user': user.id_erp,
+            'convenio': request.GET.get('id_convenio')
         }
         response = self.responsebase.get(url=url, params=params)
         return Response(response.json(), status=response.status_code)

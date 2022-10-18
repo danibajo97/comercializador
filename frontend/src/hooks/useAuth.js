@@ -25,6 +25,10 @@ export default function useAuth () {
     dispatch(getUserAuth())
   }
 
+  const changePassword = ({ password, newPassword, repeatPassword }) => {
+    console.log({ password, newPassword, repeatPassword })
+  }
+
   return {
     user,
     isAuth,
@@ -32,6 +36,7 @@ export default function useAuth () {
     hasError,
     login,
     logout,
-    getUser
+    getUser,
+    changePassword
   }
 }

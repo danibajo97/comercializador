@@ -11,6 +11,7 @@ const initialState = {
   isAdd: OPERATIONS.NONE,
   isUpdate: OPERATIONS.NONE,
   isDelete: OPERATIONS.NONE,
+  isListServicios: OPERATIONS.NONE,
   listadoServicios: []
 }
 
@@ -22,6 +23,9 @@ export const convenioSlice = createSlice({
       state.isAdd = OPERATIONS.NONE
       state.isUpdate = OPERATIONS.NONE
       state.isDelete = OPERATIONS.NONE
+      state.isListServicios = OPERATIONS.NONE
+      state.convenios = []
+      state.convenio = null
     }
   },
   extraReducers: (builder) => {
@@ -94,10 +98,16 @@ export const convenioSlice = createSlice({
     })
 
     // LISTADO_SERVICIOS ACCION
+    builder.addCase(getListadoServicios.pending, (state, action) => {
+      state.isListServicios = OPERATIONS.PENDING
+    })
     builder.addCase(getListadoServicios.fulfilled, (state, action) => {
+      state.isListServicios = OPERATIONS.FULFILLED
+      toast.success(action.payload.message)
       state.listadoServicios = action.payload
     })
     builder.addCase(getListadoServicios.rejected, (state, action) => {
+      state.isListServicios = OPERATIONS.FULFILLED
       state.listadoServicios = []
       toast.error(action.error.message)
     })
