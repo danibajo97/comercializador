@@ -99,14 +99,14 @@ class UsuarioFinalWebViewSet(viewsets.GenericViewSet):
     @action(methods=['get'], detail=False)
     def lista_clientes_finales(self, request):
         user = authenticated_user(request)
-        url = '%s%s/' % ('cmz/cliente_final/lista_clientes_finales/',
-                         request.GET.get('id_convenio'))
+        url = '%s' % ('cmz/cliente_final/lista_clientes_finales/')
         params = {
             'authenticated-user': user.id_erp,
+            'id_convenio': request.GET.get('id_convenio')
         }
         response = self.responsebase.get(url=url, params=params)
         if response.status_code == 200:
-            return Response({'Versat-response': response.json()}, status=response.status_code)
+            return Response(data=response.json(), status=response.status_code)
         else:
             return Response({'message': "Hubo problemas al conectar con el servidor"},
                             status=response.status_code)
