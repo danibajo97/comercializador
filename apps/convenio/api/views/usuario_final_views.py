@@ -114,7 +114,7 @@ class UsuarioFinalWebViewSet(viewsets.GenericViewSet):
     @action(methods=['get'], detail=False)
     def lista_contactos(self, request):
         user = authenticated_user(request)
-        url = 'servicio/contactos/'
+        url = 'cmz/servicio/contactos/'
         params = {
             'authenticated-user': user.id_erp,
         }
@@ -142,24 +142,16 @@ class UsuarioFinalWebViewSet(viewsets.GenericViewSet):
 
     @action(methods=['put'], detail=False, url_path='aceptar_cliente_final', url_name='aceptar_cliente_final')
     def aceptar_cliente_final(self, request):
-        '''
-        http://localhost:8000/cmz/cliente_final/aceptar_cliente_final/
-        json: {
-            "negocio":"c0be9863-704d-416d-a292-87051bff106a",
-            "clienteData":["0ed6bd54-c3e1-5163-89f8-c670efc9414d","6f91502b-69c1-54b6-a56a-064f372132e2"]
-            }
-        '''
         user = authenticated_user(request)
-        url = 'cmz/usuario_final/aceptar_cliente_final/'
-        params = request.query_params  # no se si es asi,
-        # Si es creando a partir de un contacto seleccionado, mandar parametro
-        # contacto_existe = contacto seleccionado, en otro caso no pasar el parametro
-        params['id_contacto'] = user.id_erp
+        url = 'cmz/cliente_final/aceptar_cliente_final/'
+        params = {
+            'authenticated-user': user.id_erp,
+        }
         response = self.responsebase.put(
-            url=url, params=params, json=request.data)
+            url=url, json=request.data, params=params)
         if response.status_code == 200:
-            return Response({'Comercializador-response': 'Actualizado Correctamente',
-                             'Versat-response': response.json()}, status=response.status_code)
+            return Response({'Comercializador-response': 'Actualizado correctamente'},
+                            status=response.status_code)
         else:
             return Response({'Versat-response': response.json()},
                             status=response.status_code)
