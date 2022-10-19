@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { useParams, useNavigate } from 'react-router-dom'
-import { Row, Col, Form, Button, Divider, ButtonToolbar, Schema, SelectPicker, DatePicker } from 'rsuite'
+import { Row, Col, Form, Button, Divider, ButtonToolbar, Schema, SelectPicker, DatePicker, Placeholder } from 'rsuite'
 
 import { FormField, Textarea, InputNumber } from 'components'
 import { date } from 'utils'
@@ -9,35 +9,36 @@ import OPERATIONS from 'constants/operationsRedux'
 
 import useAuth from 'hooks/useAuth'
 
-import { getBuscarContrato, getClientesFinales } from 'redux/datosGenerales/datosGeneralesSlice'
-import { addConvenio, updateConvenio, retrieveConvenio, stateResetOperation } from 'redux/convenio/convenioSlice'
+import { getBuscarContrato, getClientesFinales, stateResetOperation as stateResetOperationDatosGenerales } from 'redux/datosGenerales/datosGeneralesSlice'
+import { addConvenio, updateConvenio, retrieveConvenio, stateResetOperation as stateResetOperationConvenio } from 'redux/convenio/convenioSlice'
+
+const INI_VALUE = {
+  nroContrato: '',
+  fechaEmision: undefined,
+  fechaVencimiento: undefined,
+  nroConvenio: '',
+  fechaEmisionConvenio: undefined,
+  solicitadoPor: '',
+  cliente: '',
+  cantidadBaseDatos: 1,
+  observaciones: ''
+}
 
 function DatosGeneralesPanel () {
   const { user } = useAuth()
   const dispatch = useDispatch()
   const contrato = useSelector(state => state.datosGenerales.contrato)
   const clientesFinales = useSelector(state => state.datosGenerales.clientesFinales)
+  const isClienteFinal = useSelector(state => state.datosGenerales.isClienteFinal)
 
   const isAdd = useSelector(state => state.convenio.isAdd)
-  const isUpdate = useSelector(state => state.convenio.isUpdate)
   const convenio = useSelector(state => state.convenio.convenio)
 
-  const navigate = useNavigate()
   const params = useParams()
   const { id } = params
 
   const formRef = React.useRef()
-  const [formValue, setFormValue] = React.useState({
-    nroContrato: '',
-    fechaEmision: undefined,
-    fechaVencimiento: undefined,
-    nroConvenio: '',
-    fechaEmisionConvenio: undefined,
-    solicitadoPor: '',
-    cliente: '',
-    cantidadBaseDatos: 1,
-    observaciones: ''
-  })
+  const [formValue, setFormValue] = React.useState(INI_VALUE)
 
   useEffect(() => {
     if (convenio !== null) {
@@ -61,11 +62,10 @@ function DatosGeneralesPanel () {
     if (id !== undefined) { dispatch(retrieveConvenio({ id })) }
 
     return () => {
-      dispatch(stateResetOperation())
+      dispatch(stateResetOperationConvenio())
+      dispatch(stateResetOperationDatosGenerales())
     }
   }, [])
-
-  console.log({ isAdd, isUpdate })
 
   React.useEffect(() => {
     dispatch(getBuscarContrato({ contrato: nroContrato }))
@@ -104,10 +104,10 @@ function DatosGeneralesPanel () {
   })
 
   useEffect(() => {
-    if (isAdd === OPERATIONS.FULFILLED || isUpdate === OPERATIONS.FULFILLED) {
-      navigate('/')
+    if (isAdd === OPERATIONS.FULFILLED) {
+      setFormValue(INI_VALUE)
     }
-  }, [isAdd, isUpdate])
+  }, [isAdd])
 
   const handleSubmit = async () => {
     if (formRef.current.check()) {
@@ -129,7 +129,7 @@ function DatosGeneralesPanel () {
     }
   }
 
-  return (
+  const renderForm = () => (
     <Form
       fluid
       ref={formRef}
@@ -185,6 +185,14 @@ function DatosGeneralesPanel () {
         </Col>
       </Row>
     </Form>
+  )
+
+  return (
+    <>
+      {isClienteFinal === OPERATIONS.FULFILLED
+        ? renderForm()
+        : <Placeholder.Paragraph rows={3} />}
+    </>
   )
 }
 

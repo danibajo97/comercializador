@@ -1,16 +1,18 @@
 import React, { useState } from 'react'
 import { Modal, Button } from 'rsuite'
 
-export default function useModal ({ title, renderBody, footer = false }) {
+export default function useModal ({ title, renderBody, footer = false, size = 'md' }) {
   const [visible, setVisible] = useState(false)
 
   const openModal = () => setVisible(true)
   const closeModal = () => setVisible(false)
 
+  const renderTitle = () => typeof title === 'function' ? title() : title
+
   const modal = (
-    <Modal backdrop='static' size='md' open={visible} onClose={closeModal}>
+    <Modal backdrop='static' size={size} open={visible} onClose={closeModal}>
       <Modal.Header>
-        <Modal.Title>{title}</Modal.Title>
+        <Modal.Title>{renderTitle()}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         {renderBody({ openModal, closeModal })}
