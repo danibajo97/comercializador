@@ -16,7 +16,7 @@ const INI_VALUE = {
   nroContrato: '',
   fechaEmision: undefined,
   fechaVencimiento: undefined,
-  nroConvenio: '',
+  nroConvenio: 'automatico',
   fechaEmisionConvenio: undefined,
   solicitadoPor: '',
   cliente: '',
@@ -74,7 +74,6 @@ function DatosGeneralesPanel () {
   React.useEffect(() => {
     setFormValue({
       ...formValue,
-      nroConvenio: contrato?.no_convenio || '',
       fechaEmision: contrato?.fecha_inicial ? new Date(contrato.fecha_inicial) : undefined,
       fechaVencimiento: contrato?.fecha_final ? new Date(contrato.fecha_final) : undefined
     })
@@ -88,8 +87,7 @@ function DatosGeneralesPanel () {
       .isRequired('Este campo es obligatorio.'),
     fechaVencimiento: DateType()
       .isRequired('Este campo es obligatorio.'),
-    nroConvenio: StringType()
-      .isRequired('Este campo es obligatorio.'),
+    nroConvenio: StringType(),
     fechaEmisionConvenio: DateType()
       .min(fechaEmision, 'Este campo no puede ser menor que la fecha de emisión.')
       .max(fechaVencimiento, 'Este campo no puede ser mayor que la fecha de vencimiento.')
@@ -139,12 +137,11 @@ function DatosGeneralesPanel () {
     >
       <Row>
         <Col xs={24} sm={12} md={12} lg={12}>
-          {/* <FormField name='distribuidor' label='Distribuidor' disabled /> */}
-          <FormField name='nroContrato' label='Nro. Contrato' required />
+          <FormField name='nroContrato' label='Nro. Contrato' required disabled={id !== undefined} />
           <FormField name='fechaEmision' label='Fecha Emisión' accepter={DatePicker} disabled block />
         </Col>
         <Col xs={24} sm={12} md={12} lg={12}>
-          <FormField name='nroConvenio' label='Nro. Convenio' required />
+          <FormField name='nroConvenio' label='Nro. Convenio' required disabled hidden={id === undefined} />
           <FormField name='fechaVencimiento' label='Fecha Vencimiento' accepter={DatePicker} disabled block />
         </Col>
       </Row>
