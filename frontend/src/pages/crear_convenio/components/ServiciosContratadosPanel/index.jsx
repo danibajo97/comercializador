@@ -1,7 +1,8 @@
 import React, { useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import { Form, Button, ButtonGroup, Schema, SelectPicker, Row, Col, IconButton, Placeholder, Divider } from 'rsuite'
+import { Alert, UncontrolledAlert } from 'reactstrap'
+import { Form, Button, ButtonGroup, Schema, SelectPicker, Row, Col, IconButton, Placeholder, Divider, Message } from 'rsuite'
 import PlusIcon from '@rsuite/icons/Plus'
 import MinusIcon from '@rsuite/icons/Minus'
 
@@ -189,13 +190,15 @@ const ServiciosContratadosPanel = () => {
           precio: servicio.precio_moneda
         }
       })
-      const a = { convenio: convenio.id, params }
-      console.log({ a })
-      dispatch(addServiciosContratados(a))
+      dispatch(addServiciosContratados({ convenio: convenio.id, params }))
     }
   }
 
   const hasError = () => Object.keys(formError).length !== 0
+
+  const isServiciosContratadosRelacionado = () => {
+    return serviciosContratados.some(sc => !sc.relacionado)
+  }
 
   const renderForm = () => {
     return (
@@ -236,6 +239,11 @@ const ServiciosContratadosPanel = () => {
 
   return (
     <>
+      {isServiciosContratadosRelacionado() &&
+        <Message showIcon style={{ backgroundColor: '#E3F3FD' }} header='Información'>
+          Existen servicios contratados usados, si se modifican, los plazos de pagos se eliminaran.
+        </Message>}
+      <br />
       {isList === OPERATIONS.FULFILLED && isListServicios === OPERATIONS.FULFILLED
         ? renderForm()
         : <Placeholder.Paragraph rows={3} />}

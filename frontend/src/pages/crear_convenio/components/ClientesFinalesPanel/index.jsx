@@ -1,10 +1,7 @@
 import React, { useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import {
-  Row,
-  Col
-} from 'reactstrap'
+import { Row, Col } from 'reactstrap'
 import { Form, ButtonToolbar, Button, Schema, CheckPicker } from 'rsuite'
 import { toast } from 'react-toastify'
 

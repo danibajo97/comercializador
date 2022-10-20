@@ -68,13 +68,6 @@ const ActionCell = ({ rowData, dataKey, ...props }) => {
 }
 
 export default function AsociarServicios ({ id }) {
-  const { modal, openModal } = useModal({
-    title: 'Nuevo Servicios',
-    renderBody: ({ closeModal }) => {
-      return <AsociarServiciosForm closeModal={closeModal} />
-    }
-  })
-
   const renderEmpty = () => {
     if (id !== null) { return <div className='text-center text-muted mt-5 mb-5'>No hay elementos disponibles</div> } else { return <div className='text-center text-muted mt-5 mb-5'>Seleccione un plazo de pago</div> }
   }
@@ -82,7 +75,7 @@ export default function AsociarServicios ({ id }) {
   const renderCantidadCell = ({ header, dataKey }) => {
     return (
       <TableRS.Column flexGrow={1}>
-        <TableRS.HeaderCell style={Table.styleHeaderWhite}>
+        <TableRS.HeaderCell style={Table.styleHeader}>
           {header}
         </TableRS.HeaderCell>
         <CantidadCell dataKey={dataKey} style={Table.styleCell} />
@@ -93,7 +86,7 @@ export default function AsociarServicios ({ id }) {
   const renderColumnAccion = (dataKey) => {
     return (
       <TableRS.Column width={100}>
-        <TableRS.HeaderCell style={Table.styleHeaderWhite}>
+        <TableRS.HeaderCell style={Table.styleHeader}>
           Acciones
         </TableRS.HeaderCell>
         <ActionCell dataKey={dataKey} style={Table.styleCell} />
@@ -102,23 +95,15 @@ export default function AsociarServicios ({ id }) {
   }
 
   return (
-    <Panel
-      bordered header={
-        <Stack justifyContent='space-between'>
-          <span>Asociar Servicios a Plazo de Pago </span>
-          <Button appearance='primary' size='sm' color='blue' disabled={id === null} onClick={openModal}>Adicionar</Button>
-        </Stack>
-      }
-    >
-      {modal}
+    <>
       <Table data={id ? mockServiciosPlazosPago : []} autoHeight renderEmpty={renderEmpty}>
-        {Table.Column({ header: 'Servicio', dataKey: 'servicio', flex: 1, white: true })}
-        {/* {Table.Column({ header: 'Cantidad', dataKey: 'cantidad', flex: 1, white: true })} */}
+        {Table.Column({ header: 'Servicio', dataKey: 'servicio', flex: 1 })}
+        {/* {Table.Column({ header: 'Cantidad', dataKey: 'cantidad', flex: 1})} */}
         {renderCantidadCell({ header: 'Cantidad', dataKey: 'cantidad' })}
-        {Table.ColumnNumberFormat({ header: 'Precio', dataKey: 'precio', flex: 1, white: true })}
-        {Table.ColumnNumberFormat({ header: 'A Facturar', dataKey: 'aFacturar', flex: 1, white: true })}
+        {Table.ColumnNumberFormat({ header: 'Precio', dataKey: 'precio', flex: 1 })}
+        {Table.ColumnNumberFormat({ header: 'A Facturar', dataKey: 'aFacturar', flex: 1 })}
         {renderColumnAccion('id')}
       </Table>
-    </Panel>
+    </>
   )
 }

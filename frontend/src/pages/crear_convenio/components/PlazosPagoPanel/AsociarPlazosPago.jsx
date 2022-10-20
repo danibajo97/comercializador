@@ -1,22 +1,20 @@
-import React from 'react'
-// import { useNavigate } from 'react-router-dom'
+import React, { useEffect } from 'react'
 import {
-  Panel,
-  Stack,
-  Button,
   Popover,
   Whisper,
   Dropdown,
   IconButton,
   Table as TableRS,
-  Checkbox
+  Checkbox,
+  Placeholder
 } from 'rsuite'
+import { useDispatch, useSelector } from 'react-redux'
 import MoreIcon from '@rsuite/icons/legacy/More'
+import { useParams } from 'react-router-dom'
 
+import OPERATIONS from 'constants/operationsRedux'
+import { getPlazoPagoAll, stateResetOperation } from 'redux/plazoPago/plazoPagoSlice'
 import Table from 'components/table/Table'
-import { mockPlazosPago } from 'constants/mock'
-import useModal from 'hooks/useModal'
-import { PlazosPagoForm } from './PlazosPagoForm'
 
 const ActionCell = ({ rowData, dataKey, ...props }) => {
   return (
@@ -61,15 +59,22 @@ const CheckCell = ({ rowData, onChange, checkedKeys, dataKey, ...props }) => (
 )
 
 export default function AsociarPlazosPago ({ setSelectedId }) {
-  // const navigate = useNavigate()
+  const dispatch = useDispatch()
+  const isList = useSelector(state => state.plazoPago.isList)
+  const plazosPagos = useSelector(state => state.plazoPago.plazosPagos)
   const [checkedKeys, setCheckedKeys] = React.useState(null)
 
-  const { modal, openModal } = useModal({
-    title: 'Nuevo Plazos de Pagos',
-    renderBody: ({ closeModal }) => {
-      return <PlazosPagoForm closeModal={closeModal} />
+  const params = useParams()
+  const { id } = params
+
+  useEffect(() => {
+    if (id !== undefined) {
+      dispatch(getPlazoPagoAll({ convenio: id }))
     }
-  })
+    return () => {
+      dispatch(stateResetOperation())
+    }
+  }, [])
 
   React.useEffect(() => {
     setSelectedId(checkedKeys)
@@ -80,10 +85,10 @@ export default function AsociarPlazosPago ({ setSelectedId }) {
     setCheckedKeys(keys)
   }
 
-  const RenderColumnAccion = (dataKey) => {
+  const renderColumnAccion = dataKey => {
     return (
       <TableRS.Column width={100}>
-        <TableRS.HeaderCell style={Table.styleHeaderWhite}>
+        <TableRS.HeaderCell style={Table.styleHeader}>
           Acciones
         </TableRS.HeaderCell>
         <ActionCell dataKey={dataKey} style={Table.styleCell} />
@@ -91,37 +96,35 @@ export default function AsociarPlazosPago ({ setSelectedId }) {
     )
   }
 
-  const RenderCheckCell = (dataKey) => {
+  const renderCheckCell = () => {
     return (
       <TableRS.Column width={50}>
-        <TableRS.HeaderCell style={Table.styleHeaderWhite} />
+        <TableRS.HeaderCell style={Table.styleHeader} />
         <CheckCell dataKey='id' checkedKeys={checkedKeys} onChange={handleCheck} />
       </TableRS.Column>
     )
   }
 
-  const onRowClick = (rowData) => {
+  const onRowClick = rowData => {
     handleCheck(rowData.id, checkedKeys !== rowData.id)
   }
 
+  const renderTable = () => (
+    <Table data={plazosPagos} autoHeight onRowClick={onRowClick}>
+      {renderCheckCell('id')}
+      {Table.Column({ header: 'Fecha', dataKey: 'fecha', flex: 1 })}
+      {Table.ColumnNumberFormat({ header: 'Importe', dataKey: 'importe', flex: 1 })}
+      {Table.ColumnBoolean({ header: 'Facturado', dataKey: 'facturado', flex: 1 })}
+      {Table.ColumnBoolean({ header: 'Cobrado', dataKey: 'cobrado', flex: 1 })}
+      {renderColumnAccion('id')}
+    </Table>
+  )
+
   return (
-    <Panel
-      bordered header={
-        <Stack justifyContent='space-between'>
-          <span>Plazos de Pagos</span>
-          <Button appearance='primary' size='sm' color='blue' onClick={openModal}>Adicionar</Button>
-        </Stack>
-      }
-    >
-      {modal}
-      <Table data={mockPlazosPago} autoHeight onRowClick={onRowClick}>
-        {RenderCheckCell('id')}
-        {Table.Column({ header: 'Fecha', dataKey: 'fecha', flex: 1, white: true })}
-        {Table.ColumnNumberFormat({ header: 'Importe', dataKey: 'importe', flex: 1, white: true })}
-        {Table.ColumnBoolean({ header: 'Facturado', dataKey: 'facturado', flex: 1, white: true })}
-        {Table.ColumnBoolean({ header: 'Cobrado', dataKey: 'cobrado', flex: 1, white: true })}
-        {RenderColumnAccion('id')}
-      </Table>
-    </Panel>
+    <>
+      {isList === OPERATIONS.FULFILLED
+        ? renderTable()
+        : <Placeholder.Grid rows={3} columns={4} />}
+    </>
   )
 }
