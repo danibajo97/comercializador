@@ -12,13 +12,10 @@ class UsuarioFinalWebViewSet(viewsets.GenericViewSet):
 
     def list(self, request):
         user = authenticated_user(request)
-        if request.GET.get('id_usuario_final'):
-            url = '%s%s/' % ('cmz/usuario_final/',
-                             request.GET.get('id_usuario_final'))
-        else:
-            url = 'cmz/usuario_final/'
+        url = 'cmz/usuario_final/'
         params = {
             'authenticated-user': user.id_erp,
+            'negocio': request.GET.get('id_convenio')
         }
         response = self.responsebase.get(url=url, params=params)
         return Response(response.json(), status=response.status_code)
