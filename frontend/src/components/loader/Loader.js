@@ -2,27 +2,6 @@ import React, { Component } from 'react'
 
 import { Loader as LoaderRS, Placeholder } from 'rsuite'
 
-function LoaderDefault ({ full }) {
-  const styles = {
-    height: '100%',
-    width: '100%',
-    backgroundColor: 'red',
-    justifyContent: 'center',
-    alignContent: 'center'
-  }
-
-  return (
-    <div style={styles}>
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <LoaderRS content='Cargando...' speed='slow' center />
-    </div>
-  )
-}
-
 function LoaderGrid ({ rows, columns }) {
   return (
     <div>
@@ -42,7 +21,6 @@ function LoaderParagraph () {
 }
 
 export default class Loader extends Component {
-  static Default = LoaderDefault
   static Grid = LoaderGrid
   static Paragraph = LoaderParagraph
 }
