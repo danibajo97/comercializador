@@ -2,15 +2,22 @@ import { DateTime } from 'luxon'
 
 export default {
   toISODate,
-  toJSDate
+  toJSDate,
+  setDate
+}
+
+function datetime ({ date }) {
+  return DateTime.fromJSDate(new Date(date)).plus({ days: 1 })
 }
 
 function toISODate ({ date }) {
-  return DateTime.fromJSDate(new Date(date)).toISODate()
+  return datetime({ date }).toISODate()
 }
 
 function toJSDate ({ date }) {
-  const dateMoreUno = new Date(date)
-  dateMoreUno.setDate(new Date(date).getDate() + 1)
-  return DateTime.fromJSDate(dateMoreUno).toJSDate()
+  return datetime({ date }).toJSDate()
+}
+
+function setDate ({ date, days }) {
+  return datetime({ date }).plus({ days: parseInt(days) }).toJSDate()
 }
