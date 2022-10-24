@@ -5,6 +5,7 @@ import FormField from 'components/form/FormField'
 import Textarea from 'components/form/Textarea'
 import InputPassword from 'components/form/InputPassword'
 import InputNumber from 'components/form/InputNumber'
+import Loader from 'components/loader/Loader'
 
 export {
   Button,
@@ -13,5 +14,6 @@ export {
   Textarea,
   InputNumber,
   InputPassword,
-  renderEmpty
+  renderEmpty,
+  Loader
 }

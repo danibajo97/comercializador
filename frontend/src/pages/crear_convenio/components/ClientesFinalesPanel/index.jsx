@@ -2,10 +2,10 @@ import React, { useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { Row, Col } from 'reactstrap'
-import { Form, ButtonToolbar, Button, Schema, CheckPicker, Message, Placeholder } from 'rsuite'
+import { Form, ButtonToolbar, Button, Schema, CheckPicker, Message } from 'rsuite'
 import { toast } from 'react-toastify'
 
-import { FormField } from 'components'
+import { FormField, Loader } from 'components'
 import Table from 'components/table/Table'
 
 import { retrieveConvenio, stateResetOperation as stateResetOperationConvenio } from 'redux/convenio/convenioSlice'
@@ -33,8 +33,6 @@ function ClientesFinalesPanel () {
   const isListClientesFinales = useSelector(state => state.clientesFinales.isListClientesFinales)
   const isList = useSelector(state => state.clientesFinales.isList)
   const clientesFinales = useSelector(state => state.clientesFinales.clientesFinales)
-
-  console.log({ listClientesFinales, isListClientesFinales, isList, clientesFinales })
 
   useEffect(() => {
     if (id !== undefined) {
@@ -65,7 +63,6 @@ function ClientesFinalesPanel () {
         toast.error(`Debes seleccionar ${db} clientes.`)
       } else {
         const params = formValue.cliente_final
-        console.log({ params })
         dispatch(addClientesFinales({ convenio: id, params }))
       }
     }
@@ -147,7 +144,7 @@ function ClientesFinalesPanel () {
             {isClientesFinalesRelacionados()}
             {renderForm()}
           </>)
-        : <Placeholder.Paragraph rows={5} />}
+        : <Loader.Paragraph rows={5} />}
     </>
   )
 }

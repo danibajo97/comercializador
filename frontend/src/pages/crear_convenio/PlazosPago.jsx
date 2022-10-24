@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Card, Container, CardHeader } from 'reactstrap'
 import { Row, Col, Button } from 'rsuite'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 
 import { DefaultHeader } from 'components'
 import AsociarPlazosPago from './components/PlazosPagoPanel/AsociarPlazosPago'
@@ -14,10 +14,13 @@ function PlazosPago () {
   const navigate = useNavigate()
   const [selectedId, setSelectedId] = useState(null)
 
+  const params = useParams()
+  const { id } = params
+
   const modalPlazoPago = useModal({
     title: 'Nuevo Plazos de Pagos',
     renderBody: ({ closeModal }) => {
-      return <PlazosPagoForm closeModal={closeModal} />
+      return <PlazosPagoForm closeModal={closeModal} convenioId={id} />
     }
   })
 

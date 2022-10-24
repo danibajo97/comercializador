@@ -1,28 +1,24 @@
-import React from 'react'
-import {
-  Panel,
-  Stack,
-  Button,
-  Popover,
-  Table as TableRS,
-  Whisper,
-  Dropdown,
-  IconButton
-} from 'rsuite'
-import Table from 'components/table/Table'
+import React, { useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { Popover, Table as TableRS, Whisper, Dropdown, IconButton } from 'rsuite'
 import MoreIcon from '@rsuite/icons/legacy/More'
 
-import { mockServiciosPlazosPago } from 'constants/mock'
-import useModal from 'hooks/useModal'
-import { AsociarServiciosForm } from './AsociarServiciosForm'
+import { getPlazoPagoServicioAll, stateResetOperation } from 'redux/plazoPagoServicio/plazoPagoServicioSlice'
+import OPERATIONS from 'constants/operationsRedux'
+import Table from 'components/table/Table'
+import { Loader } from 'components'
+import usePagination from 'hooks/usePagination'
 
 const CantidadCell = ({ rowData, dataKey, ...props }) => {
+  const count = rowData[dataKey]
+  const text = count > 1 ? 'Clientes' : 'Cliente'
+
   const speaker = (
-    <Popover title='Cientes'>
-      {rowData.clientes.map((item, key) => {
+    <Popover title={text}>
+      {rowData.usuarios_finales.map((item, key) => {
         return (
           <div key={key}>
-            <div className=''>{key + 1} - {item}</div>
+            <div className=''>{key + 1} - {item.contacto}</div>
           </div>
         )
       })}
@@ -32,7 +28,7 @@ const CantidadCell = ({ rowData, dataKey, ...props }) => {
   return (
     <TableRS.Cell {...props}>
       <Whisper placement='top' speaker={speaker}>
-        <a style={{ cursor: 'pointer' }}>{rowData[dataKey]}</a>
+        <a style={{ cursor: 'pointer' }}>{count} {text}</a>
       </Whisper>
     </TableRS.Cell>
   )
@@ -68,6 +64,24 @@ const ActionCell = ({ rowData, dataKey, ...props }) => {
 }
 
 export default function AsociarServicios ({ id }) {
+  const dispatch = useDispatch()
+  const plazoPagoServicio = useSelector(state => state.plazoPagoServicio.plazoPagoServicio)
+  const isList = useSelector(state => state.plazoPagoServicio.isList)
+
+  const { pagination, dataPage } = usePagination({ data: plazoPagoServicio, title: 'Servicios' })
+
+  useEffect(() => {
+    if (id !== undefined) {
+      dispatch(getPlazoPagoServicioAll({ plazoPagoId: id }))
+    }
+  }, [id])
+
+  useEffect(() => {
+    return () => {
+      dispatch(stateResetOperation())
+    }
+  }, [])
+
   const renderEmpty = () => {
     if (id !== null) { return <div className='text-center text-muted mt-5 mb-5'>No hay elementos disponibles</div> } else { return <div className='text-center text-muted mt-5 mb-5'>Seleccione un plazo de pago</div> }
   }
@@ -94,16 +108,25 @@ export default function AsociarServicios ({ id }) {
     )
   }
 
-  return (
+  const renderTable = () => (
     <>
-      <Table data={id ? mockServiciosPlazosPago : []} autoHeight renderEmpty={renderEmpty}>
-        {Table.Column({ header: 'Servicio', dataKey: 'servicio', flex: 1 })}
+      <Table data={id ? dataPage : []} autoHeight renderEmpty={renderEmpty}>
+        {Table.Column({ header: 'Servicio', dataKey: 'servicio_nombre', flex: 1 })}
         {/* {Table.Column({ header: 'Cantidad', dataKey: 'cantidad', flex: 1})} */}
         {renderCantidadCell({ header: 'Cantidad', dataKey: 'cantidad' })}
-        {Table.ColumnNumberFormat({ header: 'Precio', dataKey: 'precio', flex: 1 })}
-        {Table.ColumnNumberFormat({ header: 'A Facturar', dataKey: 'aFacturar', flex: 1 })}
+        {Table.ColumnNumberFormat({ header: 'Precio', dataKey: 'servicio_precio', flex: 1 })}
+        {Table.ColumnNumberFormat({ header: 'A Facturar', dataKey: 'a_facturar', flex: 1 })}
         {renderColumnAccion('id')}
       </Table>
+      {pagination}
+    </>
+  )
+
+  return (
+    <>
+      {isList === OPERATIONS.FULFILLED
+        ? renderTable()
+        : <Loader.Grid rows={4} columns={5} />}
     </>
   )
 }
