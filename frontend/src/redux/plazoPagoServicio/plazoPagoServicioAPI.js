@@ -3,31 +3,31 @@ import axios from 'axios'
 const API_URL = process.env.REACT_APP_API_URL
 
 export default {
-  getPlazoPagoAll,
-  addPlazoPago,
-  updatePlazoPago,
-  deletePlazoPago
+  getPlazoPagoServicioAll,
+  addPlazoPagoServicio,
+  updatePlazoPagoServicio,
+  deletePlazoPagoServicio
 }
 
-async function getPlazoPagoAll ({ convenio }) {
+async function getPlazoPagoServicioAll ({ plazoPagoId }) {
   const access = await window.sessionStorage.getItem('access')
   const options = {
     method: 'GET',
-    url: `${API_URL}/api-acceso/plazo_pago/`,
+    url: `${API_URL}/api-acceso/plazo_pago_servicio/`,
     headers: { Authorization: `Bearer ${access}` },
     params: {
-      id_convenio: convenio
+      plazoPagoId
     }
   }
   try {
     const { data } = await axios(options)
     return data.results
   } catch (error) {
-    throw new Error('Error al listar los plazos de pagos.')
+    throw new Error('Error al listar los servicios de plazo de pago.')
   }
 }
 
-async function addPlazoPago ({ params }) {
+async function addPlazoPagoServicio ({ params }) {
   const access = await window.sessionStorage.getItem('access')
   const options = {
     method: 'POST',
@@ -43,7 +43,7 @@ async function addPlazoPago ({ params }) {
   }
 }
 
-async function updatePlazoPago ({ id, params }) {
+async function updatePlazoPagoServicio ({ id, params }) {
   const access = await window.sessionStorage.getItem('access')
   const options = {
     method: 'PUT',
@@ -59,7 +59,7 @@ async function updatePlazoPago ({ id, params }) {
   }
 }
 
-async function deletePlazoPago ({ id }) {
+async function deletePlazoPagoServicio ({ id }) {
   const access = await window.sessionStorage.getItem('access')
   const options = {
     method: 'DELETE',

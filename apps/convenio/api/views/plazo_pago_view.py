@@ -13,7 +13,7 @@ class PlazoPagoViewSet(viewsets.GenericViewSet):
         url = 'cmz/plazo_pago/'
         response = self.responsebase.post(url, json=request.data)
         if response.status_code == 201:
-            return Response(response.request.data, status=response.status_code)
+            return Response(status=response.status_code)
         else:
             return Response({'message': 'Hubo problemas al conectar con el servidor'},
                             status=response.status_code)
@@ -22,7 +22,7 @@ class PlazoPagoViewSet(viewsets.GenericViewSet):
         url = 'cmz/plazo_pago/'
         print(request.GET.get('id_convenio'))
         params = {
-            'id_convenio': request.GET.get('id_convenio'),
+            'negocio': request.GET.get('id_convenio'),
         }
         response = self.responsebase.get(url, params=params)
         if response.status_code == 200:
@@ -33,8 +33,8 @@ class PlazoPagoViewSet(viewsets.GenericViewSet):
 
     @transaction.atomic
     def update(self, request, pk=None):
-        url = 'cmz/plazo_pago/'
-        response = self.responsebase.patch(url, request)
+        url = 'cmz/plazo_pago/%s/' % pk
+        response = self.responsebase.put(url, json=request.data)
         if response.status_code == 204:
             return Response(status=response.status_code)
         else:
@@ -52,7 +52,7 @@ class PlazoPagoViewSet(viewsets.GenericViewSet):
 
     @transaction.atomic
     def delete(self, request, pk=None):
-        url = 'cmz/plazo_pago/' + request.GET.get('id')
+        url = 'cmz/plazo_pago/%s/' % pk
         response = self.responsebase.delete(url)
         if response.status_code == 204:
             return Response(status=response.status_code)

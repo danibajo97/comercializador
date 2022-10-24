@@ -2,43 +2,21 @@ import React, { useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { Row, Col } from 'reactstrap'
-import { Form, ButtonToolbar, Button, Schema, CheckPicker } from 'rsuite'
+import { Form, ButtonToolbar, Button, Schema, CheckPicker, Message } from 'rsuite'
 import { toast } from 'react-toastify'
 
-import { FormField } from 'components'
+import { FormField, Loader } from 'components'
 import Table from 'components/table/Table'
 
 import { retrieveConvenio, stateResetOperation as stateResetOperationConvenio } from 'redux/convenio/convenioSlice'
-import { getListaClientesFinales, stateResetOperation as stateResetOperationClientesFinales } from 'redux/clientesFinales/clientesFinalesSlice'
+import { getListaClientesFinales, addClientesFinales, getClientesFinales, stateResetOperation as stateResetOperationClientesFinales } from 'redux/clientesFinales/clientesFinalesSlice'
+import OPERATIONS from 'constants/operationsRedux'
 
 function ClientesFinalesPanel () {
   const dispatch = useDispatch()
   const [db, serDB] = React.useState(2)
   const params = useParams()
   const { id } = params
-
-  const convenio = useSelector(state => state.convenio.convenio)
-  const listClientesFinales = useSelector(state => state.clientesFinales.listClientesFinales)
-  const isListClientesFinales = useSelector(state => state.clientesFinales.isListClientesFinales)
-
-  console.log({ listClientesFinales, isListClientesFinales })
-
-  useEffect(() => {
-    if (id !== undefined) {
-      dispatch(retrieveConvenio({ id }))
-      dispatch(getListaClientesFinales({ convenio: id }))
-    }
-    return () => {
-      dispatch(stateResetOperationConvenio())
-      dispatch(stateResetOperationClientesFinales())
-    }
-  }, [])
-
-  useEffect(() => {
-    if (convenio !== null) {
-      serDB(convenio.cantidad_bd)
-    }
-  }, [convenio])
 
   const formRef = React.useRef()
   const [formValue, setFormValue] = React.useState({
@@ -50,11 +28,43 @@ function ClientesFinalesPanel () {
     cliente_final: ArrayType().isRequired('Este campo es obligatorio.')
   })
 
+  const convenio = useSelector(state => state.convenio.convenio)
+  const listClientesFinales = useSelector(state => state.clientesFinales.listClientesFinales)
+  const isListClientesFinales = useSelector(state => state.clientesFinales.isListClientesFinales)
+  const isList = useSelector(state => state.clientesFinales.isList)
+  const clientesFinales = useSelector(state => state.clientesFinales.clientesFinales)
+
+  useEffect(() => {
+    if (id !== undefined) {
+      dispatch(retrieveConvenio({ id }))
+      dispatch(getListaClientesFinales({ convenio: id }))
+      dispatch(getClientesFinales({ convenio: id }))
+    }
+    return () => {
+      dispatch(stateResetOperationConvenio())
+      dispatch(stateResetOperationClientesFinales())
+    }
+  }, [])
+
+  useEffect(() => {
+    const data = clientesFinales.map(cf => cf.id)
+    if (data.length > 0) { setFormValue({ cliente_final: data }) }
+  }, [clientesFinales])
+
+  useEffect(() => {
+    if (convenio !== null) {
+      serDB(convenio.cantidad_bd)
+    }
+  }, [convenio])
+
   const handleSubmit = () => {
     if (formRef.current.check()) {
-      if (db !== formValue.cliente_final.length) {
+      if (formValue.cliente_final.length > db) {
         toast.error(`Debes seleccionar ${db} clientes.`)
-      } else toast.success('OK')
+      } else {
+        const params = formValue.cliente_final
+        dispatch(addClientesFinales({ convenio: id, params }))
+      }
     }
   }
 
@@ -78,12 +88,20 @@ function ClientesFinalesPanel () {
     })
   }
 
-  return (
+  const isClientesFinalesRelacionados = () => {
+    const isRelacionado = clientesFinales.some(cf => !cf.relacionado)
+    return !isRelacionado
+      ? <></>
+      : (
+        <Message showIcon style={{ backgroundColor: '#E3F3FD' }} header='Información' className='mb-4 ml--1 mr--1'>
+          Existen clientes finales usados, si se modifican, los plazos de pagos se eliminarán.
+        </Message>)
+  }
+
+  const renderForm = () => (
     <Form
       fluid
       ref={formRef}
-      // onChange={onSelectClienteFinal}
-      // onCheck={setFormError}
       formValue={formValue}
       model={model}
     >
@@ -116,6 +134,18 @@ function ClientesFinalesPanel () {
         </Col>
       </Row>
     </Form>
+  )
+
+  return (
+    <>
+      {isList === OPERATIONS.FULFILLED && isListClientesFinales === OPERATIONS.FULFILLED
+        ? (
+          <>
+            {isClientesFinalesRelacionados()}
+            {renderForm()}
+          </>)
+        : <Loader.Paragraph rows={5} />}
+    </>
   )
 }
 

@@ -1,14 +1,15 @@
 import React from 'react'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
-import { Badge, Row, Col } from 'reactstrap'
-import { Popover, Whisper, Dropdown, IconButton, Table as TableRS, Pagination } from 'rsuite'
+import { Badge } from 'reactstrap'
+import { Popover, Whisper, Dropdown, IconButton, Table as TableRS } from 'rsuite'
 import MoreIcon from '@rsuite/icons/legacy/More'
 
 import Table from 'components/table/Table'
 import { estadosConvenios } from 'constants/'
 import { renderEmpty } from 'components'
 import { deleteConvenio } from 'redux/convenio/convenioSlice'
+import usePagination from 'hooks/usePagination'
 
 const ActionCell = ({ rowData, dataKey, ...props }) => {
   const navigate = useNavigate()
@@ -69,19 +70,7 @@ const ActionCell = ({ rowData, dataKey, ...props }) => {
 }
 
 export default function ConvenioTable ({ convenios }) {
-  const [limit, setLimit] = React.useState(10)
-  const [page, setPage] = React.useState(1)
-
-  const handleChangeLimit = dataKey => {
-    setPage(1)
-    setLimit(dataKey)
-  }
-
-  const dataPage = convenios.filter((v, i) => {
-    const start = limit * (page - 1)
-    const end = start + limit
-    return i >= start && i < end
-  })
+  const { pagination, dataPage } = usePagination({ data: convenios, title: 'Convenios' })
 
   const renderColumnEstado = (header, dataKey, flex) => {
     return (
@@ -127,26 +116,7 @@ export default function ConvenioTable ({ convenios }) {
         {Table.Column({ header: 'Base de Datos', dataKey: 'cantidad_bd', flex: 1 })}
         {renderColumnAccion('id')}
       </Table>
-      <Row>
-        <Col className='ml-3 mr-3 mt-1 mb-1'>
-          <Pagination
-            prev
-            next
-            first
-            last
-            ellipsis
-            boundaryLinks
-            maxButtons={5}
-            size='sm'
-            layout={[`Total de Convenios: ${convenios.length}`, '-', 'pager']}
-            total={convenios.length}
-            limit={limit}
-            activePage={page}
-            onChangePage={setPage}
-            onChangeLimit={handleChangeLimit}
-          />
-        </Col>
-      </Row>
+      {pagination}
     </>
   )
 }

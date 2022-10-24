@@ -19,8 +19,11 @@ class PlazoPagoServicioViewSet(viewsets.GenericViewSet):
                             status=response.status_code)
 
     def list(self, request):
-        url = 'cmz/plazo_pago/'
-        response = self.responsebase.get(url, request)
+        url = 'cmz/plazo_pago_servicio/'
+        params = {
+            'plazo': request.GET.get('plazoPagoId'),
+        }
+        response = self.responsebase.get(url, params)
         if response.status_code == 200:
             return Response(response.json(), status=response.status_code)
         else:

@@ -5,6 +5,7 @@ import { Popover, Whisper, Dropdown, IconButton, Table as TableRS, Pagination } 
 import MoreIcon from '@rsuite/icons/legacy/More'
 
 import Table from 'components/table/Table'
+import usePagination from 'hooks/usePagination'
 
 const ActionCell = ({ rowData, dataKey, ...props }) => {
   return (
@@ -36,19 +37,7 @@ const ActionCell = ({ rowData, dataKey, ...props }) => {
 }
 
 export default function ClientesTable ({ clientes }) {
-  const [limit, setLimit] = React.useState(10)
-  const [page, setPage] = React.useState(1)
-
-  const handleChangeLimit = dataKey => {
-    setPage(1)
-    setLimit(dataKey)
-  }
-
-  const dataPage = clientes.filter((v, i) => {
-    const start = limit * (page - 1)
-    const end = start + limit
-    return i >= start && i < end
-  })
+  const { pagination, dataPage } = usePagination({ data: clientes, title: 'Clientes' })
 
   const renderColumnAccion = (dataKey) => {
     return (
@@ -71,26 +60,7 @@ export default function ClientesTable ({ clientes }) {
         {Table.Column({ header: 'Dirección', dataKey: 'direccion', flex: 1 })}
         {renderColumnAccion('id')}
       </Table>
-      <Row>
-        <Col className='ml-3 mr-3 mt-1 mb-1'>
-          <Pagination
-            prev
-            next
-            first
-            last
-            ellipsis
-            boundaryLinks
-            maxButtons={5}
-            size='sm'
-            layout={[`Total de Convenios: ${clientes.length}`, '-', 'pager']}
-            total={clientes.length}
-            limit={limit}
-            activePage={page}
-            onChangePage={setPage}
-            onChangeLimit={handleChangeLimit}
-          />
-        </Col>
-      </Row>
+      {pagination}
     </>
   )
 }

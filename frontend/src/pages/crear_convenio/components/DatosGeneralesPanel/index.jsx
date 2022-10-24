@@ -1,9 +1,9 @@
 import React, { useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { useParams, useNavigate } from 'react-router-dom'
-import { Row, Col, Form, Button, Divider, ButtonToolbar, Schema, SelectPicker, DatePicker, Placeholder } from 'rsuite'
+import { useParams } from 'react-router-dom'
+import { Row, Col, Form, Button, Divider, ButtonToolbar, Schema, SelectPicker, DatePicker } from 'rsuite'
 
-import { FormField, Textarea, InputNumber } from 'components'
+import { FormField, Textarea, InputNumber, Loader } from 'components'
 import { date } from 'utils'
 import OPERATIONS from 'constants/operationsRedux'
 
@@ -188,7 +188,7 @@ function DatosGeneralesPanel () {
     <>
       {isClienteFinal === OPERATIONS.FULFILLED
         ? renderForm()
-        : <Placeholder.Paragraph rows={3} />}
+        : <Loader.Paragraph rows={3} />}
     </>
   )
 }

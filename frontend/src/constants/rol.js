@@ -1,0 +1,4 @@
+export default {
+  DISTRIBUIDOR: 'ROL_DISTRIBUIDOR',
+  CLIENTE: 'ROL_CLIENTE'
+}

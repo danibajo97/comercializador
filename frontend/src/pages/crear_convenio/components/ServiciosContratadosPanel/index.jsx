@@ -1,12 +1,11 @@
 import React, { useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import { Alert, UncontrolledAlert } from 'reactstrap'
-import { Form, Button, ButtonGroup, Schema, SelectPicker, Row, Col, IconButton, Placeholder, Divider, Message } from 'rsuite'
+import { Form, Button, ButtonGroup, Schema, SelectPicker, Row, Col, IconButton, Divider, Message } from 'rsuite'
 import PlusIcon from '@rsuite/icons/Plus'
 import MinusIcon from '@rsuite/icons/Minus'
 
-import { FormField, InputNumber } from 'components'
+import { FormField, InputNumber, Loader } from 'components'
 import { getListadoServicios, retrieveConvenio, stateResetOperation as stateResetOperationConvenio } from 'redux/convenio/convenioSlice'
 import { addServiciosContratados, getServiciosContratadosAll, stateResetOperation as stateResetOperationServiciosContratados } from 'redux/serviciosContratados/serviciosContratadosSlice'
 import OPERATIONS from 'constants/operationsRedux'
@@ -31,8 +30,6 @@ const ServiciosContratadosItem = ({ label, rowValue = {}, onChange, rowIndex, ro
             label='Id'
             name='id'
             value={rowValue.id}
-            // error={rowError?.id?.errorMessage}
-            // onChange={handleChangeAmount}
             hidden
           />
         </Col>
@@ -197,7 +194,13 @@ const ServiciosContratadosPanel = () => {
   const hasError = () => Object.keys(formError).length !== 0
 
   const isServiciosContratadosRelacionado = () => {
-    return serviciosContratados.some(sc => !sc.relacionado)
+    const isRelacionado = serviciosContratados.some(sc => !sc.relacionado)
+    return !isRelacionado
+      ? <></>
+      : (
+        <Message showIcon style={{ backgroundColor: '#E3F3FD' }} header='Información' className='mb-4 ml--1 mr--1'>
+          Existen servicios contratados usados, si se modifican, los plazos de pagos se eliminarán.
+        </Message>)
   }
 
   const renderForm = () => {
@@ -239,14 +242,13 @@ const ServiciosContratadosPanel = () => {
 
   return (
     <>
-      {isServiciosContratadosRelacionado() &&
-        <Message showIcon style={{ backgroundColor: '#E3F3FD' }} header='Información'>
-          Existen servicios contratados usados, si se modifican, los plazos de pagos se eliminaran.
-        </Message>}
-      <br />
       {isList === OPERATIONS.FULFILLED && isListServicios === OPERATIONS.FULFILLED
-        ? renderForm()
-        : <Placeholder.Paragraph rows={3} />}
+        ? (
+          <>
+            {isServiciosContratadosRelacionado()}
+            {renderForm()}
+          </>)
+        : <Loader.Paragraph rows={3} />}
     </>
   )
 }
