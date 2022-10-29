@@ -41,14 +41,10 @@ const ActionCell = ({ rowData, dataKey, ...props }) => {
               case 5:
                 operationDelete({ id: rowData.id })
                 break
-              case 6:
-                console.log(`/cancelar/${rowData.id}`)
-                break
               default:
                 console.log('Error')
             }
           }
-          // disabled={rowData.estado >= 3}
           return (
             <Popover ref={ref} className={className} style={{ left, top }} full>
               <Dropdown.Menu onSelect={handleSelect}>
@@ -56,9 +52,8 @@ const ActionCell = ({ rowData, dataKey, ...props }) => {
                 <Dropdown.Item eventKey={2} disabled={rowData.cantidad_bd <= 1}>Gestión de Clientes Finales</Dropdown.Item>
                 <Dropdown.Item eventKey={3}>Servicios Contratados</Dropdown.Item>
                 <Dropdown.Item eventKey={4}>Asociando Plazos de Pagos</Dropdown.Item>
-                <Dropdown.Item divider />
+                <Dropdown.Item divider hidden={rowData.estado >= 3} />
                 <Dropdown.Item eventKey={5} hidden={rowData.estado >= 3}>Eliminar</Dropdown.Item>
-                <Dropdown.Item eventKey={6} hidden={rowData.estado <= 2}>Cancelar</Dropdown.Item>
               </Dropdown.Menu>
             </Popover>
           )
