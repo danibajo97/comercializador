@@ -98,12 +98,17 @@ function ClientesFinalesPanel () {
         </Message>)
   }
 
+  const isComfirmado = () => convenio && convenio.estado === 3
+
+  console.log(isComfirmado())
+
   const renderForm = () => (
     <Form
       fluid
       ref={formRef}
       formValue={formValue}
       model={model}
+      disabled={isComfirmado()}
     >
       <Row>
         <Col xs='12'>
@@ -127,7 +132,7 @@ function ClientesFinalesPanel () {
       <Row>
         <Col xs='12' className='mt-4'>
           <ButtonToolbar>
-            <Button appearance='primary' size='sm' onClick={handleSubmit}>
+            <Button appearance='primary' size='sm' onClick={handleSubmit} hidden={isComfirmado()}>
               Guardar
             </Button>
           </ButtonToolbar>
@@ -141,7 +146,7 @@ function ClientesFinalesPanel () {
       {isList === OPERATIONS.FULFILLED && isListClientesFinales === OPERATIONS.FULFILLED
         ? (
           <>
-            {isClientesFinalesRelacionados()}
+            {!isComfirmado() && isClientesFinalesRelacionados()}
             {renderForm()}
           </>)
         : <Loader.Paragraph rows={5} />}

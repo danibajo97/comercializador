@@ -1,27 +1,17 @@
 export default [
   {
-    color: 'warning',
+    color: 'danger',
     text: 'Edición',
     id: 1
   },
   {
-    color: 'danger',
-    text: 'Validada',
+    color: 'warning',
+    text: 'Validado',
     id: 2
   },
   {
     color: 'success',
     text: 'Confirmado',
     id: 3
-  },
-  {
-    color: 'warning',
-    text: 'Cancelada',
-    id: 4
-  },
-  {
-    color: 'warning',
-    text: 'Revertida',
-    id: 5
   }
 ]

@@ -48,10 +48,11 @@ const ActionCell = ({ rowData, dataKey, ...props }) => {
                 console.log('Error')
             }
           }
+          // disabled={rowData.estado >= 3}
           return (
             <Popover ref={ref} className={className} style={{ left, top }} full>
               <Dropdown.Menu onSelect={handleSelect}>
-                <Dropdown.Item eventKey={1} disabled={rowData.estado >= 3}>Datos Generales</Dropdown.Item>
+                <Dropdown.Item eventKey={1}>Datos Generales</Dropdown.Item>
                 <Dropdown.Item eventKey={2} disabled={rowData.cantidad_bd <= 1}>Gestión de Clientes Finales</Dropdown.Item>
                 <Dropdown.Item eventKey={3}>Servicios Contratados</Dropdown.Item>
                 <Dropdown.Item eventKey={4}>Asociando Plazos de Pagos</Dropdown.Item>

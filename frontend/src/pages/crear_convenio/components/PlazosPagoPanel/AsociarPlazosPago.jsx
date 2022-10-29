@@ -96,7 +96,7 @@ const CheckCell = ({ rowData, onChange, checkedKeys, dataKey, ...props }) => (
   </TableRS.Cell>
 )
 
-export default function AsociarPlazosPago ({ setSelectedId }) {
+export default function AsociarPlazosPago ({ setSelectedId, isConfirmado }) {
   const dispatch = useDispatch()
   const isList = useSelector(state => state.plazoPago.isList)
   const plazosPagos = useSelector(state => state.plazoPago.plazosPagos)
@@ -158,7 +158,7 @@ export default function AsociarPlazosPago ({ setSelectedId }) {
         {Table.ColumnNumberFormat({ header: 'Importe', dataKey: 'importe', flex: 1 })}
         {Table.ColumnBoolean({ header: 'Facturado', dataKey: 'facturado', flex: 0.8 })}
         {Table.ColumnBoolean({ header: 'Cobrado', dataKey: 'cobrado', flex: 0.8 })}
-        {renderColumnAccion('id')}
+        {!isConfirmado && renderColumnAccion('id')}
       </Table>
       {pagination}
     </div>
