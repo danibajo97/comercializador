@@ -66,7 +66,8 @@ const ServiciosContratadosItem = ({ label, rowValue = {}, onChange, rowIndex, ro
   )
 }
 
-const ServiciosContratadosInputControl = ({ value = [], onChange, fieldError }) => {
+const ServiciosContratadosInputControl = ({ value = [], onChange, fieldError, disabled }) => {
+  console.log({ disabled })
   const errors = fieldError ? fieldError.array : []
   const [serviciosContratados, setServiciosContratados] = React.useState(value)
   const handleChangeServiciosContratados = nextServiciosContratados => {
@@ -106,7 +107,7 @@ const ServiciosContratadosInputControl = ({ value = [], onChange, fieldError }) 
           </div>
         ))}
       </Row>
-      <Row className='mt-1'>
+      <Row className='mt-1' hidden={disabled}>
         <Col xs={24}>
           <ButtonGroup size='sm'>
             <IconButton onClick={handleAdd} icon={<PlusIcon />} appearance='subtle' color='blue' />
@@ -203,6 +204,8 @@ const ServiciosContratadosPanel = () => {
         </Message>)
   }
 
+  const isComfirmado = () => convenio && convenio.estado === 3
+
   const renderForm = () => {
     return (
       <Form
@@ -213,6 +216,7 @@ const ServiciosContratadosPanel = () => {
         onCheck={setFormError}
         formValue={formValue}
         model={model}
+        disabled={isComfirmado()}
       >
         <Row>
           <Col xs={24}>
@@ -228,6 +232,7 @@ const ServiciosContratadosPanel = () => {
           <Col xs={24}>
             <Button
               disabled={hasError()}
+              hidden={isComfirmado()}
               size='sm'
               appearance='primary'
               onClick={guardarForm}
@@ -245,7 +250,7 @@ const ServiciosContratadosPanel = () => {
       {isList === OPERATIONS.FULFILLED && isListServicios === OPERATIONS.FULFILLED
         ? (
           <>
-            {isServiciosContratadosRelacionado()}
+            {!isComfirmado() && isServiciosContratadosRelacionado()}
             {renderForm()}
           </>)
         : <Loader.Paragraph rows={3} />}

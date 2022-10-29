@@ -63,7 +63,7 @@ const ActionCell = ({ rowData, dataKey, ...props }) => {
   )
 }
 
-export default function AsociarServicios ({ id }) {
+export default function AsociarServicios ({ id, isConfirmado }) {
   const dispatch = useDispatch()
   const plazoPagoServicio = useSelector(state => state.plazoPagoServicio.plazoPagoServicio)
   const isList = useSelector(state => state.plazoPagoServicio.isList)
@@ -116,7 +116,7 @@ export default function AsociarServicios ({ id }) {
         {renderCantidadCell({ header: 'Cantidad', dataKey: 'cantidad' })}
         {Table.ColumnNumberFormat({ header: 'Precio', dataKey: 'servicio_precio', flex: 1 })}
         {Table.ColumnNumberFormat({ header: 'A Facturar', dataKey: 'a_facturar', flex: 1 })}
-        {renderColumnAccion('id')}
+        {!isConfirmado && renderColumnAccion('id')}
       </Table>
       {pagination}
     </>

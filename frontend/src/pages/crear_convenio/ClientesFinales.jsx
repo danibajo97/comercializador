@@ -45,15 +45,16 @@ function ClientesFinales () {
                       appearance='primary'
                       onClick={openModal}
                     >
-                      Nuevo Cliente
+                      <i className='d-sm-block d-md-none fa fa-plus' />
+                      <div className='mf-2 d-none d-md-inline-block'>Nuevo Cliente</div>
                     </Button>
                     <Button
                       size='sm'
                       appearance='default'
                       onClick={() => navigate(-1)}
                     >
-                      <i className='fa fa-arrow-left mr-2' />
-                      Atrás
+                      <i className='d-sm-block d-md-none fa fa-arrow-left' />
+                      <div className='mf-2 d-none d-md-inline-block'>Atrás</div>
                     </Button>
                   </Col>
                 </Row>

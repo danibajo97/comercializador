@@ -19,7 +19,8 @@ class AuthenticatedThread(threading.Thread):
         headers = {"Content-Type": "application/json"}
 
         try:
-            response = requests.post(url, json=payload, headers=headers)
+            response = requests.post(
+                url, json=payload, headers=headers, verify=False)
             if response.status_code == 200:
                 token = response.json()
                 response_base = ResponseBase()

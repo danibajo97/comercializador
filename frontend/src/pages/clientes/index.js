@@ -42,7 +42,8 @@ function Clientes () {
                       appearance='primary'
                       onClick={openModal}
                     >
-                      Nuevo Cliente
+                      <i className='d-sm-block d-md-none fa fa-plus' />
+                      <div className='mf-2 d-none d-md-inline-block'>Nuevo Cliente</div>
                     </Button>
                   </Col>
                 </Row>

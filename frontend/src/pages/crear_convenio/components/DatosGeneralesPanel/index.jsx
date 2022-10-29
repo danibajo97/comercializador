@@ -127,6 +127,8 @@ function DatosGeneralesPanel () {
     }
   }
 
+  const isComfirmado = () => convenio && convenio.estado === 3
+
   const renderForm = () => (
     <Form
       fluid
@@ -134,6 +136,7 @@ function DatosGeneralesPanel () {
       onChange={setFormValue}
       formValue={formValue}
       model={model}
+      disabled={isComfirmado()}
     >
       <Row>
         <Col xs={24} sm={12} md={12} lg={12}>
@@ -175,7 +178,7 @@ function DatosGeneralesPanel () {
       <Row>
         <Col xs={24} className='mt-4'>
           <ButtonToolbar>
-            <Button appearance='primary' size='sm' onClick={handleSubmit} disabled={contrato?.fecha_inicial === undefined} loading={isAdd === OPERATIONS.PENDING}>
+            <Button appearance='primary' size='sm' onClick={handleSubmit} hidden={isComfirmado()} disabled={contrato?.fecha_inicial === undefined} loading={isAdd === OPERATIONS.PENDING}>
               {id === undefined ? 'Guardar' : 'Editar'}
             </Button>
           </ButtonToolbar>
