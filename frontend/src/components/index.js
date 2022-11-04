@@ -1,4 +1,4 @@
-import Button from 'components/Button'
+import CardHeader from 'components/headers/CardHeader'
 import DefaultHeader from 'components/headers/DefaultHeader'
 import { renderEmpty } from 'components/table/Table'
 import FormField from 'components/form/FormField'
@@ -8,7 +8,7 @@ import InputNumber from 'components/form/InputNumber'
 import Loader from 'components/loader/Loader'
 
 export {
-  Button,
+  CardHeader,
   DefaultHeader,
   FormField,
   Textarea,

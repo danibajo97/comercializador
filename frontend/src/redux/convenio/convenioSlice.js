@@ -13,6 +13,8 @@ const initialState = {
   isDelete: OPERATIONS.NONE,
   isListServicios: OPERATIONS.NONE,
   isRetrieve: OPERATIONS.NONE,
+  isValidar: OPERATIONS.NONE,
+  isConfirmar: OPERATIONS.NONE,
   listadoServicios: []
 }
 
@@ -26,6 +28,8 @@ export const convenioSlice = createSlice({
       state.isDelete = OPERATIONS.NONE
       state.isListServicios = OPERATIONS.NONE
       state.isRetrieve = OPERATIONS.NONE
+      state.isValidar = OPERATIONS.NONE
+      state.isConfirmar = OPERATIONS.NONE
       state.convenios = []
       state.convenio = null
     }
@@ -113,6 +117,48 @@ export const convenioSlice = createSlice({
       state.listadoServicios = []
       toast.error(action.error.message)
     })
+
+    // VALIDAR_CONVENIO ACCION
+    builder.addCase(validarConvenio.pending, (state, action) => {
+      state.isValidar = OPERATIONS.PENDING
+    })
+    builder.addCase(validarConvenio.fulfilled, (state, action) => {
+      state.isValidar = OPERATIONS.FULFILLED
+      toast.success(action.payload.message)
+      state.convenios = state.convenios.map(convenio => {
+        const c = { ...convenio }
+        if (convenio.id === action.payload.id) {
+          c.estado = 2
+          c.estado_display = 'Validado'
+        }
+        return c
+      })
+    })
+    builder.addCase(validarConvenio.rejected, (state, action) => {
+      state.isValidar = OPERATIONS.FULFILLED
+      toast.error(action.error.message)
+    })
+
+    // CONFIRMAR_CONVENIO ACCION
+    builder.addCase(confirmarConvenio.pending, (state, action) => {
+      state.isConfirmar = OPERATIONS.PENDING
+    })
+    builder.addCase(confirmarConvenio.fulfilled, (state, action) => {
+      state.isConfirmar = OPERATIONS.FULFILLED
+      toast.success(action.payload.message)
+      state.convenios = state.convenios.map(convenio => {
+        const c = { ...convenio }
+        if (convenio.id === action.payload.id) {
+          c.estado = 3
+          c.estado_display = 'Confirmado'
+        }
+        return c
+      })
+    })
+    builder.addCase(confirmarConvenio.rejected, (state, action) => {
+      state.isConfirmar = OPERATIONS.FULFILLED
+      toast.error(action.error.message)
+    })
   }
 })
 
@@ -121,6 +167,8 @@ export const retrieveConvenio = createAsyncThunk('convenio/retrieveConvenio', ap
 export const addConvenio = createAsyncThunk('convenio/addConvenio', api.addConvenio)
 export const updateConvenio = createAsyncThunk('convenio/updateConvenio', api.updateConvenio)
 export const deleteConvenio = createAsyncThunk('convenio/deleteConvenio', api.deleteConvenio)
+export const validarConvenio = createAsyncThunk('convenio/validarConvenio', api.validarConvenio)
+export const confirmarConvenio = createAsyncThunk('convenio/confirmarConvenio', api.confirmarConvenio)
 
 export const getListadoServicios = createAsyncThunk('convenio/getListadoServicios', api.getListadoServicios)
 

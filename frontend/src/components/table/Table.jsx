@@ -4,7 +4,9 @@ import {
   Badge
 } from 'rsuite'
 
-const RenderColumn = ({ header, dataKey, flex, white }) => {
+import { estadosConvenios } from 'constants/'
+
+function RenderColumn ({ header, dataKey, flex, white }) {
   const style = !white ? styleHeader : styleHeaderWhite
   return (
     <TableRS.Column flexGrow={flex}>
@@ -58,6 +60,31 @@ const RenderColumnBoolean = ({ header, dataKey, flex, white = false }) => {
   )
 }
 
+const RenderColumnEstado = ({ header, dataKey, flex, white = false }) => {
+  const style = !white ? styleHeader : styleHeaderWhite
+  return (
+    <TableRS.Column flexGrow={flex}>
+      <TableRS.HeaderCell style={style}>
+        {header}
+      </TableRS.HeaderCell>
+      <TableRS.Cell style={styleCell}>
+        {rowData => <><Badge className={`bg-${estadosConvenios[rowData[dataKey] - 1].color} mr-2`} />{estadosConvenios[rowData[dataKey] - 1].text}</>}
+      </TableRS.Cell>
+    </TableRS.Column>
+  )
+}
+
+const RenderColumnAccion = ({ header, dataKey, action: ActionCell }) => {
+  return (
+    <TableRS.Column width={100}>
+      <TableRS.HeaderCell style={Table.styleHeader}>
+        {header}
+      </TableRS.HeaderCell>
+      <ActionCell dataKey={dataKey} style={Table.styleCell} />
+    </TableRS.Column>
+  )
+}
+
 const styleHeader = {
   backgroundColor: '#F6F9FC',
   borderColor: '#e9ecef',
@@ -89,6 +116,8 @@ export default class Table extends Component {
   static ColumnBoolean = RenderColumnBoolean
   static ColumnNumber = RenderColumnNumber
   static ColumnNumberFormat = RenderColumnNumberFormat
+  static ColumnEstado = RenderColumnEstado
+  static ColumnAccion = RenderColumnAccion
 
   static styleHeader = styleHeader
   static styleHeaderWhite = styleHeaderWhite
