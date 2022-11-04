@@ -1,6 +1,7 @@
 from django.db import transaction
 from rest_framework import viewsets
 from rest_framework.response import Response
+from rest_framework.decorators import action
 
 from apps.base.response_base import ResponseBase
 from apps.users.resources.authenticated_user import authenticated_user
@@ -11,8 +12,9 @@ class SolicitudLicenciaViewSet(viewsets.GenericViewSet):
 
     @transaction.atomic
     def create(self, request):
+        # request.data = {'venta': bool, ..... (atributos de la solicitud)}
         user = authenticated_user(request)
-        url = 'cmz/solicitud_licencia_venta_externo/'
+        url = 'cmz/solicitud_licencia_externo/'
         params = {
             'authenticated-user': user.id_erp,
         }
@@ -27,11 +29,11 @@ class SolicitudLicenciaViewSet(viewsets.GenericViewSet):
 
     def list(self, request):
         user = authenticated_user(request)
-        if request.GET.get('id_solicitud_licencia_venta'):
-            url = '%s%s/' % ('cmz/solicitud_licencia_venta_externo/',
-                             request.GET.get('id_solicitud_licencia_venta'))
+        if request.GET.get('id_solicitud_licencia'):
+            url = '%s%s/' % ('cmz/solicitud_licencia_externo/',
+                             request.GET.get('id_solicitud_licencia'))
         else:
-            url = 'cmz/solicitud_licencia_venta_externo/'
+            url = 'cmz/solicitud_licencia_externo/'
         params = {
             'authenticated-user': user.id_erp,
         }
@@ -44,7 +46,7 @@ class SolicitudLicenciaViewSet(viewsets.GenericViewSet):
         params = {
             'authenticated-user': user.id_erp,
         }
-        url = 'cmz/solicitud_licencia_venta_externo/%s/' % pk
+        url = 'cmz/solicitud_licencia_externo/%s/' % pk
         response = self.responsebase.put(
             url=url, json=request.data, params=params)
         if response.status_code == 200:
@@ -56,7 +58,7 @@ class SolicitudLicenciaViewSet(viewsets.GenericViewSet):
 
     @transaction.atomic
     def retrieve(self, request, pk):
-        url = 'cmz/solicitud_licencia_venta_externo/%s/' % pk
+        url = 'cmz/solicitud_licencia_externo/%s/' % pk
         response = self.responsebase.get(url=url)
         if response.status_code == 200:
             return Response(response.json(), status=response.status_code)
@@ -66,11 +68,22 @@ class SolicitudLicenciaViewSet(viewsets.GenericViewSet):
 
     @transaction.atomic
     def destroy(self, request, pk):
-        url = 'cmz/solicitud_licencia_venta_externo/%s/' % pk
+        url = 'cmz/solicitud_licencia_externo/%s/' % pk
         response = self.responsebase.delete(url=url)
         if response.status_code == 204:
             return Response({'Comercializador-response': 'Eliminado correctamente'},
                             status=response.status_code)
+        else:
+            return Response({'Versat-response': response.json()},
+                            status=response.status_code)
+
+    @action(detail=False, methods=['put'])
+    def otorgar_licencia(self, request):
+        # request.data = [ iddetalle, .....]  lista con los iddetalle de las solicitudes a generar
+        url = 'cmz/solicitud_licencia_externo/otorgar_licencia'
+        response = self.responsebase.get(url=url, json=request.data)
+        if response.status_code == 200:
+            return Response(response.json(), status=response.status_code)
         else:
             return Response({'Versat-response': response.json()},
                             status=response.status_code)
