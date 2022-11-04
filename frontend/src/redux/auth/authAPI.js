@@ -7,12 +7,12 @@ export default {
   logout
 }
 
-async function login ({ email, password }) {
+async function login ({ username, password }) {
   const options = {
     method: 'POST',
     url: `${API_URL}/api/token/`,
     headers: { 'Content-Type': 'application/json' },
-    data: { email, password }
+    data: { username, password }
   }
   try {
     const { data } = await axios(options)

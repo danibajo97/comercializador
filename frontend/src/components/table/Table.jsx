@@ -4,7 +4,7 @@ import {
   Badge
 } from 'rsuite'
 
-import { estadosConvenios } from 'constants/'
+import estadosConvenios from 'constants/estadosConvenios'
 
 function RenderColumn ({ header, dataKey, flex, white }) {
   const style = !white ? styleHeader : styleHeaderWhite

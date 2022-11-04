@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { Modal } from 'reactstrap'
 import { Button } from 'rsuite'
 
-import { alertType as TYPES_ALERT } from 'constants/'
+import TYPES_ALERT from 'constants/alertType'
 
 export default function useAlert ({ type, text, isConfirm, textConfirm }) {
   const [visible, setVisible] = useState(false)

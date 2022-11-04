@@ -7,14 +7,13 @@ export default function useLogin () {
 
   const formRef = useRef()
   const [formValue, setFormValue] = useState({
-    email: '',
+    username: '',
     password: ''
   })
 
   const { StringType } = Schema.Types
   const formModel = Schema.Model({
-    email: StringType()
-      .isEmail('Este campo no es un correo.')
+    username: StringType()
       .isRequired('Este campo es obligatorio.'),
     password: StringType()
       .isRequired('Este campo es obligatorio.')
@@ -22,7 +21,7 @@ export default function useLogin () {
 
   const handleSubmit = () => {
     if (formRef.current.check()) {
-      login({ email: formValue.email, password: formValue.password })
+      login({ username: formValue.username, password: formValue.password })
     }
   }
 

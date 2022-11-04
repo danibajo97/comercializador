@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
 import { getConveniosAll } from 'redux/convenio/convenioSlice'
-import { estadosConvenios } from 'constants/'
+import estadosConvenios from 'constants/estadosConvenios'
 import OPERATIONS from 'constants/operationsRedux'
 
 export default function useHomeDistribuidor () {

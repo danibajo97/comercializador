@@ -44,7 +44,7 @@ export default function Login () {
                   >
                     <Row>
                       <Col xs='12'>
-                        <FormField name='email' label='Correo' />
+                        <FormField name='username' label='Usuario' />
                         <InputPassword name='password' label='Contraseña' />
                       </Col>
                       <Col xs='12'>
