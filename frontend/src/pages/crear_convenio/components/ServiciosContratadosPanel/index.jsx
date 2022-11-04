@@ -1,11 +1,11 @@
 import React, { useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import { Form, Button, ButtonGroup, Schema, SelectPicker, Row, Col, IconButton, Placeholder, Divider } from 'rsuite'
+import { Form, Button, ButtonGroup, Schema, SelectPicker, Row, Col, IconButton, Divider, Message } from 'rsuite'
 import PlusIcon from '@rsuite/icons/Plus'
 import MinusIcon from '@rsuite/icons/Minus'
 
-import { FormField, InputNumber } from 'components'
+import { FormField, InputNumber, Loader } from 'components'
 import { getListadoServicios, retrieveConvenio, stateResetOperation as stateResetOperationConvenio } from 'redux/convenio/convenioSlice'
 import { addServiciosContratados, getServiciosContratadosAll, stateResetOperation as stateResetOperationServiciosContratados } from 'redux/serviciosContratados/serviciosContratadosSlice'
 import OPERATIONS from 'constants/operationsRedux'
@@ -30,8 +30,6 @@ const ServiciosContratadosItem = ({ label, rowValue = {}, onChange, rowIndex, ro
             label='Id'
             name='id'
             value={rowValue.id}
-            // error={rowError?.id?.errorMessage}
-            // onChange={handleChangeAmount}
             hidden
           />
         </Col>
@@ -68,7 +66,8 @@ const ServiciosContratadosItem = ({ label, rowValue = {}, onChange, rowIndex, ro
   )
 }
 
-const ServiciosContratadosInputControl = ({ value = [], onChange, fieldError }) => {
+const ServiciosContratadosInputControl = ({ value = [], onChange, fieldError, disabled }) => {
+  console.log({ disabled })
   const errors = fieldError ? fieldError.array : []
   const [serviciosContratados, setServiciosContratados] = React.useState(value)
   const handleChangeServiciosContratados = nextServiciosContratados => {
@@ -108,7 +107,7 @@ const ServiciosContratadosInputControl = ({ value = [], onChange, fieldError }) 
           </div>
         ))}
       </Row>
-      <Row className='mt-1'>
+      <Row className='mt-1' hidden={disabled}>
         <Col xs={24}>
           <ButtonGroup size='sm'>
             <IconButton onClick={handleAdd} icon={<PlusIcon />} appearance='subtle' color='blue' />
@@ -189,13 +188,23 @@ const ServiciosContratadosPanel = () => {
           precio: servicio.precio_moneda
         }
       })
-      const a = { convenio: convenio.id, params }
-      console.log({ a })
-      dispatch(addServiciosContratados(a))
+      dispatch(addServiciosContratados({ convenio: convenio.id, params }))
     }
   }
 
   const hasError = () => Object.keys(formError).length !== 0
+
+  const isServiciosContratadosRelacionado = () => {
+    const isRelacionado = serviciosContratados.some(sc => !sc.relacionado)
+    return !isRelacionado
+      ? <></>
+      : (
+        <Message showIcon style={{ backgroundColor: '#E3F3FD' }} header='Información' className='mb-4 ml--1 mr--1'>
+          Existen servicios contratados usados, si se modifican, los plazos de pagos se eliminarán.
+        </Message>)
+  }
+
+  const isComfirmado = () => convenio && convenio.estado === 3
 
   const renderForm = () => {
     return (
@@ -207,6 +216,7 @@ const ServiciosContratadosPanel = () => {
         onCheck={setFormError}
         formValue={formValue}
         model={model}
+        disabled={isComfirmado()}
       >
         <Row>
           <Col xs={24}>
@@ -222,6 +232,7 @@ const ServiciosContratadosPanel = () => {
           <Col xs={24}>
             <Button
               disabled={hasError()}
+              hidden={isComfirmado()}
               size='sm'
               appearance='primary'
               onClick={guardarForm}
@@ -237,8 +248,12 @@ const ServiciosContratadosPanel = () => {
   return (
     <>
       {isList === OPERATIONS.FULFILLED && isListServicios === OPERATIONS.FULFILLED
-        ? renderForm()
-        : <Placeholder.Paragraph rows={3} />}
+        ? (
+          <>
+            {!isComfirmado() && isServiciosContratadosRelacionado()}
+            {renderForm()}
+          </>)
+        : <Loader.Paragraph rows={3} />}
     </>
   )
 }

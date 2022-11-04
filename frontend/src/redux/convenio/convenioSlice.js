@@ -12,6 +12,7 @@ const initialState = {
   isUpdate: OPERATIONS.NONE,
   isDelete: OPERATIONS.NONE,
   isListServicios: OPERATIONS.NONE,
+  isRetrieve: OPERATIONS.NONE,
   listadoServicios: []
 }
 
@@ -24,6 +25,7 @@ export const convenioSlice = createSlice({
       state.isUpdate = OPERATIONS.NONE
       state.isDelete = OPERATIONS.NONE
       state.isListServicios = OPERATIONS.NONE
+      state.isRetrieve = OPERATIONS.NONE
       state.convenios = []
       state.convenio = null
     }
@@ -45,15 +47,15 @@ export const convenioSlice = createSlice({
 
     // RETRIEVE_CONVENIO ACCION
     builder.addCase(retrieveConvenio.pending, (state, action) => {
-      state.isLoading = true
+      state.isRetrieve = OPERATIONS.PENDING
     })
     builder.addCase(retrieveConvenio.fulfilled, (state, action) => {
       state.convenio = action.payload
-      state.isLoading = false
+      state.isRetrieve = OPERATIONS.FULFILLED
     })
     builder.addCase(retrieveConvenio.rejected, (state, action) => {
       state.convenio = null
-      state.isLoading = false
+      state.isRetrieve = OPERATIONS.REJECTED
       toast.error(action.error.message)
     })
 

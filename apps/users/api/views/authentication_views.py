@@ -79,10 +79,10 @@ class AuthenticatedUser(generics.GenericAPIView):
                                      'email': current_user.email,
                                      'name': current_user.name,
                                      'last_name': current_user.last_name,
-                                     'is_distribuidor': current_user.is_distribuidor,
-                                 }
-                                 },
-                                status=response.status_code)
+                                     'rol': 'ROL_DISTRIBUIDOR' if current_user.is_distribuidor else 'ROL_CLIENTE',
+                }
+                },
+                    status=response.status_code)
             else:
                 return Response({'comercializador': 'Error al conectar con el Servidor'},
                                 status=response.status_code)

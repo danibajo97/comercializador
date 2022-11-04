@@ -7,17 +7,26 @@ import {
   CardHeader,
   CardBody
 } from 'reactstrap'
-import { Panel, Button } from 'rsuite'
+import { Button, Panel } from 'rsuite'
 import { useNavigate } from 'react-router-dom'
 
 import { DefaultHeader } from 'components'
-import ServiciosContratadosPanel from './components/ServiciosContratadosPanel'
+import ClientesFinalesPanel from './components/ClientesFinalesPanel'
+import ClienteForm from './components/ClienteForm'
+import useModal from 'hooks/useModal'
 
-function ServiciosContratados (props) {
+function ClientesFinales () {
   const navigate = useNavigate()
+  const { modal, openModal } = useModal({
+    title: 'Nuevo Cliente',
+    renderBody: ({ closeModal }) => {
+      return <ClienteForm closeModal={closeModal} />
+    }
+  })
 
   return (
     <>
+      {modal}
       <DefaultHeader />
       <Container className='mt--7' fluid>
         <Row>
@@ -26,16 +35,26 @@ function ServiciosContratados (props) {
               <CardHeader className='bg-white border-0'>
                 <Row className='align-items-center'>
                   <Col xs='8'>
-                    <h3 className='mb-0'>Convenios <span className='text-muted'>(Servicios Contratados)</span></h3>
+                    <h3 className='mb-0'>Convenios <span className='text-muted'>(Clientes Finales)</span></h3>
+
                   </Col>
                   <Col className='text-right' xs='4'>
+                    <Button
+                      className='mr-2'
+                      size='sm'
+                      appearance='primary'
+                      onClick={openModal}
+                    >
+                      <i className='d-sm-block d-md-none fa fa-plus' />
+                      <div className='mf-2 d-none d-md-inline-block'>Nuevo Cliente</div>
+                    </Button>
                     <Button
                       size='sm'
                       appearance='default'
                       onClick={() => navigate(-1)}
                     >
-                      <i className='fa fa-arrow-left mr-2' />
-                      Atrás
+                      <i className='d-sm-block d-md-none fa fa-arrow-left' />
+                      <div className='mf-2 d-none d-md-inline-block'>Atrás</div>
                     </Button>
                   </Col>
                 </Row>
@@ -44,7 +63,7 @@ function ServiciosContratados (props) {
                 <Row>
                   <Col xs='12'>
                     <Panel bordered>
-                      <ServiciosContratadosPanel />
+                      <ClientesFinalesPanel />
                     </Panel>
                   </Col>
                 </Row>
@@ -57,4 +76,4 @@ function ServiciosContratados (props) {
   )
 }
 
-export default ServiciosContratados
+export default ClientesFinales

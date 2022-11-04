@@ -7,13 +7,13 @@ import {
   CardHeader,
   CardBody
 } from 'reactstrap'
-import { Button, Panel } from 'rsuite'
+import { Panel, Button } from 'rsuite'
 import { useNavigate } from 'react-router-dom'
 
 import { DefaultHeader } from 'components'
-import DatosGeneralesPanel from './components/DatosGeneralesPanel'
+import ServiciosContratadosPanel from './components/ServiciosContratadosPanel'
 
-function DatosGenerales (props) {
+function ServiciosContratados (props) {
   const navigate = useNavigate()
 
   return (
@@ -26,7 +26,7 @@ function DatosGenerales (props) {
               <CardHeader className='bg-white border-0'>
                 <Row className='align-items-center'>
                   <Col xs='8'>
-                    <h3 className='mb-0'>Convenios <span className='text-muted'>(Datos Generales)</span></h3>
+                    <h3 className='mb-0'>Convenios <span className='text-muted'>(Servicios Contratados)</span></h3>
                   </Col>
                   <Col className='text-right' xs='4'>
                     <Button
@@ -34,8 +34,8 @@ function DatosGenerales (props) {
                       appearance='default'
                       onClick={() => navigate(-1)}
                     >
-                      <i className='fa fa-arrow-left mr-2' />
-                      Atrás
+                      <i className='d-sm-block d-md-none fa fa-arrow-left' />
+                      <div className='mf-2 d-none d-md-inline-block'>Atrás</div>
                     </Button>
                   </Col>
                 </Row>
@@ -44,7 +44,7 @@ function DatosGenerales (props) {
                 <Row>
                   <Col xs='12'>
                     <Panel bordered>
-                      <DatosGeneralesPanel />
+                      <ServiciosContratadosPanel />
                     </Panel>
                   </Col>
                 </Row>
@@ -57,4 +57,4 @@ function DatosGenerales (props) {
   )
 }
 
-export default DatosGenerales
+export default ServiciosContratados

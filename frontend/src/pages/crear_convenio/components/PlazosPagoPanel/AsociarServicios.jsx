@@ -1,28 +1,24 @@
-import React from 'react'
-import {
-  Panel,
-  Stack,
-  Button,
-  Popover,
-  Table as TableRS,
-  Whisper,
-  Dropdown,
-  IconButton
-} from 'rsuite'
-import Table from 'components/table/Table'
+import React, { useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { Popover, Table as TableRS, Whisper, Dropdown, IconButton } from 'rsuite'
 import MoreIcon from '@rsuite/icons/legacy/More'
 
-import { mockServiciosPlazosPago } from 'constants/mock'
-import useModal from 'hooks/useModal'
-import { AsociarServiciosForm } from './AsociarServiciosForm'
+import { getPlazoPagoServicioAll, stateResetOperation } from 'redux/plazoPagoServicio/plazoPagoServicioSlice'
+import OPERATIONS from 'constants/operationsRedux'
+import Table from 'components/table/Table'
+import { Loader } from 'components'
+import usePagination from 'hooks/usePagination'
 
 const CantidadCell = ({ rowData, dataKey, ...props }) => {
+  const count = rowData[dataKey]
+  const text = count > 1 ? 'Clientes' : 'Cliente'
+
   const speaker = (
-    <Popover title='Cientes'>
-      {rowData.clientes.map((item, key) => {
+    <Popover title={text}>
+      {rowData.usuarios_finales.map((item, key) => {
         return (
           <div key={key}>
-            <div className=''>{key + 1} - {item}</div>
+            <div className=''>{key + 1} - {item.contacto}</div>
           </div>
         )
       })}
@@ -32,7 +28,7 @@ const CantidadCell = ({ rowData, dataKey, ...props }) => {
   return (
     <TableRS.Cell {...props}>
       <Whisper placement='top' speaker={speaker}>
-        <a style={{ cursor: 'pointer' }}>{rowData[dataKey]}</a>
+        <a style={{ cursor: 'pointer' }}>{count} {text}</a>
       </Whisper>
     </TableRS.Cell>
   )
@@ -67,13 +63,24 @@ const ActionCell = ({ rowData, dataKey, ...props }) => {
   )
 }
 
-export default function AsociarServicios ({ id }) {
-  const { modal, openModal } = useModal({
-    title: 'Nuevo Servicios',
-    renderBody: ({ closeModal }) => {
-      return <AsociarServiciosForm closeModal={closeModal} />
+export default function AsociarServicios ({ id, isConfirmado }) {
+  const dispatch = useDispatch()
+  const plazoPagoServicio = useSelector(state => state.plazoPagoServicio.plazoPagoServicio)
+  const isList = useSelector(state => state.plazoPagoServicio.isList)
+
+  const { pagination, dataPage } = usePagination({ data: plazoPagoServicio, title: 'Servicios' })
+
+  useEffect(() => {
+    if (id !== undefined) {
+      dispatch(getPlazoPagoServicioAll({ plazoPagoId: id }))
     }
-  })
+  }, [id])
+
+  useEffect(() => {
+    return () => {
+      dispatch(stateResetOperation())
+    }
+  }, [])
 
   const renderEmpty = () => {
     if (id !== null) { return <div className='text-center text-muted mt-5 mb-5'>No hay elementos disponibles</div> } else { return <div className='text-center text-muted mt-5 mb-5'>Seleccione un plazo de pago</div> }
@@ -82,7 +89,7 @@ export default function AsociarServicios ({ id }) {
   const renderCantidadCell = ({ header, dataKey }) => {
     return (
       <TableRS.Column flexGrow={1}>
-        <TableRS.HeaderCell style={Table.styleHeaderWhite}>
+        <TableRS.HeaderCell style={Table.styleHeader}>
           {header}
         </TableRS.HeaderCell>
         <CantidadCell dataKey={dataKey} style={Table.styleCell} />
@@ -93,7 +100,7 @@ export default function AsociarServicios ({ id }) {
   const renderColumnAccion = (dataKey) => {
     return (
       <TableRS.Column width={100}>
-        <TableRS.HeaderCell style={Table.styleHeaderWhite}>
+        <TableRS.HeaderCell style={Table.styleHeader}>
           Acciones
         </TableRS.HeaderCell>
         <ActionCell dataKey={dataKey} style={Table.styleCell} />
@@ -101,24 +108,25 @@ export default function AsociarServicios ({ id }) {
     )
   }
 
-  return (
-    <Panel
-      bordered header={
-        <Stack justifyContent='space-between'>
-          <span>Asociar Servicios a Plazo de Pago </span>
-          <Button appearance='primary' size='sm' color='blue' disabled={id === null} onClick={openModal}>Adicionar</Button>
-        </Stack>
-      }
-    >
-      {modal}
-      <Table data={id ? mockServiciosPlazosPago : []} autoHeight renderEmpty={renderEmpty}>
-        {Table.Column({ header: 'Servicio', dataKey: 'servicio', flex: 1, white: true })}
-        {/* {Table.Column({ header: 'Cantidad', dataKey: 'cantidad', flex: 1, white: true })} */}
+  const renderTable = () => (
+    <>
+      <Table data={id ? dataPage : []} autoHeight renderEmpty={renderEmpty}>
+        {Table.Column({ header: 'Servicio', dataKey: 'servicio_nombre', flex: 1 })}
+        {/* {Table.Column({ header: 'Cantidad', dataKey: 'cantidad', flex: 1})} */}
         {renderCantidadCell({ header: 'Cantidad', dataKey: 'cantidad' })}
-        {Table.ColumnNumberFormat({ header: 'Precio', dataKey: 'precio', flex: 1, white: true })}
-        {Table.ColumnNumberFormat({ header: 'A Facturar', dataKey: 'aFacturar', flex: 1, white: true })}
-        {renderColumnAccion('id')}
+        {Table.ColumnNumberFormat({ header: 'Precio', dataKey: 'servicio_precio', flex: 1 })}
+        {Table.ColumnNumberFormat({ header: 'A Facturar', dataKey: 'a_facturar', flex: 1 })}
+        {!isConfirmado && renderColumnAccion('id')}
       </Table>
-    </Panel>
+      {pagination}
+    </>
+  )
+
+  return (
+    <>
+      {isList === OPERATIONS.FULFILLED
+        ? renderTable()
+        : <Loader.Grid rows={4} columns={5} />}
+    </>
   )
 }

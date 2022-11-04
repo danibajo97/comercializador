@@ -1,9 +1,9 @@
 import React, { useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { useParams, useNavigate } from 'react-router-dom'
-import { Row, Col, Form, Button, Divider, ButtonToolbar, Schema, SelectPicker, DatePicker, Placeholder } from 'rsuite'
+import { useParams } from 'react-router-dom'
+import { Row, Col, Form, Button, Divider, ButtonToolbar, Schema, SelectPicker, DatePicker } from 'rsuite'
 
-import { FormField, Textarea, InputNumber } from 'components'
+import { FormField, Textarea, InputNumber, Loader } from 'components'
 import { date } from 'utils'
 import OPERATIONS from 'constants/operationsRedux'
 
@@ -16,7 +16,7 @@ const INI_VALUE = {
   nroContrato: '',
   fechaEmision: undefined,
   fechaVencimiento: undefined,
-  nroConvenio: '',
+  nroConvenio: 'automatico',
   fechaEmisionConvenio: undefined,
   solicitadoPor: '',
   cliente: '',
@@ -74,7 +74,6 @@ function DatosGeneralesPanel () {
   React.useEffect(() => {
     setFormValue({
       ...formValue,
-      nroConvenio: contrato?.no_convenio || '',
       fechaEmision: contrato?.fecha_inicial ? new Date(contrato.fecha_inicial) : undefined,
       fechaVencimiento: contrato?.fecha_final ? new Date(contrato.fecha_final) : undefined
     })
@@ -88,8 +87,7 @@ function DatosGeneralesPanel () {
       .isRequired('Este campo es obligatorio.'),
     fechaVencimiento: DateType()
       .isRequired('Este campo es obligatorio.'),
-    nroConvenio: StringType()
-      .isRequired('Este campo es obligatorio.'),
+    nroConvenio: StringType(),
     fechaEmisionConvenio: DateType()
       .min(fechaEmision, 'Este campo no puede ser menor que la fecha de emisión.')
       .max(fechaVencimiento, 'Este campo no puede ser mayor que la fecha de vencimiento.')
@@ -129,6 +127,8 @@ function DatosGeneralesPanel () {
     }
   }
 
+  const isComfirmado = () => convenio && convenio.estado === 3
+
   const renderForm = () => (
     <Form
       fluid
@@ -136,15 +136,15 @@ function DatosGeneralesPanel () {
       onChange={setFormValue}
       formValue={formValue}
       model={model}
+      disabled={isComfirmado()}
     >
       <Row>
         <Col xs={24} sm={12} md={12} lg={12}>
-          {/* <FormField name='distribuidor' label='Distribuidor' disabled /> */}
-          <FormField name='nroContrato' label='Nro. Contrato' required />
+          <FormField name='nroContrato' label='Nro. Contrato' required disabled={id !== undefined} />
           <FormField name='fechaEmision' label='Fecha Emisión' accepter={DatePicker} disabled block />
         </Col>
         <Col xs={24} sm={12} md={12} lg={12}>
-          <FormField name='nroConvenio' label='Nro. Convenio' required />
+          <FormField name='nroConvenio' label='Nro. Convenio' required disabled hidden={id === undefined} />
           <FormField name='fechaVencimiento' label='Fecha Vencimiento' accepter={DatePicker} disabled block />
         </Col>
       </Row>
@@ -178,7 +178,7 @@ function DatosGeneralesPanel () {
       <Row>
         <Col xs={24} className='mt-4'>
           <ButtonToolbar>
-            <Button appearance='primary' size='sm' onClick={handleSubmit} disabled={contrato?.fecha_inicial === undefined} loading={isAdd === OPERATIONS.PENDING}>
+            <Button appearance='primary' size='sm' onClick={handleSubmit} hidden={isComfirmado()} disabled={contrato?.fecha_inicial === undefined} loading={isAdd === OPERATIONS.PENDING}>
               {id === undefined ? 'Guardar' : 'Editar'}
             </Button>
           </ButtonToolbar>
@@ -191,7 +191,7 @@ function DatosGeneralesPanel () {
     <>
       {isClienteFinal === OPERATIONS.FULFILLED
         ? renderForm()
-        : <Placeholder.Paragraph rows={3} />}
+        : <Loader.Paragraph rows={3} />}
     </>
   )
 }

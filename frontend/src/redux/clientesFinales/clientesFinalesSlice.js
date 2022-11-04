@@ -6,7 +6,10 @@ import OPERATIONS from 'constants/operationsRedux'
 
 const initialState = {
   listClientesFinales: [],
-  isListClientesFinales: OPERATIONS.NONE
+  clientesFinales: [],
+  isListClientesFinales: OPERATIONS.NONE,
+  isList: OPERATIONS.NONE,
+  isAdd: OPERATIONS.NONE
 }
 
 export const clientesFinalesSlice = createSlice({
@@ -15,7 +18,10 @@ export const clientesFinalesSlice = createSlice({
   reducers: {
     stateResetOperation: (state) => {
       state.isListClientesFinales = OPERATIONS.NONE
+      state.isList = OPERATIONS.NONE
+      state.isAdd = OPERATIONS.NONE
       state.listClientesFinales = []
+      state.clientesFinales = []
     }
   },
   extraReducers: (builder) => {
@@ -32,10 +38,39 @@ export const clientesFinalesSlice = createSlice({
       state.listClientesFinales = []
       toast.error(action.error)
     })
+
+    // GET_CLIENTES_FINALES ACCION
+    builder.addCase(getClientesFinales.pending, (state, action) => {
+      state.isList = OPERATIONS.PENDING
+    })
+    builder.addCase(getClientesFinales.fulfilled, (state, action) => {
+      state.isList = OPERATIONS.FULFILLED
+      state.clientesFinales = action.payload
+    })
+    builder.addCase(getClientesFinales.rejected, (state, action) => {
+      state.isList = OPERATIONS.REJECTED
+      state.clientesFinales = []
+      toast.error(action.error)
+    })
+
+    // ADD_CLIENTE_FINALES ACCION
+    builder.addCase(addClientesFinales.pending, (state, action) => {
+      state.isAdd = OPERATIONS.PENDING
+    })
+    builder.addCase(addClientesFinales.fulfilled, (state, action) => {
+      state.isAdd = OPERATIONS.FULFILLED
+      toast.success(action.payload)
+    })
+    builder.addCase(addClientesFinales.rejected, (state, action) => {
+      state.isAdd = OPERATIONS.REJECTED
+      toast.error(action.error)
+    })
   }
 })
 
 export const getListaClientesFinales = createAsyncThunk('clientesFinales/getListaClientesFinales', api.getListaClientesFinales)
+export const getClientesFinales = createAsyncThunk('clientesFinales/getClientesFinales', api.getClientesFinales)
+export const addClientesFinales = createAsyncThunk('clientesFinales/addClientesFinales', api.addClientesFinales)
 
 export const { stateResetOperation } = clientesFinalesSlice.actions
 
