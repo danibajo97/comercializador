@@ -23,6 +23,7 @@ from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 from apps.users.api.views.authentication_views import RegisterUsersFromVersatErpView, ActivationCodeView, \
     AuthenticatedUser
+from apps.users.api.views.users_views import RegisterView, ChangePasswordView, UpdateProfileView
 
 schema_view = get_schema_view(
     openapi.Info(
@@ -40,7 +41,9 @@ schema_view = get_schema_view(
 local_urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include('rest_framework.urls')),
-    path('api-usuarios/', include('apps.users.urls')),
+    path('register/', RegisterView.as_view(), name='auth_register'),
+    path('change_password/<int:pk>/', ChangePasswordView.as_view(), name='auth_change_password'),
+    path('update_profile/<int:pk>/', UpdateProfileView.as_view(), name='auth_update_profile'),
     path('api-acceso/', include('apps.convenio.urls')),
     path('registro-usuarios/', RegisterUsersFromVersatErpView.as_view(),
          name='register_users_from_versaterp'),

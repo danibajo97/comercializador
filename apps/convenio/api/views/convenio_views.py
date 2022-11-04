@@ -119,13 +119,13 @@ class ConvenioWebViewSet(viewsets.GenericViewSet):
                         status=response.status_code)
 
     @action(detail=False, methods=['get'])
-    def confirmar_convenio(self, request):
+    def terminar_convenio(self, request):
         user = authenticated_user(request)
         params = {
             'idcontacto': user.id_erp,
             'id_convenio': request.GET.get('id_convenio'),
         }
-        url = 'cmz/convenio_externo/confirmar_convenio/'
+        url = 'cmz/convenio_externo/terminar_convenio/'
         response = self.responsebase.get(url=url, params=params)
         return Response({'Versat-response': response.json()},
                         status=response.status_code)

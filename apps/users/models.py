@@ -4,8 +4,9 @@ from simple_history.models import HistoricalRecords
 
 
 class UserManager(BaseUserManager):
-    def _create_user(self, email, name, password, is_staff, is_superuser, **extra_fields):
+    def _create_user(self, username, email, name, password, is_staff, is_superuser, **extra_fields):
         user = self.model(
+            username=username,
             email=email,
             name=name,
             is_staff=is_staff,
@@ -16,17 +17,18 @@ class UserManager(BaseUserManager):
         user.save(using=self.db)
         return user
 
-    def create_user(self, email, name, password=None, **extra_fields):
-        return self._create_user(email, name, password, False, False, **extra_fields)
+    def create_user(self, username, email, name, password=None, **extra_fields):
+        return self._create_user(username, email, name, password, False, False, **extra_fields)
 
-    def create_superuser(self, email, name, password=None, **extra_fields):
-        return self._create_user(email, name, password, True, True, **extra_fields)
+    def create_superuser(self, username, email, name, password=None, **extra_fields):
+        return self._create_user(username, email, name, password, True, True, **extra_fields)
 
 
 class User(AbstractBaseUser, PermissionsMixin):
-    email = models.EmailField('Correo Electrónico', max_length=255, unique=True, )
+    email = models.EmailField('Correo Electrónico', max_length=255, unique=True)
     name = models.CharField('Nombre', max_length=255, blank=True, null=True)
     last_name = models.CharField('Apellido', max_length=255, blank=True, null=True)
+    username = models.CharField('Usuario', max_length=255, unique=True,)
     id_erp = models.CharField('id-ERP', max_length=255)
     is_active = models.BooleanField(default=True)
     is_distribuidor = models.BooleanField(default=False)
@@ -39,8 +41,8 @@ class User(AbstractBaseUser, PermissionsMixin):
         verbose_name = 'Usuario'
         verbose_name_plural = 'Usuarios'
 
-    USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['name']
+    USERNAME_FIELD = 'username'
+    REQUIRED_FIELDS = ['name', 'last_name', 'email']
 
     def __str__(self):
-        return f'{self.name}, {self.email}'
+        return f'{self.name}, {self.username}'

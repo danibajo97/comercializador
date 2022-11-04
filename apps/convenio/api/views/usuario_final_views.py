@@ -152,3 +152,65 @@ class UsuarioFinalWebViewSet(viewsets.GenericViewSet):
         else:
             return Response({'Versat-response': response.json()},
                             status=response.status_code)
+
+    @action(methods=['get'], detail=False, url_path='paises', url_name='paises')
+    def paises(self, request):
+        user = authenticated_user(request)
+        url = 'servicio/pais_list/'
+        params = {
+            'authenticated-user': user.id_erp,
+        }
+        response = self.responsebase.get(url=url, params=params)
+        return Response(response.json(), status=response.status_code)
+
+    @action(methods=['get'], detail=False, url_path='provincias', url_name='provincias')
+    def provincias(self, request):
+        user = authenticated_user(request)
+        url = 'servicio/provincia_list/'
+        params = {
+            'authenticated-user': user.id_erp,
+        }
+        response = self.responsebase.get(url=url, params=params)
+        return Response(response.json(), status=response.status_code)
+
+    @action(methods=['get'], detail=False, url_path='municipios', url_name='municipios')
+    def municipios(self, request):
+        user = authenticated_user(request)
+        url = 'servicio/municipio_list/'
+        params = {
+            'authenticated-user': user.id_erp,
+        }
+        response = self.responsebase.get(url=url, params=params)
+        return Response(response.json(), status=response.status_code)
+
+
+    @action(methods=['get'], detail=False, url_path='paises', url_name='paises')
+    def paises(self, request):
+        user = authenticated_user(request)
+        url = 'servicio/pais_list/'
+        params = {
+            'authenticated-user': user.id_erp,
+        }
+        response = self.responsebase.get(url=url, params=params)
+        return Response(response.json(), status=response.status_code)
+
+    @action(methods=['get'], detail=False, url_path='provincias', url_name='provincias')
+    def provincias(self, request):
+        user = authenticated_user(request)
+        url = 'servicio/provincia_list/'
+        params = {
+            'authenticated-user': user.id_erp,
+        }
+        response = self.responsebase.get(url=url, params=params)
+        return Response(response.json(), status=response.status_code)
+
+    @action(methods=['get'], detail=False, url_path='municipios', url_name='municipios')
+    def municipios(self, request):
+        user = authenticated_user(request)
+        url = 'servicio/municipio_list/'
+        params = {
+            'authenticated-user': user.id_erp,
+        }
+        response = self.responsebase.get(url=url, params=params)
+        return Response(response.json(), status=response.status_code)
+
