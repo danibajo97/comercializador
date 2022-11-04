@@ -12,7 +12,7 @@ import { useNavigate } from 'react-router-dom'
 
 import { DefaultHeader } from 'components'
 import ClientesFinalesForm from './ClientesFinalesForm'
-import ClienteForm from 'pages/clientes/components/ClienteForm/'
+import ClienteForm from 'pages/contacto/components/ClienteForm'
 import useModal from 'hooks/useModal'
 
 function ClientesFinales () {
