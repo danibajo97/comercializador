@@ -5,14 +5,13 @@ from rest_framework import status, generics
 from rest_framework.response import Response
 
 from apps.base.response_base import ResponseBase
-from apps.users.api.serializers.users_serializers import UserSerializer
+from apps.users.api.serializers.authentication_serializers import ActivateUserSerializer
 from apps.users.models import User
 from apps.users.resources.activate_code import activate_code
 
 
 class RegisterUsersFromVersatErpView(generics.GenericAPIView):
     model = User
-    serializer_class = UserSerializer
 
     @transaction.atomic
     def post(self, request):
@@ -43,24 +42,27 @@ class RegisterUsersFromVersatErpView(generics.GenericAPIView):
 
 class ActivationCodeView(generics.GenericAPIView):
     model = User
+    serializer_class = ActivateUserSerializer
 
-    def get(self, request, uidb64, token):
+    def post(self, request, uidb64, token):
         try:
             uid = urlsafe_base64_decode(uidb64).decode()
             user = self.model.objects.filter(pk=uid).first()
         except (TypeError, ValueError, OverflowError, self.model.DoesNotExist):
             user = None
 
-        if user is not None and default_token_generator.check_token(user, token):
-            user.is_active = True
-            user.save()
-            return Response({
-                'message': 'Su cuenta ha sido activada correctamente.',
-            }, status=status.HTTP_200_OK)
-        else:
-            return Response({
-                'message': 'Usted no esta registrado en el sistema.'
-            }, status=status.HTTP_400_BAD_REQUEST)
+        serializer = ActivateUserSerializer(data=request.data)
+        if serializer.is_valid(raise_exception=True):
+            if default_token_generator.check_token(user, token):
+                user.is_active = True
+                user.save()
+                return Response({
+                    'message': 'Su cuenta ha sido activada correctamente.',
+                }, status=status.HTTP_200_OK)
+            else:
+                return Response({
+                    'message': 'Usted no esta registrado en el sistema.'
+                }, status=status.HTTP_400_BAD_REQUEST)
 
 
 class AuthenticatedUser(generics.GenericAPIView):
@@ -78,9 +80,9 @@ class AuthenticatedUser(generics.GenericAPIView):
                                      'name': current_user.name,
                                      'last_name': current_user.last_name,
                                      'is_distribuidor': current_user.is_distribuidor,
-                }
-                },
-                    status=response.status_code)
+                                 }
+                                 },
+                                status=response.status_code)
             else:
                 return Response({'comercializador': 'Error al conectar con el Servidor'},
                                 status=response.status_code)
