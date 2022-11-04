@@ -3,12 +3,20 @@ from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from apps.base.response_base import ResponseBase
+from apps.base.swagger_schema import parameter
 from apps.users.resources.authenticated_user import authenticated_user
+
+from drf_yasg import openapi
+from drf_yasg.utils import swagger_auto_schema
 
 
 class ContratoWebViewSet(viewsets.GenericViewSet):
     responsebase = ResponseBase()
 
+    contrato = parameter(
+        name='contrato', description="Numero de contrato", type=openapi.TYPE_STRING)
+
+    @swagger_auto_schema(manual_parameters=[contrato])
     @action(detail=False, methods=['get'])
     def buscar_contrato(self, request):
         user = authenticated_user(request)
