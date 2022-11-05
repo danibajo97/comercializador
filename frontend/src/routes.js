@@ -1,8 +1,8 @@
-import DatosGenerales from 'pages/crear_convenio/DatosGenerales'
-import ClientesFinales from 'pages/crear_convenio/ClientesFinales'
-import ServiciosContratados from 'pages/crear_convenio/ServiciosContratados'
-import PlazosPago from 'pages/crear_convenio/PlazosPago'
-import Clientes from 'pages/clientes'
+import DatosGenerales from 'pages/convenio/DatosGenerales'
+import ClientesFinales from 'pages/convenio/ClientesFinales'
+import ServiciosContratados from 'pages/convenio/ServiciosContratados'
+import PlazosPago from 'pages/convenio/PlazosPago'
+// import Clientes from 'pages/clientes'
 
 const routes = [
   {
@@ -34,12 +34,12 @@ const routes = [
     name: 'Plazos de Pago',
     element: <PlazosPago />,
     navbar: false
-  },
-  {
-    path: 'clientes',
-    name: 'Clientes',
-    element: <Clientes />,
-    navbar: true
   }
+  // {
+  //   path: 'clientes',
+  //   name: 'Clientes',
+  //   element: <Clientes />,
+  //   navbar: true
+  // }
 ]
 export default routes

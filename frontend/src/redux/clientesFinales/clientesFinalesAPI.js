@@ -8,15 +8,12 @@ export default {
   addClientesFinales
 }
 
-async function getListaClientesFinales ({ convenio }) {
+async function getListaClientesFinales () {
   const access = await window.sessionStorage.getItem('access')
   const options = {
     method: 'GET',
     url: `${API_URL}/api-acceso/usuario_final/lista_clientes_finales/`,
-    headers: { Authorization: `Bearer ${access}` },
-    params: {
-      id_convenio: convenio
-    }
+    headers: { Authorization: `Bearer ${access}` }
   }
   try {
     const { data } = await axios(options)

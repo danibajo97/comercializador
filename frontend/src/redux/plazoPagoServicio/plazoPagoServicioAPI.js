@@ -31,15 +31,17 @@ async function addPlazoPagoServicio ({ params }) {
   const access = await window.sessionStorage.getItem('access')
   const options = {
     method: 'POST',
-    url: `${API_URL}/api-acceso/plazo_pago/`,
+    url: `${API_URL}/api-acceso/plazo_pago_servicio/`,
     headers: { Authorization: `Bearer ${access}` },
     data: params
   }
   try {
     await axios(options)
-    return 'Se adicionó el plazo de pago correctamente.'
+    return 'Se adicionó el servicio de plazo de pago correctamente.'
   } catch (error) {
-    throw new Error('Error al adicionar el plazo de pago.')
+    const { message } = error.response.data
+    if (message) { throw new Error(message) }
+    throw new Error('Error al adicionar el servicio de plazo de pago.')
   }
 }
 
@@ -47,15 +49,15 @@ async function updatePlazoPagoServicio ({ id, params }) {
   const access = await window.sessionStorage.getItem('access')
   const options = {
     method: 'PUT',
-    url: `${API_URL}/api-acceso/plazo_pago/${id}/`,
+    url: `${API_URL}/api-acceso/plazo_pago_servicio/${id}/`,
     headers: { Authorization: `Bearer ${access}` },
     data: params
   }
   try {
     await axios(options)
-    return 'Se actualizó el plazo de pago correctamente.'
+    return 'Se actualizó el servicio de plazo de pago correctamente.'
   } catch (error) {
-    throw new Error('Error al actualizar el plazo de pago.')
+    throw new Error('Error al actualizar el servicio de plazo de pago.')
   }
 }
 
@@ -63,16 +65,16 @@ async function deletePlazoPagoServicio ({ id }) {
   const access = await window.sessionStorage.getItem('access')
   const options = {
     method: 'DELETE',
-    url: `${API_URL}/api-acceso/plazo_pago/${id}/`,
+    url: `${API_URL}/api-acceso/plazo_pago_servicio/${id}/`,
     headers: { Authorization: `Bearer ${access}` }
   }
   try {
     await axios(options)
     return {
       id,
-      message: 'Se eliminó el plazo de pago correctamente.'
+      message: 'Se eliminó el servicio de plazo de pago correctamente.'
     }
   } catch (error) {
-    throw new Error('Error al eliminar el plazo de pago.')
+    throw new Error('Error al eliminar el servicio de plazo de pago.')
   }
 }

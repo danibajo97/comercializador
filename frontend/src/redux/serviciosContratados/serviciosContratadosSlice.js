@@ -44,7 +44,7 @@ export const serviciosContratadosSlice = createSlice({
     })
     builder.addCase(addServiciosContratados.rejected, (state, action) => {
       state.isAdd = OPERATIONS.REJECTED
-      toast.error(action.error)
+      toast.error(action?.error?.message)
     })
   }
 })

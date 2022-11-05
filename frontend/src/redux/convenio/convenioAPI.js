@@ -8,7 +8,9 @@ export default {
   addConvenio,
   updateConvenio,
   deleteConvenio,
-  getListadoServicios
+  getListadoServicios,
+  validarConvenio,
+  confirmarConvenio
 }
 
 async function getConveniosAll ({ page = 1 }) {
@@ -110,5 +112,57 @@ async function getListadoServicios ({ convenio, plazopago }) {
     return data
   } catch (error) {
     throw new Error('Error al buscar el listado de servicios.')
+  }
+}
+
+async function validarConvenio ({ id }) {
+  const access = await window.sessionStorage.getItem('access')
+  const options = {
+    method: 'GET',
+    url: `${API_URL}/api-acceso/convenio/validar_convenio/`,
+    headers: { Authorization: `Bearer ${access}` },
+    params: {
+      id
+    }
+  }
+  try {
+    await axios(options)
+    return {
+      id,
+      message: 'Se validó el convenio correctamente.'
+    }
+  } catch (error) {
+    const { responseText } = error?.request
+    if (responseText) {
+      const a = JSON.parse(responseText)
+      throw new Error(a['Versat-response'])
+    }
+    throw new Error('Error al validar el convenio.')
+  }
+}
+
+async function confirmarConvenio ({ id }) {
+  const access = await window.sessionStorage.getItem('access')
+  const options = {
+    method: 'GET',
+    url: `${API_URL}/api-acceso/convenio/confirmar_convenio/`,
+    headers: { Authorization: `Bearer ${access}` },
+    params: {
+      id
+    }
+  }
+  try {
+    await axios(options)
+    return {
+      id,
+      message: 'Se confirmó el convenio correctamente.'
+    }
+  } catch (error) {
+    const { responseText } = error?.request
+    if (responseText) {
+      const a = JSON.parse(responseText)
+      throw new Error(a['Versat-response'])
+    }
+    throw new Error('Error al confirmar el convenio.')
   }
 }

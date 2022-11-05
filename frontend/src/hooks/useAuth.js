@@ -13,8 +13,8 @@ export default function useAuth () {
   const isLoading = useSelector(state => state.auth.isLoading)
   const hasError = useSelector(state => state.auth.hasError)
 
-  const login = ({ email, password }) => {
-    dispatch(loginAuth({ email, password }))
+  const login = ({ username, password }) => {
+    dispatch(loginAuth({ username, password }))
   }
 
   const logout = () => {
