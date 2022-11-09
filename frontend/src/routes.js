@@ -2,6 +2,7 @@ import DatosGenerales from 'pages/convenio/DatosGenerales'
 import ClientesFinales from 'pages/convenio/ClientesFinales'
 import ServiciosContratados from 'pages/convenio/ServiciosContratados'
 import PlazosPago from 'pages/convenio/PlazosPago'
+import SolicitudLicencia from 'pages/licencia'
 // import Clientes from 'pages/clientes'
 
 const routes = [
@@ -34,6 +35,12 @@ const routes = [
     name: 'Plazos de Pago',
     element: <PlazosPago />,
     navbar: false
+  },
+  {
+    path: 'solicitud-licencia',
+    name: 'Solicitud de Licencia',
+    element: <SolicitudLicencia />,
+    navbar: true
   }
   // {
   //   path: 'clientes',
