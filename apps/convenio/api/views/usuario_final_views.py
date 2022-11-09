@@ -99,7 +99,8 @@ class UsuarioFinalWebViewSet(viewsets.GenericViewSet):
         url = '%s' % ('cmz/cliente_final/lista_clientes_finales/')
         params = {
             'authenticated-user': user.id_erp,
-            'id_convenio': request.GET.get('id_convenio')
+            'negocio_plazo': request.GET.get('id_convenio'),
+            'plazopagoservicio': request.GET.get('plazo_pago_servicio')
         }
         response = self.responsebase.get(url=url, params=params)
         if response.status_code == 200:

@@ -1,3 +1,4 @@
-import estadosConvenios from 'constants/convenios/estadosConvenios'
+import estadosConvenios from 'constants/estadosConvenios'
+import alertType from 'constants/alertType'
 
-export { estadosConvenios }
+export { estadosConvenios, alertType }

@@ -3,12 +3,18 @@ from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
+from drf_yasg import openapi
+from drf_yasg.utils import swagger_auto_schema
+
 from apps.base.response_base import ResponseBase
+from apps.base.swagger_schema import parameter
 from apps.users.resources.authenticated_user import authenticated_user
 
 
 class ConvenioWebViewSet(viewsets.GenericViewSet):
     responsebase = ResponseBase()
+    id = parameter(
+        name='id', description="Id de convenio", type=openapi.TYPE_STRING)
 
     @transaction.atomic
     def create(self, request):
@@ -106,26 +112,31 @@ class ConvenioWebViewSet(viewsets.GenericViewSet):
             return Response({'Versat-response': response.json()},
                             status=response.status_code)
 
+    @swagger_auto_schema(manual_parameters=[id])
     @action(detail=False, methods=['get'])
     def validar_convenio(self, request):
-        user = authenticated_user(request)
         params = {
-            'idcontacto': user.id_erp,
-            'id_convenio': request.GET.get('id_convenio'),
+            'id': request.GET.get('id'),
         }
         url = 'cmz/convenio_externo/validar_convenio/'
         response = self.responsebase.get(url=url, params=params)
-        return Response({'Versat-response': response.json()},
-                        status=response.status_code)
+        if response.status_code == 202:
+            return Response(status=response.status_code)
+        else:
+            return Response({'Versat-response': response.json()},
+                            status=response.status_code)
 
+    @swagger_auto_schema(manual_parameters=[id])
     @action(detail=False, methods=['get'])
-    def terminar_convenio(self, request):
-        user = authenticated_user(request)
+    def confirmar_convenio(self, request):
         params = {
-            'idcontacto': user.id_erp,
-            'id_convenio': request.GET.get('id_convenio'),
+            'id': request.GET.get('id'),
         }
         url = 'cmz/convenio_externo/terminar_convenio/'
         response = self.responsebase.get(url=url, params=params)
-        return Response({'Versat-response': response.json()},
-                        status=response.status_code)
+        print(response)
+        if response.status_code == 202:
+            return Response(status=response.status_code)
+        else:
+            return Response({'Versat-response': response.json()},
+                            status=response.status_code)
