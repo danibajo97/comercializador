@@ -12,7 +12,7 @@ class ActivateUserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ('username', 'name', 'last_name', 'email', 'password', 'password2')
+        fields = ('username', 'name', 'last_name', 'email', 'password')
         extra_kwargs = {
             'name': {'required': True},
             'last_name': {'required': True},
@@ -21,12 +21,12 @@ class ActivateUserSerializer(serializers.ModelSerializer):
     def validate_username(self, value):
         user = self.context['request'].user
         if User.objects.exclude(pk=user.pk).filter(username=value).exists():
-            raise serializers.ValidationError({"username": "This username is already in use."})
+            raise serializers.ValidationError({"username": "Este nombre de usuario ya está en uso."})
         return value
 
     def validate(self, attrs):
         if attrs['password'] != attrs['password2']:
-            raise serializers.ValidationError({"password": "Password fields didn't match."})
+            raise serializers.ValidationError({"password": "Las contraseñas no coinciden."})
 
         return attrs
 

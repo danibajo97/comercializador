@@ -6,12 +6,14 @@ from rest_framework.response import Response
 
 from apps.base.response_base import ResponseBase
 from apps.users.api.serializers.authentication_serializers import ActivateUserSerializer
+from apps.users.api.serializers.users_serializers import RegisterSerializer
 from apps.users.models import User
 from apps.users.resources.activate_code import activate_code
 
 
 class RegisterUsersFromVersatErpView(generics.GenericAPIView):
     model = User
+    serializer_class = RegisterSerializer
 
     @transaction.atomic
     def post(self, request):
@@ -22,6 +24,7 @@ class RegisterUsersFromVersatErpView(generics.GenericAPIView):
                 pass
             else:
                 emails.append(request.data['email'])
+                request.data['username'] = request.data['email']
             user_serializer = self.serializer_class(data=request.data)
         else:
             for user in request.data:
@@ -29,6 +32,7 @@ class RegisterUsersFromVersatErpView(generics.GenericAPIView):
                     pass
                 else:
                     emails.append(user['email'])
+                    user['username'] = user['email']
             user_serializer = self.serializer_class(
                 data=request.data, many=True)
         if user_serializer.is_valid():
