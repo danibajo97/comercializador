@@ -29,16 +29,13 @@ class SolicitudLicenciaViewSet(viewsets.GenericViewSet):
 
     def list(self, request):
         user = authenticated_user(request)
-        if request.GET.get('id_solicitud_licencia'):
-            url = '%s%s/' % ('cmz/solicitud_licencia_externo/',
-                             request.GET.get('id_solicitud_licencia'))
-        else:
-            url = 'cmz/solicitud_licencia_externo/'
+
+        url = 'cmz/solicitud_licencia_externo/'
         params = {
             'authenticated-user': user.id_erp,
         }
         response = self.responsebase.get(url=url, params=params)
-        return Response(response.json(), status=response.status_code)
+        return Response(data=response.json(), status=response.status_code)
 
     @transaction.atomic
     def update(self, request, pk):

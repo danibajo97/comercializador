@@ -31,7 +31,9 @@ export default function useHomeDistribuidor () {
     }
   }, [convenios])
 
-  const estadoData = estadosConvenios.map(item => ({ label: item.text, value: item.id }))
+  const estadoData = estadosConvenios.map(item => {
+    if (item.visible) { return { label: item.text, value: item.id } } else { return undefined }
+  }).filter(item => item !== undefined)
 
   const onSelectEstado = (value) => {
     const filterEstado = convenios.filter(convenio => value.includes(convenio.estado))
