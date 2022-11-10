@@ -125,15 +125,14 @@ class UsuarioFinalWebViewSet(viewsets.GenericViewSet):
 
     @action(methods=['get'], detail=False)
     def lista_personas_asociadas(self, request):
-        user = authenticated_user(request)
-        url = '%s%s/' % ('cmz/cliente_final/personas_asociadas/',
-                         request.GET.get('id_convenio'))
+        url = 'cmz/cliente_final/personas_asociadas/'
         params = {
-            'authenticated-user': user.id_erp,
+            'cliente': request.GET.get('cliente'),
+            'negocio': request.GET.get('convenio')
         }
         response = self.responsebase.get(url=url, params=params)
         if response.status_code == 200:
-            return Response({'Versat-response': response.json()}, status=response.status_code)
+            return Response({'response': response.json()}, status=response.status_code)
         else:
             return Response({'message': "Hubo problemas al conectar con el servidor"},
                             status=response.status_code)
@@ -184,7 +183,6 @@ class UsuarioFinalWebViewSet(viewsets.GenericViewSet):
         response = self.responsebase.get(url=url, params=params)
         return Response(response.json(), status=response.status_code)
 
-
     @action(methods=['get'], detail=False, url_path='paises', url_name='paises')
     def paises(self, request):
         user = authenticated_user(request)
@@ -214,4 +212,3 @@ class UsuarioFinalWebViewSet(viewsets.GenericViewSet):
         }
         response = self.responsebase.get(url=url, params=params)
         return Response(response.json(), status=response.status_code)
-

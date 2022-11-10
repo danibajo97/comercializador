@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Schema } from 'rsuite'
 
-import { getBuscarContrato, getClientesFinales, stateResetOperation as stateResetOperationDatosGenerales } from 'redux/datosGenerales/datosGeneralesSlice'
+import { getBuscarContrato, getClientesFinales, getPersonasAsociadas, stateResetOperation as stateResetOperationDatosGenerales } from 'redux/datosGenerales/datosGeneralesSlice'
 import { addConvenio, updateConvenio, retrieveConvenio, stateResetOperation as stateResetOperationConvenio } from 'redux/convenio/convenioSlice'
 import { useParams } from 'react-router-dom'
 import useAuth from 'hooks/useAuth'
@@ -34,6 +34,9 @@ export default function useDatosGeneralesForm () {
   const clientesFinales = useSelector(state => state.datosGenerales.clientesFinales)
   const isClienteFinal = useSelector(state => state.datosGenerales.isClienteFinal)
 
+  const personasAsociadas = useSelector(state => state.datosGenerales.personasAsociadas)
+  const listPersonasAsociadas = useSelector(state => state.datosGenerales.listPersonasAsociadas)
+
   const isAdd = useSelector(state => state.convenio.isAdd)
   const convenio = useSelector(state => state.convenio.convenio)
 
@@ -52,7 +55,8 @@ export default function useDatosGeneralesForm () {
       .min(fechaEmision, 'Este campo no puede ser menor que la fecha de emisión.')
       .max(fechaVencimiento, 'Este campo no puede ser mayor que la fecha de vencimiento.')
       .isRequired('Este campo es obligatorio.'),
-    solicitadoPor: StringType(), // .isRequired('Este campo es obligatorio.'),
+    solicitadoPor: StringType()
+      .isRequired('Este campo es obligatorio.'),
     cliente: StringType()
       .isRequired('Este campo es obligatorio.'),
     cantidadBaseDatos: NumberType()
@@ -60,16 +64,6 @@ export default function useDatosGeneralesForm () {
       .isRequired('Este campo es obligatorio.'),
     observaciones: StringType()
   })
-
-  useEffect(() => {
-    dispatch(getClientesFinales())
-    if (id !== undefined) { dispatch(retrieveConvenio({ id })) }
-
-    return () => {
-      dispatch(stateResetOperationConvenio())
-      dispatch(stateResetOperationDatosGenerales())
-    }
-  }, [])
 
   useEffect(() => {
     if (convenio !== null) {
@@ -88,7 +82,9 @@ export default function useDatosGeneralesForm () {
 
   useEffect(() => {
     dispatch(getClientesFinales())
-    if (id !== undefined) { dispatch(retrieveConvenio({ id })) }
+    if (id !== undefined) {
+      dispatch(retrieveConvenio({ id }))
+    }
 
     return () => {
       dispatch(stateResetOperationConvenio())
@@ -99,6 +95,10 @@ export default function useDatosGeneralesForm () {
   useEffect(() => {
     dispatch(getBuscarContrato({ contrato: nroContrato }))
   }, [nroContrato])
+
+  useEffect(() => {
+    if (user?.distribuidor) { dispatch(getPersonasAsociadas({ cliente: user.distribuidor.id })) }
+  }, [user])
 
   useEffect(() => {
     setFormValue({
@@ -124,7 +124,7 @@ export default function useDatosGeneralesForm () {
         fecha_emision: date.toISODate({ date: formValue.fechaEmisionConvenio }),
         no_convenio: formValue.nroConvenio,
         observaciones: formValue.observaciones,
-        solicitado_por: ''
+        solicitado_por: formValue.solicitadoPor
       }
       if (id === undefined) {
         dispatch(addConvenio({ params }))
@@ -136,7 +136,7 @@ export default function useDatosGeneralesForm () {
 
   const isConfirmado = () => convenio && convenio.estado === 3
   const isUpdate = () => id !== undefined
-  const isLoading = () => isClienteFinal === OPERATIONS.FULFILLED
+  const isLoading = () => isClienteFinal === OPERATIONS.FULFILLED || listPersonasAsociadas === OPERATIONS.FULFILLED
 
-  return { formRef, formModel, formValue, setFormValue, handleSubmit, contrato, clientesFinales, isLoading, isConfirmado, isUpdate }
+  return { formRef, formModel, formValue, setFormValue, handleSubmit, contrato, clientesFinales, personasAsociadas, isLoading, isConfirmado, isUpdate }
 }

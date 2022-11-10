@@ -8,7 +8,9 @@ const initialState = {
   isContanto: OPERATIONS.NONE,
   contrato: null,
   clientesFinales: [],
-  isClienteFinal: OPERATIONS.NONE
+  isClienteFinal: OPERATIONS.NONE,
+  personasAsociadas: [],
+  listPersonasAsociadas: OPERATIONS.NONE
 }
 
 export const datosGeneralesSlice = createSlice({
@@ -20,6 +22,8 @@ export const datosGeneralesSlice = createSlice({
       state.contrato = null
       state.clientesFinales = []
       state.isClienteFinal = OPERATIONS.NONE
+      state.personasAsociadas = []
+      state.listPersonasAsociadas = OPERATIONS.NONE
     }
   },
   extraReducers: (builder) => {
@@ -52,11 +56,25 @@ export const datosGeneralesSlice = createSlice({
       state.clientesFinales = []
       state.isClienteFinal = OPERATIONS.REJECTED
     })
+
+    // GET_PERSONAS_ASOCIADAS ACCION
+    builder.addCase(getPersonasAsociadas.pending, (state, action) => {
+      state.listPersonasAsociadas = OPERATIONS.PENDING
+    })
+    builder.addCase(getPersonasAsociadas.fulfilled, (state, action) => {
+      state.personasAsociadas = action.payload
+      state.listPersonasAsociadas = OPERATIONS.FULFILLED
+    })
+    builder.addCase(getPersonasAsociadas.rejected, (state, action) => {
+      state.personasAsociadas = []
+      state.listPersonasAsociadas = OPERATIONS.REJECTED
+    })
   }
 })
 
 export const getBuscarContrato = createAsyncThunk('datosGenerales/getBuscarContrato', api.getBuscarContrato)
 export const getClientesFinales = createAsyncThunk('datosGenerales/getClientesFinales', api.getClientesFinales)
+export const getPersonasAsociadas = createAsyncThunk('datosGenerales/getPersonasAsociadas', api.getPersonasAsociadas)
 
 export const { stateResetOperation } = datosGeneralesSlice.actions
 

@@ -4,7 +4,8 @@ const API_URL = process.env.REACT_APP_API_URL
 
 export default {
   getBuscarContrato,
-  getClientesFinales
+  getClientesFinales,
+  getPersonasAsociadas
 }
 
 async function getBuscarContrato ({ contrato }) {
@@ -37,5 +38,24 @@ async function getClientesFinales () {
     return response.data
   } catch (error) {
     throw new Error('Error al listar los cliente finales.')
+  }
+}
+
+async function getPersonasAsociadas ({ convenio = null, cliente = null }) {
+  const access = await window.sessionStorage.getItem('access')
+  const options = {
+    method: 'GET',
+    url: `${API_URL}/api-acceso/usuario_final/lista_personas_asociadas/`,
+    headers: { Authorization: `Bearer ${access}` },
+    params: {
+      convenio,
+      cliente
+    }
+  }
+  try {
+    const { data } = await axios(options)
+    return data.response
+  } catch (error) {
+    throw new Error('Error al listar las personas osociadas.')
   }
 }
