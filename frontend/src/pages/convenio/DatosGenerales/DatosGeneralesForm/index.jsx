@@ -15,6 +15,7 @@ function DatosGeneralesForm () {
     handleSubmit,
     clientesFinales,
     contrato,
+    personasAsociadas,
     isLoading
   } = useDatosGeneralesForm()
 
@@ -54,7 +55,12 @@ function DatosGeneralesForm () {
                   value: cliente.id
                 }))} required block
               />
-              <FormField name='solicitadoPor' label='Solicitado Por' accepter={SelectPicker} data={[]} block />
+              <FormField
+                name='solicitadoPor' label='Solicitado Por' accepter={SelectPicker} data={personasAsociadas.map(persona => ({
+                  label: persona.nombre_completo,
+                  value: persona.id
+                }))} required block
+              />
             </Col>
             <Col xs={24} sm={12} md={12} lg={12}>
               <FormField name='fechaEmisionConvenio' label='Fecha Emisión Convenio' accepter={DatePicker} required block />

@@ -28,7 +28,7 @@ const ActionCell = ({ rowData, dataKey, ...props }) => {
                   <Dropdown.Item divider hidden={rowData.estado === 3} />
                   <Dropdown.Item eventKey={5} hidden={rowData.estado >= 3}>Eliminar</Dropdown.Item>
                   <Dropdown.Item eventKey={6} hidden={rowData.estado !== 1}>Validar</Dropdown.Item>
-                  <Dropdown.Item eventKey={7} hidden={rowData.estado !== 2}>Confirmar</Dropdown.Item>
+                  <Dropdown.Item eventKey={7} hidden={rowData.estado !== 2}>Terminar</Dropdown.Item>
                 </Dropdown.Menu>
               </Popover>
             )

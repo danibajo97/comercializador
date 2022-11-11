@@ -6,6 +6,7 @@ from apps.convenio.api.views.servicio_contratado_views import ServicioContratado
 from apps.convenio.api.views.plazo_pago_servicio_views import PlazoPagoServicioViewSet
 from apps.convenio.api.views.plazo_pago_view import PlazoPagoViewSet
 from apps.convenio.api.views.usuario_final_views import UsuarioFinalWebViewSet
+from apps.convenio.api.views.solicitud_licencia_views import SolicitudLicenciaViewSet
 
 router = DefaultRouter()
 
@@ -18,5 +19,7 @@ router.register('plazo_pago_servicio', PlazoPagoServicioViewSet,
                 basename="plazo_pago_servicio")
 router.register('usuario_final', UsuarioFinalWebViewSet,
                 basename="usuario_final")
+router.register('solicitud_licencia', SolicitudLicenciaViewSet,
+                basename="solicitud_licencia")
 
 urlpatterns = router.urls
