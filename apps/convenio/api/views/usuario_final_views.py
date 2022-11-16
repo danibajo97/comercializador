@@ -212,3 +212,18 @@ class UsuarioFinalWebViewSet(viewsets.GenericViewSet):
         }
         response = self.responsebase.get(url=url, params=params)
         return Response(response.json(), status=response.status_code)
+
+    @action(methods=['get'], detail=False)
+    def gestionados_por(self, request):
+        user = authenticated_user(request)
+        url = '%s' % ('cmz/usuario_final/gestionado_por/')
+        params = {
+            'authenticated-user': user.id_erp,
+            'cliente': user.id_erp,
+        }
+        response = self.responsebase.get(url=url, params=params)
+        if response.status_code == 200:
+            return Response(data=response.json(), status=response.status_code)
+        else:
+            return Response({'message': "Hubo problemas al conectar con el servidor"},
+                            status=response.status_code)
