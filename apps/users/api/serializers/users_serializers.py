@@ -8,22 +8,16 @@ from apps.users.models import User
 class RegisterSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(
         required=True,
-        validators=[UniqueValidator(queryset=User.objects.all())]
     )
 
     class Meta:
         model = User
-        fields = ('username', 'email', 'password')
+        fields = ('username', 'email', 'password', 'is_distribuidor', 'id_erp')
 
     def create(self, validated_data):
-        user = User.objects.create(
-            username=validated_data['username'],
-            email=validated_data['email'],
-        )
-
+        user = User(**validated_data)
         user.set_password(validated_data['password'])
         user.save()
-
         return user
 
 
@@ -37,12 +31,6 @@ class UpdateUserSerializer(serializers.ModelSerializer):
             'name': {'required': True},
             'last_name': {'required': True},
         }
-
-    def validate_email(self, value):
-        user = self.context['request'].user
-        if User.objects.exclude(pk=user.pk).filter(email=value).exists():
-            raise serializers.ValidationError({"email": "Este email ya está en uso."})
-        return value
 
     def validate_username(self, value):
         user = self.context['request'].user

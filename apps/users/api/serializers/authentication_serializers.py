@@ -32,7 +32,7 @@ class ActivateUserSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
 
-        instance.first_name = validated_data['name']
+        instance.name = validated_data['name']
         instance.last_name = validated_data['last_name']
         instance.username = validated_data['username']
         instance.set_password(validated_data['password'])

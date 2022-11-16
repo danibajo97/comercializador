@@ -2,6 +2,7 @@ from django.contrib.auth.tokens import default_token_generator
 from django.db import transaction
 from django.utils.http import urlsafe_base64_decode
 from rest_framework import status, generics
+from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 
 from apps.base.response_base import ResponseBase
@@ -9,44 +10,48 @@ from apps.users.api.serializers.authentication_serializers import ActivateUserSe
 from apps.users.api.serializers.users_serializers import RegisterSerializer
 from apps.users.models import User
 from apps.users.resources.activate_code import activate_code
+from apps.users.resources.random_user import generate_username
 
 
 class RegisterUsersFromVersatErpView(generics.GenericAPIView):
     model = User
     serializer_class = RegisterSerializer
+    permission_classes = (AllowAny,)
 
     @transaction.atomic
     def post(self, request):
-        emails = []
+        msg = []
+        usernames = []
         request_type = isinstance(request.data, dict)
         if request_type:
-            if self.model.objects.filter(email=request.data['email']).exists():
-                pass
+            if self.model.objects.filter(email=request.data['email'], is_resetpwd=True).exists():
+                msg.append("El usuario %s ya existe en el sistema" % request.data['email'])
             else:
-                emails.append(request.data['email'])
-                request.data['username'] = request.data['email']
+                request.data['username'] = generate_username()
+                usernames.append(request.data['username'])
             user_serializer = self.serializer_class(data=request.data)
         else:
             for user in request.data:
-                if self.model.objects.filter(email=user['email']).exists():
-                    pass
+                if self.model.objects.filter(email=user['email'], is_resetpwd=True).exists():
+                    msg.append("El usuario %s ya existe en el sistema" % user['email'])
                 else:
-                    emails.append(user['email'])
-                    user['username'] = user['email']
+                    user['username'] = generate_username()
+                    usernames.append(user['username'])
             user_serializer = self.serializer_class(
                 data=request.data, many=True)
-        if user_serializer.is_valid():
+        if user_serializer.is_valid(raise_exception=True):
             user_serializer.save()
-            for email in emails:
-                user = self.model.objects.filter(email=email).first()
+            users = self.model.objects.filter(username__in=usernames)
+            for user in users:
                 activate_code(user, request)
             return Response(status=status.HTTP_201_CREATED)
-        return Response(status=status.HTTP_400_BAD_REQUEST)
+        return Response({'error': msg}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class ActivationCodeView(generics.GenericAPIView):
     model = User
     serializer_class = ActivateUserSerializer
+    permission_classes = (AllowAny,)
 
     def post(self, request, uidb64, token):
         try:
@@ -84,9 +89,9 @@ class AuthenticatedUser(generics.GenericAPIView):
                                      'name': current_user.name,
                                      'last_name': current_user.last_name,
                                      'rol': 'ROL_DISTRIBUIDOR' if current_user.is_distribuidor else 'ROL_CLIENTE',
-                }
-                },
-                    status=response.status_code)
+                                 }
+                                 },
+                                status=response.status_code)
             else:
                 return Response({'comercializador': 'Error al conectar con el Servidor'},
                                 status=response.status_code)

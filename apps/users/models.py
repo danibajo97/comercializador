@@ -25,7 +25,7 @@ class UserManager(BaseUserManager):
 
 
 class User(AbstractBaseUser, PermissionsMixin):
-    email = models.EmailField('Correo Electrónico', max_length=255, unique=True)
+    email = models.EmailField('Correo Electrónico', max_length=255)
     name = models.CharField('Nombre', max_length=255, blank=True, null=True)
     last_name = models.CharField('Apellido', max_length=255, blank=True, null=True)
     username = models.CharField('Usuario', max_length=255, unique=True,)
@@ -45,4 +45,4 @@ class User(AbstractBaseUser, PermissionsMixin):
     REQUIRED_FIELDS = ['name', 'last_name', 'email']
 
     def __str__(self):
-        return f'{self.name}, {self.username}'
+        return f'{self.username}'
