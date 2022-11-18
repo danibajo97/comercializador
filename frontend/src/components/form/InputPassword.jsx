@@ -10,7 +10,7 @@ export default function InputPassword ({ name, label, accepter, required, error,
     <>
       {label && <Form.ControlLabel className='text-muted text-sm'>{label}: {required && <span className='text-danger'>*</span>}</Form.ControlLabel>}
       <InputGroup inside size='sm'>
-        <Form.Control name={name} {...rest} size='sm' type={visible ? 'text' : 'password'} />
+        <Form.Control data-testid={`${name}-testid`} name={name} {...rest} size='sm' type={visible ? 'text' : 'password'} />
         <InputGroup.Button onClick={() => setVisible(!visible)}>
           {visible ? <EyeIcon /> : <EyeSlashIcon />}
         </InputGroup.Button>

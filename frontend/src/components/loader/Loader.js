@@ -11,10 +11,18 @@ function LoaderGrid ({ rows, columns }) {
   )
 }
 
-function LoaderParagraph () {
+function LoaderParagraph ({ rows }) {
   return (
     <div>
-      <Placeholder.Paragraph rows={6} className='text-red' />
+      <Placeholder.Paragraph rows={rows} className='text-red' />
+      <LoaderRS content='Cargando...' speed='slow' center />
+    </div>
+  )
+}
+
+function LoaderDefault ({ ...props }) {
+  return (
+    <div {...props}>
       <LoaderRS content='Cargando...' speed='slow' center />
     </div>
   )
@@ -23,4 +31,5 @@ function LoaderParagraph () {
 export default class Loader extends Component {
   static Grid = LoaderGrid
   static Paragraph = LoaderParagraph
+  static Default = LoaderDefault
 }
