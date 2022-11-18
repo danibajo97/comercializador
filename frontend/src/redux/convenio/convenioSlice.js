@@ -7,6 +7,7 @@ import OPERATIONS from 'constants/operationsRedux'
 const initialState = {
   convenio: null,
   convenios: [],
+  conveniosLimit: 0,
   isConvenios: OPERATIONS.NONE,
   isAdd: OPERATIONS.NONE,
   isUpdate: OPERATIONS.NONE,
@@ -31,6 +32,7 @@ export const convenioSlice = createSlice({
       state.isValidar = OPERATIONS.NONE
       state.isConfirmar = OPERATIONS.NONE
       state.convenios = []
+      state.conveniosLimit = 0
       state.convenio = null
     }
   },
@@ -38,13 +40,18 @@ export const convenioSlice = createSlice({
     // GET_CONVENIO_ALL ACCION
     builder.addCase(getConveniosAll.pending, (state, action) => {
       state.isConvenios = OPERATIONS.PENDING
+      state.convenios = []
+      state.conveniosLimit = 0
     })
     builder.addCase(getConveniosAll.fulfilled, (state, action) => {
-      state.convenios = action.payload
+      const data = action.payload
+      state.convenios = data?.results
+      state.conveniosLimit = data?.count
       state.isConvenios = OPERATIONS.FULFILLED
     })
     builder.addCase(getConveniosAll.rejected, (state, action) => {
       state.convenios = []
+      state.conveniosLimit = 0
       state.isConvenios = OPERATIONS.REJECTED
       toast.error(action.error)
     })

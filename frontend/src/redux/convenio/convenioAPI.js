@@ -13,19 +13,21 @@ export default {
   confirmarConvenio
 }
 
-async function getConveniosAll ({ page = 1 }) {
+async function getConveniosAll ({ pagination }) {
+  const { page, limit } = pagination
   const access = await window.sessionStorage.getItem('access')
   const options = {
     method: 'GET',
     url: `${API_URL}/api-acceso/convenio/`,
     headers: { Authorization: `Bearer ${access}` },
     params: {
-      page
+      page,
+      limit
     }
   }
   try {
     const { data } = await axios(options)
-    return data.results
+    return data
   } catch (error) {
     throw new Error('Error al listar los convenios.')
   }
