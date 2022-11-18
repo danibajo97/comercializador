@@ -2,8 +2,12 @@ import React, { useState } from 'react'
 import { Col, Row } from 'reactstrap'
 import { Pagination } from 'rsuite'
 
-export default function usePagination ({ data, title }) {
-  const [limit, setLimit] = useState(8)
+// const PAGINATION_LIMIT = process.env.REACT_APP_PAGINATION_LIMIT
+
+export default function usePagination ({ data }) {
+  const PAGINATION_LIMIT = 3
+
+  const [limit, setLimit] = useState(2)
   const [page, setPage] = useState(1)
 
   const handleChangeLimit = dataKey => {
@@ -17,7 +21,12 @@ export default function usePagination ({ data, title }) {
     return i >= start && i < end
   })
 
-  const layout = data.length === 0 ? '' : `Total de ${title}: ${data.length}`
+  const start = () => ((page - 1) * PAGINATION_LIMIT) + 1
+  const end = () => {
+    const sum = start() + PAGINATION_LIMIT - 1
+    return sum >= data.length ? data.length : sum
+  }
+  const layout = data.length === 0 ? '' : `Mostrando: ${start()} - ${end()} de ${data.length}`
 
   const pagination = (
     <Row>
