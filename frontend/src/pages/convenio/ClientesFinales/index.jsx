@@ -14,8 +14,10 @@ import { DefaultHeader } from 'components'
 import ClientesFinalesForm from './ClientesFinalesForm'
 import ClienteForm from 'pages/contacto/components/ClienteForm'
 import useModal from 'hooks/useModal'
+import useHeader from 'hooks/useHeader'
 
 function ClientesFinales () {
+  useHeader({ title: 'Convenios' })
   const navigate = useNavigate()
   const { modal, openModal } = useModal({
     title: 'Nuevo Cliente',

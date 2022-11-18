@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { getConveniosAll } from 'redux/convenio/convenioSlice'
 import estadosConvenios from 'constants/estadosConvenios'
 import OPERATIONS from 'constants/operationsRedux'
+import usePaginationServer from 'hooks/usePaginationServer'
 
 export default function useHomeDistribuidor () {
   const [data, setData] = useState([])
@@ -14,18 +15,21 @@ export default function useHomeDistribuidor () {
   const dispatch = useDispatch()
 
   const convenios = useSelector(state => state.convenio.convenios)
+  const conveniosLimit = useSelector(state => state.convenio.conveniosLimit)
   const isConvenios = useSelector(state => state.convenio.isConvenios)
 
+  const { pagination, page, limit } = usePaginationServer({ length: conveniosLimit })
+
   useEffect(() => {
-    dispatch(getConveniosAll({ page: 1 }))
-  }, [])
+    dispatch(getConveniosAll({ pagination: { page, limit } }))
+  }, [page])
 
   useEffect(() => {
     setData(convenios)
     if (isConvenios === OPERATIONS.FULFILLED) {
       const edicion = convenios.filter(convenio => convenio.estado === 1)
       const confirmado = convenios.filter(convenio => convenio.estado === 3)
-      setTotalConvenio(convenios.length)
+      setTotalConvenio(conveniosLimit)
       setTotalConfirmado(confirmado.length)
       setTotalEdicion(edicion.length)
     }
@@ -42,5 +46,5 @@ export default function useHomeDistribuidor () {
 
   const loading = isConvenios === OPERATIONS.FULFILLED
 
-  return { data, loading, totalConvenio, totalConfirmado, totalEdicion, estadoData, onSelectEstado }
+  return { data, loading, totalConvenio, totalConfirmado, totalEdicion, estadoData, onSelectEstado, pagination }
 }

@@ -1,16 +1,18 @@
 import React, { useEffect } from 'react'
 import { Col, Form, Button, ButtonToolbar, Schema, SelectPicker, DatePicker, Radio, RadioGroup } from 'rsuite'
 
-import { FormField, Textarea } from 'components'
+import { FormField, Textarea, Loader } from 'components'
 import useAuth from 'hooks/useAuth'
 import { useDispatch, useSelector } from 'react-redux'
 
+import { getPersonasAsociadas, stateResetOperation as stateResetOperationDatosGenerales } from 'redux/datosGenerales/datosGeneralesSlice'
 import { getConveniosAll } from 'redux/convenio/convenioSlice'
+import { addSolicitudLicencia, updateSolicitudLicencia } from 'redux/solicitudLicencia/solicitudLicenciaSlice'
 import { getClientesFinales, stateResetOperation as stateResetOperationClientesFinales } from 'redux/clientesFinales/clientesFinalesSlice'
 import { getServiciosContratadosAll, stateResetOperation as stateResetOperationServiciosContratados } from 'redux/serviciosContratados/serviciosContratadosSlice'
 import OPERATIONS from 'constants/operationsRedux'
 
-export default function LicenciaForm ({ closeModal }) {
+export default function LicenciaForm ({ closeModal, solicitudLicencia }) {
   const dispatch = useDispatch()
   const { user } = useAuth()
   const formRef = React.useRef()
@@ -18,7 +20,6 @@ export default function LicenciaForm ({ closeModal }) {
   const [formValue, setFormValue] = React.useState({
     tipo: 'venta',
     convenio: '',
-    nro: '',
     fecha: undefined,
     clienteSolicita: '',
     personaSolicita: '',
@@ -28,18 +29,19 @@ export default function LicenciaForm ({ closeModal }) {
     observaciones: ''
   })
 
+  console.log({ user })
+
   const { StringType, DateType } = Schema.Types
   const model = Schema.Model({
     tipo: StringType().isRequired('Este campo es obligatorio.'),
     convenio: StringType().isRequired('Este campo es obligatorio.'),
-    nro: StringType().isRequired('Este campo es obligatorio.'),
     fecha: DateType().isRequired('Este campo es obligatorio.'),
-    clienteSolicita: StringType().isRequired('Este campo es obligatorio.'),
+    clienteSolicita: StringType(), // .isRequired('Este campo es obligatorio.'),
     personaSolicita: StringType().isRequired('Este campo es obligatorio.'),
     clienteFinal: StringType().isRequired('Este campo es obligatorio.'),
     servicio: StringType().isRequired('Este campo es obligatorio.'),
     claveRegistro: StringType().isRequired('Este campo es obligatorio.'),
-    observaciones: StringType().isRequired('Este campo es obligatorio.')
+    observaciones: StringType()
   })
 
   const { convenio } = formValue
@@ -52,7 +54,7 @@ export default function LicenciaForm ({ closeModal }) {
   const serviciosContratados = useSelector(state => state.serviciosContratados.serviciosContratados)
   const isListServiciosContratados = useSelector(state => state.serviciosContratados.isList)
 
-  console.log({ convenios })
+  const personasAsociadas = useSelector(state => state.datosGenerales.personasAsociadas)
 
   useEffect(() => {
     dispatch(getConveniosAll({ page: 1 }))
@@ -60,22 +62,60 @@ export default function LicenciaForm ({ closeModal }) {
     return () => {
       dispatch(stateResetOperationServiciosContratados())
       dispatch(stateResetOperationClientesFinales())
+      dispatch(stateResetOperationDatosGenerales())
     }
   }, [])
 
-  // useEffect(() => {
-  //   if (convenio) {
-  //     dispatch(getServiciosContratadosAll({ convenio }))
-  //     dispatch(getClientesFinales({ convenio }))
-  //   }
-  // }, [convenio])
+  useEffect(() => {
+    if (user?.distribuidor) { dispatch(getPersonasAsociadas({ cliente: user.distribuidor.id })) }
+  }, [user])
+
+  useEffect(() => {
+    if (convenio) {
+      dispatch(getServiciosContratadosAll({ convenio }))
+      dispatch(getClientesFinales({ convenio }))
+    }
+  }, [convenio])
 
   const handleSubmit = () => {
     // clienteSolicita = user.distribuidor.id
-    if (formRef.current.check()) { if (closeModal) closeModal() }
+    if (formRef.current.check()) {
+      const params = {
+        // ...formValue,
+        venta: formValue.tipo === 'venta',
+        negocio: formValue.convenio,
+        no_solicitud: 'aaa',
+        solicitado_por: formValue.personaSolicita,
+        cliente: formValue.clienteFinal,
+        semilla: formValue.claveRegistro,
+        servicio: formValue.servicio,
+        observaciones: formValue.observaciones
+      }
+      if (solicitudLicencia === undefined) {
+        dispatch(addSolicitudLicencia({ params }))
+      } else {
+        dispatch(updateSolicitudLicencia({ id: solicitudLicencia.id, params }))
+      }
+
+      // if (closeModal) closeModal()
+    }
   }
 
-  return (
+  const convenioDataSelect = () => {
+    const data = convenios.map(convenio => {
+      if (convenio.estado === 3) {
+        return {
+          label: convenio.no_convenio + ' - ' + convenio.contacto_cliente_final,
+          value: convenio.id
+        }
+      } else return undefined
+    }).filter(convenio => convenio !== undefined)
+
+    console.log({ data })
+    return data
+  }
+
+  const renderForm = () => (
     <Form
       fluid
       ref={formRef}
@@ -92,12 +132,21 @@ export default function LicenciaForm ({ closeModal }) {
           </Form.Control>
         </Form.Group>
         <FormField
-          name='convenio' label='Convenio' accepter={SelectPicker} data={[]} block required hidden={formValue.tipo !== 'venta'}
+          name='convenio'
+          label='Convenio' accepter={SelectPicker}
+          data={convenioDataSelect()}
+          block
+          required
+          hidden={formValue.tipo !== 'venta'}
         />
-        <FormField name='nro' label='Nro' required />
         <FormField name='fecha' label='Fecha' accepter={DatePicker} block required />
         <FormField name='clienteSolicita' label='Cliente que Solicita' accepter={SelectPicker} data={[]} block required />
-        <FormField name='personaSolicita' label='Persona que Solicita' accepter={SelectPicker} data={[]} block required />
+        <FormField
+          name='personaSolicita' label='Persona que Solicita' accepter={SelectPicker} data={personasAsociadas.map(persona => ({
+            label: persona.nombre_completo,
+            value: persona.id
+          }))} block required
+        />
         <FormField
           name='clienteFinal'
           label='Cliente Final'
@@ -116,8 +165,8 @@ export default function LicenciaForm ({ closeModal }) {
           label='Servicio'
           accepter={SelectPicker}
           data={serviciosContratados.map(servicio => ({
-            label: servicio.nombre,
-            value: servicio.id
+            label: servicio.producto_nombre,
+            value: servicio.servicio
           }))}
           block
           required
@@ -139,5 +188,15 @@ export default function LicenciaForm ({ closeModal }) {
         </ButtonToolbar>
       </Col>
     </Form>
+  )
+
+  const isLoading = () => isConvenios === OPERATIONS.FULFILLED
+
+  return (
+    <>
+      {isLoading()
+        ? renderForm()
+        : <Loader.Paragraph rows={16} />}
+    </>
   )
 }

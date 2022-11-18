@@ -5,7 +5,6 @@ import MoreIcon from '@rsuite/icons/legacy/More'
 
 import Table from 'components/table/Table'
 import { renderEmpty } from 'components'
-import usePagination from 'hooks/usePagination'
 import useConvenioTable from './useConvenioTable'
 
 const ActionCell = ({ rowData, dataKey, ...props }) => {
@@ -41,12 +40,10 @@ const ActionCell = ({ rowData, dataKey, ...props }) => {
   )
 }
 
-export default function ConvenioTable ({ convenios }) {
-  const { pagination, dataPage } = usePagination({ data: convenios, title: 'Convenios' })
-
+export default function ConvenioTable ({ convenios, pagination }) {
   return (
     <>
-      <Table data={dataPage} height={450} autoHeight renderEmpty={renderEmpty}>
+      <Table data={convenios} height={450} autoHeight renderEmpty={renderEmpty}>
         {Table.Column({ header: 'Nro Contrato', dataKey: 'contrato_no', flex: 1 })}
         {Table.Column({ header: 'Cliente', dataKey: 'contacto_cliente_final', flex: 2.5 })}
         {Table.Column({ header: 'Nro Convenio', dataKey: 'no_convenio', flex: 1 })}
