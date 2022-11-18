@@ -16,7 +16,8 @@ const initialState = {
   isRetrieve: OPERATIONS.NONE,
   isValidar: OPERATIONS.NONE,
   isConfirmar: OPERATIONS.NONE,
-  listadoServicios: []
+  listadoServicios: [],
+  widges: {}
 }
 
 export const convenioSlice = createSlice({
@@ -34,6 +35,7 @@ export const convenioSlice = createSlice({
       state.convenios = []
       state.conveniosLimit = 0
       state.convenio = null
+      state.widges = {}
     }
   },
   extraReducers: (builder) => {
@@ -166,6 +168,14 @@ export const convenioSlice = createSlice({
       state.isConfirmar = OPERATIONS.FULFILLED
       toast.error(action.error.message)
     })
+
+    // GET_WIDGES_INFO ACCION
+    builder.addCase(getWidgesInfo.fulfilled, (state, action) => {
+      state.widges = action.payload
+    })
+    builder.addCase(getWidgesInfo.rejected, (state, action) => {
+      state.widges = {}
+    })
   }
 })
 
@@ -176,6 +186,7 @@ export const updateConvenio = createAsyncThunk('convenio/updateConvenio', api.up
 export const deleteConvenio = createAsyncThunk('convenio/deleteConvenio', api.deleteConvenio)
 export const validarConvenio = createAsyncThunk('convenio/validarConvenio', api.validarConvenio)
 export const confirmarConvenio = createAsyncThunk('convenio/confirmarConvenio', api.confirmarConvenio)
+export const getWidgesInfo = createAsyncThunk('convenio/getWidgesInfo', api.getWidgesInfo)
 
 export const getListadoServicios = createAsyncThunk('convenio/getListadoServicios', api.getListadoServicios)
 

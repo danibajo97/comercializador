@@ -10,10 +10,11 @@ export default {
   deleteConvenio,
   getListadoServicios,
   validarConvenio,
-  confirmarConvenio
+  confirmarConvenio,
+  getWidgesInfo
 }
 
-async function getConveniosAll ({ pagination }) {
+async function getConveniosAll ({ pagination, extras }) {
   const { page, limit } = pagination
   const access = await window.sessionStorage.getItem('access')
   const options = {
@@ -22,7 +23,8 @@ async function getConveniosAll ({ pagination }) {
     headers: { Authorization: `Bearer ${access}` },
     params: {
       page,
-      limit
+      limit,
+      ...extras
     }
   }
   try {
@@ -166,5 +168,20 @@ async function confirmarConvenio ({ id }) {
       throw new Error(a['Versat-response'])
     }
     throw new Error('Error al confirmar el convenio.')
+  }
+}
+
+async function getWidgesInfo () {
+  const access = await window.sessionStorage.getItem('access')
+  const options = {
+    method: 'GET',
+    url: `${API_URL}/api-acceso/convenio/widges_info/`,
+    headers: { Authorization: `Bearer ${access}` }
+  }
+  try {
+    const { data } = await axios(options)
+    return data
+  } catch (error) {
+    throw new Error('Error al listar los convenios.')
   }
 }
