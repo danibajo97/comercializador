@@ -5,7 +5,6 @@ import { Pagination } from 'rsuite'
 const PAGINATION_LIMIT = process.env.REACT_APP_PAGINATION_LIMIT
 
 export default function usePaginationServer ({ length }) {
-  // const PAGINATION_LIMIT = 3
   const [page, setPage] = useState(1)
 
   const start = () => ((page - 1) * PAGINATION_LIMIT) + 1
