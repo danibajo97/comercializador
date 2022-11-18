@@ -13,19 +13,12 @@ class SolicitudLicenciaViewSet(viewsets.GenericViewSet):
     @transaction.atomic
     def create(self, request):
         # request.data = {'venta': bool, ..... (atributos de la solicitud)}
-        user = authenticated_user(request)
         url = 'cmz/solicitud_licencia_externo/'
-        params = {
-            'authenticated-user': user.id_erp,
-        }
-        response = self.responsebase.post(
-            url=url, json=request.data, params=params)
+        response = self.responsebase.post(url=url, json=request.data)
         if response.status_code == 201:
-            return Response({'Comercializador-response': 'Creado correctamente',
-                             'Versat-response': response.json()}, status=response.status_code)
+            return Response({'Comercializador-response': 'Creado correctamente'}, status=response.status_code)
         else:
-            return Response({'Versat-response': response.json()},
-                            status=response.status_code)
+            return Response(response, status=response.status_code)
 
     def list(self, request):
         user = authenticated_user(request)
