@@ -84,3 +84,19 @@ class SolicitudLicenciaViewSet(viewsets.GenericViewSet):
         else:
             return Response({'Versat-response': response.json()},
                             status=response.status_code)
+
+    @action(methods=['get'], detail=False)
+    def servicios_actualizacion(self, request):
+        user = authenticated_user(request)
+        url = '%s' % ('cmz/solicitud_licencia_externo/servicios/')
+        params = {
+            'authenticated-user': user.id_erp,
+            'cliente': request.GET.get('cliente_final'),
+        }
+        response = self.responsebase.get(url=url, params=params)
+        if response.status_code == 200:
+            return Response(data=response.json(), status=response.status_code)
+        else:
+            return Response({'message': "Hubo problemas al conectar con el servidor"},
+                            status=response.status_code)
+
