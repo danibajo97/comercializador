@@ -1,5 +1,4 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
-import { toast } from 'react-toastify'
 
 import api from 'redux/datosGenerales/datosGeneralesAPI'
 import OPERATIONS from 'constants/operationsRedux'

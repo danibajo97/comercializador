@@ -34,13 +34,10 @@ class ConvenioWebViewSet(viewsets.GenericViewSet):
 
     def list(self, request):
         user = authenticated_user(request)
-        if request.GET.get('id_convenio'):
-            url = '%s%s/' % ('cmz/convenio_externo/',
-                             request.GET.get('id_convenio'))
-        else:
-            url = 'cmz/convenio_externo/'
+        url = 'cmz/convenio_externo/'
         params = {
             'authenticated-user': user.id_erp,
+            **request.GET
         }
         response = self.responsebase.get(url=url, params=params)
         return Response(response.json(), status=response.status_code)
@@ -140,3 +137,13 @@ class ConvenioWebViewSet(viewsets.GenericViewSet):
         else:
             return Response({'Versat-response': response.json()},
                             status=response.status_code)
+
+    @action(detail=False, methods=['get'])
+    def widges_info(self, request):
+        user = authenticated_user(request)
+        url = 'cmz/convenio_externo/widges_info/'
+        params = {
+            'authenticated-user': user.id_erp,
+        }
+        response = self.responsebase.get(url=url, params=params)
+        return Response(response.json(), status=response.status_code)

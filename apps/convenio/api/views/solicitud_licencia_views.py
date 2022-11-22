@@ -15,21 +15,18 @@ class SolicitudLicenciaViewSet(viewsets.GenericViewSet):
         # request.data = {'venta': bool, ..... (atributos de la solicitud)}
         user = authenticated_user(request)
         url = 'cmz/solicitud_licencia_externo/'
-        params = {
-            'authenticated-user': user.id_erp,
+        json_data = {
+            **request.data,
+            'cliente_solicita': user.id_erp
         }
-        response = self.responsebase.post(
-            url=url, json=request.data, params=params)
+        response = self.responsebase.post(url=url, json=json_data)
         if response.status_code == 201:
-            return Response({'Comercializador-response': 'Creado correctamente',
-                             'Versat-response': response.json()}, status=response.status_code)
+            return Response({'Comercializador-response': 'Creado correctamente'}, status=response.status_code)
         else:
-            return Response({'Versat-response': response.json()},
-                            status=response.status_code)
+            return Response(response, status=response.status_code)
 
     def list(self, request):
         user = authenticated_user(request)
-
         url = 'cmz/solicitud_licencia_externo/'
         params = {
             'authenticated-user': user.id_erp,
@@ -40,18 +37,17 @@ class SolicitudLicenciaViewSet(viewsets.GenericViewSet):
     @transaction.atomic
     def update(self, request, pk):
         user = authenticated_user(request)
-        params = {
-            'authenticated-user': user.id_erp,
-        }
         url = 'cmz/solicitud_licencia_externo/%s/' % pk
-        response = self.responsebase.put(
-            url=url, json=request.data, params=params)
+        json_data = {
+            **request.data,
+            'cliente_solicita': user.id_erp
+        }
+        response = self.responsebase.put(url=url, json=json_data)
         if response.status_code == 200:
             return Response({'Comercializador-response': 'Actualizado Correctamente',
-                             'Versat-response': response.json()}, status=response.status_code)
+                             'versat_response': response.json()}, status=response.status_code)
         else:
-            return Response({'Versat-response': response.json()},
-                            status=response.status_code)
+            return Response({'response': response.json()}, status=response.status_code)
 
     @transaction.atomic
     def retrieve(self, request, pk):
@@ -71,8 +67,8 @@ class SolicitudLicenciaViewSet(viewsets.GenericViewSet):
             return Response({'Comercializador-response': 'Eliminado correctamente'},
                             status=response.status_code)
         else:
-            return Response({'Versat-response': response.json()},
-                            status=response.status_code)
+            return Response(
+                status=response.status_code)
 
     @action(detail=False, methods=['put'])
     def otorgar_licencia(self, request):
@@ -99,4 +95,3 @@ class SolicitudLicenciaViewSet(viewsets.GenericViewSet):
         else:
             return Response({'message': "Hubo problemas al conectar con el servidor"},
                             status=response.status_code)
-

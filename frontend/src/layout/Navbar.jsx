@@ -19,6 +19,7 @@ import { NavLink as NavLinkRRD, Link } from 'react-router-dom'
 
 import useAuth from 'hooks/useAuth'
 import useUserOptions from 'hooks/useUserOptions'
+import ROL from 'constants/rol'
 
 const Navbar = ({ routes }) => {
   const [isOpen, setIsOpen] = useState(false)
@@ -66,8 +67,11 @@ const Navbar = ({ routes }) => {
         <NavbarToggler onClick={toggle} />
         <Collapse isOpen={isOpen} navbar>
           <Nav className='me-auto' navbar>
-            <NavLink to='/' tag={NavLinkRRD} onClick={closeCollapse}>Inicio</NavLink>
-            {createLinks(routes)}
+            {user?.rol !== ROL.CLIENTE &&
+              <>
+                <NavLink to='/' tag={NavLinkRRD} onClick={closeCollapse}>Inicio</NavLink>
+                {createLinks(routes)}
+              </>}
           </Nav>
           {user &&
             <Nav navbar>
@@ -77,7 +81,7 @@ const Navbar = ({ routes }) => {
                     <span className='avatar avatar-sm rounded-circle mr-2 d-none d-md-block'>
                       <img
                         alt='...'
-                        src={require('assets/img/icons/favicon.png')}
+                        src={require('assets/img/icons/user-login-avatar-blue-child.png')}
                       />
                     </span>
                     <Media className=''>

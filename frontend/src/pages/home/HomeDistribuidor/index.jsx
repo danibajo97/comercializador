@@ -12,7 +12,7 @@ import useHomeDistribuidor from './useHomeDistribuidor'
 export default function HomeDistribuidor () {
   useHeader({ title: 'Inicio' })
   const navigate = useNavigate()
-  const { data, loading, totalConvenio, totalConfirmado, totalEdicion, estadoData, onSelectEstado } = useHomeDistribuidor()
+  const { data, loading, totalConvenio, totalConfirmado, totalEdicion, estadoData, onSelectEstado, pagination } = useHomeDistribuidor()
 
   return (
     <>
@@ -47,7 +47,7 @@ export default function HomeDistribuidor () {
               <Row>
                 <Col>
                   {loading
-                    ? <ConvenioTable convenios={data} />
+                    ? <ConvenioTable convenios={data} pagination={pagination} />
                     : <Loader.Grid rows={7} columns={6} />}
                 </Col>
               </Row>

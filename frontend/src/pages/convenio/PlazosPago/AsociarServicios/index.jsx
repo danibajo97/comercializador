@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Popover, Table as TableRS, Whisper, Dropdown, IconButton } from 'rsuite'
 import MoreIcon from '@rsuite/icons/legacy/More'
 
-import { getPlazoPagoServicioAll, deletePlazoPagoServicio, updatePlazoPagoServicio, stateResetOperation } from 'redux/plazoPagoServicio/plazoPagoServicioSlice'
+import { getPlazoPagoServicioAll, deletePlazoPagoServicio, stateResetOperation } from 'redux/plazoPagoServicio/plazoPagoServicioSlice'
 import OPERATIONS from 'constants/operationsRedux'
 import Table from 'components/table/Table'
 import { Loader } from 'components'
@@ -11,14 +11,25 @@ import usePagination from 'hooks/usePagination'
 import useModal from 'hooks/useModal'
 import { AsociarServiciosForm } from '../AsociarServiciosForm'
 import { useParams } from 'react-router-dom'
+import useAlert from 'hooks/useAlert'
 
 const ActionCell = ({ rowData, dataKey, ...props }) => {
   const dispatch = useDispatch()
   const params = useParams()
   const { id } = params
 
+  const deleteAlert = useAlert({
+    type: 'delete',
+    text: 'Se eliminará el servicio, esta acción no se puede deshacer.',
+    isConfirm: true,
+    textConfirm: 'Eliminar Servicio'
+  })
+
   const operationDelete = () => {
-    dispatch(deletePlazoPagoServicio({ id: rowData.id }))
+    deleteAlert.setConfirmAccion(() => {
+      dispatch(deletePlazoPagoServicio({ id: rowData.id }))
+    })
+    deleteAlert.openAlert()
   }
 
   const modalServicio = useModal({
@@ -43,7 +54,7 @@ const ActionCell = ({ rowData, dataKey, ...props }) => {
 
   return (
     <>
-      {modalServicio.modal}
+      {deleteAlert.alert}{modalServicio.modal}
       <TableRS.Cell {...props} className='link-group'>
         <Whisper
           placement='bottomEnd' trigger='click' speaker={({ onClose, left, top, className }, ref) => {
@@ -105,7 +116,7 @@ export default function AsociarServicios ({ id, isConfirmado }) {
   const plazoPagoServicio = useSelector(state => state.plazoPagoServicio.plazoPagoServicio)
   const isList = useSelector(state => state.plazoPagoServicio.isList)
 
-  const { pagination, dataPage } = usePagination({ data: plazoPagoServicio, title: 'Servicios' })
+  const { pagination, dataPage } = usePagination({ data: id ? plazoPagoServicio : [] })
 
   useEffect(() => {
     if (id !== undefined) {
@@ -152,7 +163,6 @@ export default function AsociarServicios ({ id, isConfirmado }) {
         {/* {Table.Column({ header: 'Cantidad', dataKey: 'cantidad', flex: 1})} */}
         {renderCantidadCell({ header: 'Cantidad', dataKey: 'cantidad' })}
         {Table.ColumnNumberFormat({ header: 'Precio', dataKey: 'servicio_precio', flex: 1 })}
-        {Table.ColumnNumberFormat({ header: 'A Facturar', dataKey: 'a_facturar', flex: 1 })}
         {!isConfirmado && renderColumnAccion('id')}
       </Table>
       {pagination}

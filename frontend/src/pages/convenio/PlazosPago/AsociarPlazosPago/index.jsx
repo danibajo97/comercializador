@@ -18,15 +18,12 @@ import useModal from 'hooks/useModal'
 import { PlazosPagoForm } from '../PlazosPagoForm'
 import { Loader } from 'components'
 import usePagination from 'hooks/usePagination'
+import useAlert from 'hooks/useAlert'
 
 const ActionCell = ({ rowData, dataKey, ...props }) => {
   const dispatch = useDispatch()
   const params = useParams()
   const { id } = params
-
-  const operationDelete = () => {
-    dispatch(deletePlazoPago({ id: rowData.id }))
-  }
 
   const modalPlazoPago = useModal({
     title: 'Editar Plazos de Pagos',
@@ -42,13 +39,27 @@ const ActionCell = ({ rowData, dataKey, ...props }) => {
     }
   })
 
+  const deleteAlert = useAlert({
+    type: 'delete',
+    text: 'Se eliminará el plazo de pago, esta acción no se puede deshacer.',
+    isConfirm: true,
+    textConfirm: 'Eliminar Plazo de Pago'
+  })
+
+  const operationDelete = () => {
+    deleteAlert.setConfirmAccion(() => {
+      dispatch(deletePlazoPago({ id: rowData.id }))
+    })
+    deleteAlert.openAlert()
+  }
+
   const operationUpdate = () => {
     modalPlazoPago.openModal()
   }
 
   return (
     <>
-      {modalPlazoPago.modal}
+      {deleteAlert.alert} {modalPlazoPago.modal}
       <TableRS.Cell {...props} className='link-group'>
         <Whisper
           placement='bottomEnd' trigger='click' speaker={({ onClose, left, top, className }, ref) => {
@@ -102,7 +113,7 @@ export default function AsociarPlazosPago ({ setSelectedId, isConfirmado }) {
   const plazosPagos = useSelector(state => state.plazoPago.plazosPagos)
   const [checkedKeys, setCheckedKeys] = React.useState(null)
 
-  const { pagination, dataPage } = usePagination({ data: plazosPagos, title: 'Plazos de Pago' })
+  const { pagination, dataPage } = usePagination({ data: plazosPagos })
 
   const params = useParams()
   const { id } = params
@@ -155,7 +166,6 @@ export default function AsociarPlazosPago ({ setSelectedId, isConfirmado }) {
         {renderCheckCell('id')}
         {Table.Column({ header: 'Fecha', dataKey: 'fecha', flex: 0.8 })}
         {Table.ColumnNumber({ header: 'Dias', dataKey: 'dias', flex: 0.5 })}
-        {Table.ColumnNumberFormat({ header: 'Importe', dataKey: 'importe', flex: 1 })}
         {Table.ColumnBoolean({ header: 'Facturado', dataKey: 'facturado', flex: 0.8 })}
         {Table.ColumnBoolean({ header: 'Cobrado', dataKey: 'cobrado', flex: 0.8 })}
         {!isConfirmado && renderColumnAccion('id')}

@@ -163,55 +163,39 @@ class UsuarioFinalWebViewSet(viewsets.GenericViewSet):
         response = self.responsebase.get(url=url, params=params)
         return Response(response.json(), status=response.status_code)
 
-    @action(methods=['get'], detail=False, url_path='provincias', url_name='provincias')
-    def provincias(self, request):
-        user = authenticated_user(request)
-        url = 'servicio/provincia_list/'
-        params = {
-            'authenticated-user': user.id_erp,
-        }
-        response = self.responsebase.get(url=url, params=params)
-        return Response(response.json(), status=response.status_code)
+    @action(methods=['get'], detail=False, url_path='provincias_municipios', url_name='provincias_municipios')
+    def provincias_municipios(self, request):
+        provincias = self.__provinciasAll()
+        municipios = self.__municipiosAll()
 
-    @action(methods=['get'], detail=False, url_path='municipios', url_name='municipios')
-    def municipios(self, request):
-        user = authenticated_user(request)
-        url = 'servicio/municipio_list/'
-        params = {
-            'authenticated-user': user.id_erp,
-        }
-        response = self.responsebase.get(url=url, params=params)
-        return Response(response.json(), status=response.status_code)
+        result = []
+        for p in provincias:
+            muni = self.__searchByProvincia(
+                municipios=municipios, provinciaId=p.get('id'))
+            for m in muni:
+                result.append({
+                    'provincia': p.get('nombre'),
+                    'municipio_nombre': m.get('nombre'),
+                    'municipio_id': m.get('id')
+                })
+        return Response(result)
 
-    @action(methods=['get'], detail=False, url_path='paises', url_name='paises')
-    def paises(self, request):
-        user = authenticated_user(request)
-        url = 'servicio/pais_list/'
-        params = {
-            'authenticated-user': user.id_erp,
-        }
-        response = self.responsebase.get(url=url, params=params)
-        return Response(response.json(), status=response.status_code)
+    def __provinciasAll(self):
+        url = 'servicio/provincias/'
+        response = self.responsebase.get(url=url)
+        return response.json()
 
-    @action(methods=['get'], detail=False, url_path='provincias', url_name='provincias')
-    def provincias(self, request):
-        user = authenticated_user(request)
-        url = 'servicio/provincia_list/'
-        params = {
-            'authenticated-user': user.id_erp,
-        }
-        response = self.responsebase.get(url=url, params=params)
-        return Response(response.json(), status=response.status_code)
+    def __municipiosAll(self):
+        url = 'servicio/municipios/'
+        response = self.responsebase.get(url=url)
+        return response.json()
 
-    @action(methods=['get'], detail=False, url_path='municipios', url_name='municipios')
-    def municipios(self, request):
-        user = authenticated_user(request)
-        url = 'servicio/municipio_list/'
-        params = {
-            'authenticated-user': user.id_erp,
-        }
-        response = self.responsebase.get(url=url, params=params)
-        return Response(response.json(), status=response.status_code)
+    def __searchByProvincia(self, municipios, provinciaId):
+        result = []
+        for m in municipios:
+            if str(m.get('provincia')) == str(provinciaId):
+                result.append(m)
+        return result
 
     @action(methods=['get'], detail=False)
     def gestionados_por(self, request):

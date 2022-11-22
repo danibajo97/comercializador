@@ -7,6 +7,7 @@ import OPERATIONS from 'constants/operationsRedux'
 const initialState = {
   convenio: null,
   convenios: [],
+  conveniosLimit: 0,
   isConvenios: OPERATIONS.NONE,
   isAdd: OPERATIONS.NONE,
   isUpdate: OPERATIONS.NONE,
@@ -15,7 +16,8 @@ const initialState = {
   isRetrieve: OPERATIONS.NONE,
   isValidar: OPERATIONS.NONE,
   isConfirmar: OPERATIONS.NONE,
-  listadoServicios: []
+  listadoServicios: [],
+  widges: {}
 }
 
 export const convenioSlice = createSlice({
@@ -31,20 +33,27 @@ export const convenioSlice = createSlice({
       state.isValidar = OPERATIONS.NONE
       state.isConfirmar = OPERATIONS.NONE
       state.convenios = []
+      state.conveniosLimit = 0
       state.convenio = null
+      state.widges = {}
     }
   },
   extraReducers: (builder) => {
     // GET_CONVENIO_ALL ACCION
     builder.addCase(getConveniosAll.pending, (state, action) => {
       state.isConvenios = OPERATIONS.PENDING
+      state.convenios = []
+      state.conveniosLimit = 0
     })
     builder.addCase(getConveniosAll.fulfilled, (state, action) => {
-      state.convenios = action.payload
+      const data = action.payload
+      state.convenios = data?.results
+      state.conveniosLimit = data?.count
       state.isConvenios = OPERATIONS.FULFILLED
     })
     builder.addCase(getConveniosAll.rejected, (state, action) => {
       state.convenios = []
+      state.conveniosLimit = 0
       state.isConvenios = OPERATIONS.REJECTED
       toast.error(action.error)
     })
@@ -159,6 +168,14 @@ export const convenioSlice = createSlice({
       state.isConfirmar = OPERATIONS.FULFILLED
       toast.error(action.error.message)
     })
+
+    // GET_WIDGES_INFO ACCION
+    builder.addCase(getWidgesInfo.fulfilled, (state, action) => {
+      state.widges = action.payload
+    })
+    builder.addCase(getWidgesInfo.rejected, (state, action) => {
+      state.widges = {}
+    })
   }
 })
 
@@ -169,6 +186,7 @@ export const updateConvenio = createAsyncThunk('convenio/updateConvenio', api.up
 export const deleteConvenio = createAsyncThunk('convenio/deleteConvenio', api.deleteConvenio)
 export const validarConvenio = createAsyncThunk('convenio/validarConvenio', api.validarConvenio)
 export const confirmarConvenio = createAsyncThunk('convenio/confirmarConvenio', api.confirmarConvenio)
+export const getWidgesInfo = createAsyncThunk('convenio/getWidgesInfo', api.getWidgesInfo)
 
 export const getListadoServicios = createAsyncThunk('convenio/getListadoServicios', api.getListadoServicios)
 

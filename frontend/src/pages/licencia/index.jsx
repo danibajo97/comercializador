@@ -6,42 +6,27 @@ import {
   Container,
   CardHeader
 } from 'reactstrap'
-import { useDispatch, useSelector } from 'react-redux'
-import { Button, Dropdown, Popover } from 'rsuite'
+import { Button } from 'rsuite'
 
 import { DefaultHeader, Loader } from 'components'
 import LicenciaTable from './components/LicenciaTable'
-import LicenciaForm from './components/LicenciaForm'
-import useModal from 'hooks/useModal'
 
-import { getSolicitudLicenciaAll, stateResetOperation } from 'redux/solicitudLicencia/solicitudLicenciaSlice'
 import OPERATIONS from 'constants/operationsRedux'
+import ConvenioHeader from 'pages/licencia/components/LicenciaHeader'
+import ROL from 'constants/rol'
+import useHeader from 'hooks/useHeader'
+import useLicencia from './useLicencia'
 
 export default function SolicitudLicencia () {
-  const dispatch = useDispatch()
-  const { modal, openModal } = useModal({
-    title: 'Nueva Solicitud de Licencia',
-    size: 'sm',
-    renderBody: ({ closeModal }) => {
-      return <LicenciaForm closeModal={closeModal} />
-    }
-  })
-
-  const solicitudLicencias = useSelector(state => state.solicitudLicencia.solicitudLicencias)
-  const isList = useSelector(state => state.solicitudLicencia.isList)
-
-  React.useEffect(() => {
-    dispatch(getSolicitudLicenciaAll({ page: 1 }))
-
-    return () => {
-      dispatch(stateResetOperation())
-    }
-  }, [])
+  const { user, title, modal, openModal, solicitudLicencias, isList } = useLicencia()
+  useHeader({ title: title() })
 
   return (
     <>
       {modal}
-      <DefaultHeader />
+      {user?.rol === ROL.CLIENTE
+        ? <ConvenioHeader totalLicencia={0} totalOtorgada={0} totalPendient={0} />
+        : <DefaultHeader />}
       <Container className='mt--7' fluid>
         <Row>
           <Col>
