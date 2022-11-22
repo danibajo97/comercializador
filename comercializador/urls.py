@@ -41,8 +41,10 @@ schema_view = get_schema_view(
 local_urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include('rest_framework.urls')),
-    path('cambiar_contrasena/<int:pk>/', ChangePasswordView.as_view(), name='auth_change_password'),
-    path('actualizar_perfil/<int:pk>/', UpdateProfileView.as_view(), name='auth_update_profile'),
+    path('cambiar_contrasena/<int:pk>/',
+         ChangePasswordView.as_view(), name='auth_change_password'),
+    path('actualizar_perfil/<int:pk>/',
+         UpdateProfileView.as_view(), name='auth_update_profile'),
     path('api-acceso/', include('apps.convenio.urls')),
     path('registro-usuarios/', RegisterUsersFromVersatErpView.as_view(),
          name='register_users_from_versaterp'),
@@ -67,7 +69,7 @@ jwt_urlpatterns = [
 ]
 
 react_urlpatterns = [
-    # re_path(r'^.*', TemplateView.as_view(template_name='index.html'))
+    re_path(r'^.*', TemplateView.as_view(template_name='index.html'))
 ]
 
 urlpatterns = local_urlpatterns + swagger_urlpatterns + \
