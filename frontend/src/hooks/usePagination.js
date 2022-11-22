@@ -5,17 +5,11 @@ import { Pagination } from 'rsuite'
 const PAGINATION_LIMIT = parseInt(process.env.REACT_APP_PAGINATION_LIMIT)
 
 export default function usePagination ({ data }) {
-  const [limit, setLimit] = useState(2)
   const [page, setPage] = useState(1)
 
-  const handleChangeLimit = dataKey => {
-    setPage(1)
-    setLimit(dataKey)
-  }
-
   const dataPage = data.filter((v, i) => {
-    const start = limit * (page - 1)
-    const end = start + limit
+    const start = PAGINATION_LIMIT * (page - 1)
+    const end = start + PAGINATION_LIMIT
     return i >= start && i < end
   })
 
@@ -40,10 +34,9 @@ export default function usePagination ({ data }) {
           size='sm'
           layout={[layout, '-', 'pager']}
           total={data.length}
-          limit={limit}
+          limit={PAGINATION_LIMIT}
           activePage={page}
           onChangePage={setPage}
-          onChangeLimit={handleChangeLimit}
         />
       </Col>
     </Row>

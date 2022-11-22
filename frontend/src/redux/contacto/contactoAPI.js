@@ -17,7 +17,6 @@ async function getProvincias () {
   }
   try {
     const { data } = await axios(options)
-    console.log({ data })
     return data
   } catch (error) {
     throw new Error('Error al listar las provincias.')

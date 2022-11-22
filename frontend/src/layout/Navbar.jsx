@@ -81,7 +81,7 @@ const Navbar = ({ routes }) => {
                     <span className='avatar avatar-sm rounded-circle mr-2 d-none d-md-block'>
                       <img
                         alt='...'
-                        src={require('assets/img/icons/favicon.png')}
+                        src={require('assets/img/icons/user-login-avatar-blue-child.png')}
                       />
                     </span>
                     <Media className=''>

@@ -5,7 +5,8 @@ const API_URL = process.env.REACT_APP_API_URL
 export default {
   getListaClientesFinales,
   getClientesFinales,
-  addClientesFinales
+  addClientesFinales,
+  getGestionadosPor
 }
 
 async function getListaClientesFinales () {
@@ -57,5 +58,20 @@ async function addClientesFinales ({ convenio, params }) {
     return 'Se adicionó los clientes finales.'
   } catch (error) {
     throw new Error('Error al adicionar los clientes finales.')
+  }
+}
+
+async function getGestionadosPor () {
+  const access = await window.sessionStorage.getItem('access')
+  const options = {
+    method: 'GET',
+    url: `${API_URL}/api-acceso/usuario_final/gestionados_por/`,
+    headers: { Authorization: `Bearer ${access}` }
+  }
+  try {
+    const { data } = await axios(options)
+    return data
+  } catch (error) {
+    throw new Error('Error al listar los clientes finales.')
   }
 }

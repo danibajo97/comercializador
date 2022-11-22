@@ -1,6 +1,6 @@
 /* global describe it expect beforeEach */
 
-import { fireEvent, render, screen } from '@testing-library/react'
+import { render, screen } from '@testing-library/react'
 import '@testing-library/jest-dom'
 import Login from 'pages/authentication/Login'
 import AppProvider from 'AppProvider'

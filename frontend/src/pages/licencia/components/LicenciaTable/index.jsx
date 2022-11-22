@@ -6,10 +6,26 @@ import Table from 'components/table/Table'
 import usePagination from 'hooks/usePagination'
 import useAlert from 'hooks/useAlert'
 import { useDispatch } from 'react-redux'
-import { deleteSolicitudLicencia, stateResetOperation } from 'redux/solicitudLicencia/solicitudLicenciaSlice'
+import { deleteSolicitudLicencia } from 'redux/solicitudLicencia/solicitudLicenciaSlice'
+import useModal from 'hooks/useModal'
+import LicenciaForm from '../LicenciaForm'
 
 const ActionCell = ({ rowData, dataKey, ...props }) => {
   const dispatch = useDispatch()
+
+  const modalSolicitud = useModal({
+    title: 'Solicitud de Licencia',
+    size: 'sm',
+    renderBody: ({ closeModal }) => {
+      return (
+        <LicenciaForm
+          closeModal={closeModal} solicitudLicencia={{
+            ...rowData
+          }}
+        />
+      )
+    }
+  })
 
   const deleteAlert = useAlert({
     type: 'delete',
@@ -19,7 +35,7 @@ const ActionCell = ({ rowData, dataKey, ...props }) => {
   })
 
   const operationUpdate = () => {
-
+    modalSolicitud.openModal()
   }
 
   const operationDelete = () => {
@@ -31,7 +47,7 @@ const ActionCell = ({ rowData, dataKey, ...props }) => {
 
   return (
     <>
-      {deleteAlert.alert}
+      {modalSolicitud.modal}{deleteAlert.alert}
       <TableRS.Cell {...props} className='link-group'>
         <Whisper
           placement='bottomEnd' trigger='click' speaker={({ onClose, left, top, className }, ref) => {

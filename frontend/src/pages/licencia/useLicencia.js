@@ -12,7 +12,7 @@ export default function useLicencia () {
   const dispatch = useDispatch()
 
   const { modal, openModal } = useModal({
-    title: 'Nueva Solicitud de Licencia',
+    title: 'Solicitud de Licencia',
     size: 'sm',
     renderBody: ({ closeModal }) => {
       return <LicenciaForm closeModal={closeModal} />

@@ -9,7 +9,9 @@ const initialState = {
   clientesFinales: [],
   isListClientesFinales: OPERATIONS.NONE,
   isList: OPERATIONS.NONE,
-  isAdd: OPERATIONS.NONE
+  isAdd: OPERATIONS.NONE,
+  gestionadosPor: [],
+  isListGestionadosPor: OPERATIONS.NONE
 }
 
 export const clientesFinalesSlice = createSlice({
@@ -22,6 +24,8 @@ export const clientesFinalesSlice = createSlice({
       state.isAdd = OPERATIONS.NONE
       state.listClientesFinales = []
       state.clientesFinales = []
+      state.isListGestionadosPor = OPERATIONS.NONE
+      state.gestionadosPor = []
     }
   },
   extraReducers: (builder) => {
@@ -65,12 +69,27 @@ export const clientesFinalesSlice = createSlice({
       state.isAdd = OPERATIONS.REJECTED
       toast.error(action.error)
     })
+
+    // GET_GESTIONADOS_POR ACCION
+    builder.addCase(getGestionadosPor.pending, (state, action) => {
+      state.isListGestionadosPor = OPERATIONS.PENDING
+    })
+    builder.addCase(getGestionadosPor.fulfilled, (state, action) => {
+      state.isListGestionadosPor = OPERATIONS.FULFILLED
+      state.gestionadosPor = action.payload
+    })
+    builder.addCase(getGestionadosPor.rejected, (state, action) => {
+      state.isListGestionadosPor = OPERATIONS.REJECTED
+      state.gestionadosPor = []
+      toast.error(action.error)
+    })
   }
 })
 
 export const getListaClientesFinales = createAsyncThunk('clientesFinales/getListaClientesFinales', api.getListaClientesFinales)
 export const getClientesFinales = createAsyncThunk('clientesFinales/getClientesFinales', api.getClientesFinales)
 export const addClientesFinales = createAsyncThunk('clientesFinales/addClientesFinales', api.addClientesFinales)
+export const getGestionadosPor = createAsyncThunk('clientesFinales/getGestionadosPor', api.getGestionadosPor)
 
 export const { stateResetOperation } = clientesFinalesSlice.actions
 
