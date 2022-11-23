@@ -6,7 +6,12 @@ import OPERATIONS from 'constants/operationsRedux'
 
 const initialState = {
   solicitudLicencias: [],
-  isList: OPERATIONS.NONE
+  isList: OPERATIONS.NONE,
+  isAdd: OPERATIONS.NONE,
+  isUpdate: OPERATIONS.NONE,
+  isDelete: OPERATIONS.NONE,
+  serviciosActualizacion: [],
+  isListServiciosActualizacion: OPERATIONS.NONE
 }
 
 export const solicitudLicenciaSlice = createSlice({
@@ -14,8 +19,11 @@ export const solicitudLicenciaSlice = createSlice({
   initialState,
   reducers: {
     stateResetOperation: (state) => {
-      state.isList = OPERATIONS.NONE
-      state.solicitudLicencias = []
+      state.isAdd = OPERATIONS.NONE
+      state.isUpdate = OPERATIONS.NONE
+      state.isDelete = OPERATIONS.NONE
+      state.serviciosActualizacion = []
+      state.isListServiciosActualizacion = OPERATIONS.NONE
     }
   },
   extraReducers: (builder) => {
@@ -31,10 +39,68 @@ export const solicitudLicenciaSlice = createSlice({
       state.isList = OPERATIONS.REJECTED
       toast.error(action.error)
     })
+
+    // ADD_SOLICITUD_LICENCIA ACCION
+    builder.addCase(addSolicitudLicencia.pending, (state, action) => {
+      state.isAdd = OPERATIONS.PENDING
+    })
+    builder.addCase(addSolicitudLicencia.fulfilled, (state, action) => {
+      state.isAdd = OPERATIONS.FULFILLED
+      toast.success(action.payload)
+    })
+    builder.addCase(addSolicitudLicencia.rejected, (state, action) => {
+      state.isAdd = OPERATIONS.REJECTED
+      toast.error(action.error.message)
+    })
+
+    // UPDATE_SOLICITUD_LICENCIA ACCION
+    builder.addCase(updateSolicitudLicencia.pending, (state, action) => {
+      state.isUpdate = OPERATIONS.PENDING
+    })
+    builder.addCase(updateSolicitudLicencia.fulfilled, (state, action) => {
+      state.isUpdate = OPERATIONS.FULFILLED
+      toast.success(action.payload)
+    })
+    builder.addCase(updateSolicitudLicencia.rejected, (state, action) => {
+      state.isUpdate = OPERATIONS.REJECTED
+      toast.error(action.error.message)
+    })
+
+    // DELETE_SOLICITUD_LICENCIA ACCION
+    builder.addCase(deleteSolicitudLicencia.pending, (state, action) => {
+      state.isDelete = OPERATIONS.PENDING
+    })
+    builder.addCase(deleteSolicitudLicencia.fulfilled, (state, action) => {
+      state.isDelete = OPERATIONS.FULFILLED
+      state.solicitudLicencias = state.solicitudLicencias.filter(sl => sl.id !== action.payload.id)
+      toast.success(action.payload.message)
+    })
+    builder.addCase(deleteSolicitudLicencia.rejected, (state, action) => {
+      state.isDelete = OPERATIONS.REJECTED
+      toast.error(action.error.message)
+    })
+
+    // GET_SERVICIOS_ACTUALIZACION ACCION
+    builder.addCase(getServiciosActualizacion.pending, (state, action) => {
+      state.isListServiciosActualizacion = OPERATIONS.PENDING
+    })
+    builder.addCase(getServiciosActualizacion.fulfilled, (state, action) => {
+      state.isListServiciosActualizacion = OPERATIONS.FULFILLED
+      state.serviciosActualizacion = action.payload
+    })
+    builder.addCase(getServiciosActualizacion.rejected, (state, action) => {
+      state.isListServiciosActualizacion = OPERATIONS.REJECTED
+      state.serviciosActualizacion = []
+      toast.error(action.error)
+    })
   }
 })
 
 export const getSolicitudLicenciaAll = createAsyncThunk('solicitudLicencia/getSolicitudLicenciaAll', api.getSolicitudLicenciaAll)
+export const addSolicitudLicencia = createAsyncThunk('solicitudLicencia/addSolicitudLicencia', api.addSolicitudLicencia)
+export const updateSolicitudLicencia = createAsyncThunk('solicitudLicencia/updateSolicitudLicencia', api.updateSolicitudLicencia)
+export const deleteSolicitudLicencia = createAsyncThunk('solicitudLicencia/deleteSolicitudLicencia', api.deleteSolicitudLicencia)
+export const getServiciosActualizacion = createAsyncThunk('solicitudLicencia/getServiciosActualizacion', api.getServiciosActualizacion)
 
 export const { stateResetOperation } = solicitudLicenciaSlice.actions
 

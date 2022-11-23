@@ -9,6 +9,7 @@ import clientesFinalesReducer from 'redux/clientesFinales/clientesFinalesSlice'
 import plazoPagoReducer from 'redux/plazoPago/plazoPagoSlice'
 import plazoPagoServicioReducer from 'redux/plazoPagoServicio/plazoPagoServicioSlice'
 import solicitudLicenciaReducer from 'redux/solicitudLicencia/solicitudLicenciaSlice'
+import contactoReducer from 'redux/contacto/contactoSlice'
 
 export const store = configureStore({
   reducer: {
@@ -22,6 +23,8 @@ export const store = configureStore({
     plazoPago: plazoPagoReducer,
     plazoPagoServicio: plazoPagoServicioReducer,
     /* LICENCIA REDUCER */
-    solicitudLicencia: solicitudLicenciaReducer
+    solicitudLicencia: solicitudLicenciaReducer,
+    /* CONTRATOS */
+    contacto: contactoReducer
   }
 })

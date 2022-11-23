@@ -11,8 +11,10 @@ import { AsociarServiciosForm } from './AsociarServiciosForm'
 import { DefaultHeader } from 'components'
 import useModal from 'hooks/useModal'
 import useConvenio from 'hooks/useConvenio'
+import useHeader from 'hooks/useHeader'
 
 function PlazosPago () {
+  useHeader({ title: 'Convenios' })
   const navigate = useNavigate()
   const [selectedId, setSelectedId] = useState(null)
 

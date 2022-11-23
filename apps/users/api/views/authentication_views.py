@@ -25,7 +25,8 @@ class RegisterUsersFromVersatErpView(generics.GenericAPIView):
         request_type = isinstance(request.data, dict)
         if request_type:
             if self.model.objects.filter(email=request.data['email'], is_resetpwd=True).exists():
-                msg.append("El usuario %s ya existe en el sistema" % request.data['email'])
+                msg.append("El usuario %s ya existe en el sistema" %
+                           request.data['email'])
             else:
                 request.data['username'] = generate_username()
                 usernames.append(request.data['username'])
@@ -33,7 +34,8 @@ class RegisterUsersFromVersatErpView(generics.GenericAPIView):
         else:
             for user in request.data:
                 if self.model.objects.filter(email=user['email'], is_resetpwd=True).exists():
-                    msg.append("El usuario %s ya existe en el sistema" % user['email'])
+                    msg.append("El usuario %s ya existe en el sistema" %
+                               user['email'])
                 else:
                     user['username'] = generate_username()
                     usernames.append(user['username'])
@@ -53,6 +55,7 @@ class ActivationCodeView(generics.GenericAPIView):
     serializer_class = ActivateUserSerializer
     permission_classes = (AllowAny,)
 
+    @transaction.atomic()
     def post(self, request, uidb64, token):
         try:
             uid = urlsafe_base64_decode(uidb64).decode()
@@ -85,13 +88,12 @@ class AuthenticatedUser(generics.GenericAPIView):
             if response.status_code == 200:
                 return Response({'versat': response.json(),
                                  'comercializador': {
+                                     'id': current_user.pk,
                                      'email': current_user.email,
                                      'name': current_user.name,
                                      'last_name': current_user.last_name,
                                      'rol': 'ROL_DISTRIBUIDOR' if current_user.is_distribuidor else 'ROL_CLIENTE',
-                                 }
-                                 },
-                                status=response.status_code)
+                }}, status=response.status_code)
             else:
                 return Response({'comercializador': 'Error al conectar con el Servidor'},
                                 status=response.status_code)

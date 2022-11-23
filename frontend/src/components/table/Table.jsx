@@ -46,7 +46,9 @@ const RenderColumnNumber = ({ header, dataKey, flex, white }) => {
   )
 }
 
-const RenderColumnBoolean = ({ header, dataKey, flex, white = false }) => {
+const RenderColumnBoolean = ({ header, dataKey, flex, white = false, opcions }) => {
+  const optionYes = opcions?.yes || 'Si'
+  const optionNo = opcions?.no || 'No'
   const style = !white ? styleHeader : styleHeaderWhite
   return (
     <TableRS.Column flexGrow={flex}>
@@ -54,7 +56,7 @@ const RenderColumnBoolean = ({ header, dataKey, flex, white = false }) => {
         {header}
       </TableRS.HeaderCell>
       <TableRS.Cell style={styleCell}>
-        {rowData => <><Badge color={rowData[dataKey] ? 'green' : 'red'} className='mr-2' />{rowData[dataKey] ? 'Si' : 'No'}</>}
+        {rowData => <><Badge color={rowData[dataKey] ? 'green' : 'red'} className='mr-2' />{rowData[dataKey] ? optionYes : optionNo}</>}
       </TableRS.Cell>
     </TableRS.Column>
   )

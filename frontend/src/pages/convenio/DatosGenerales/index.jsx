@@ -12,8 +12,10 @@ import { useNavigate } from 'react-router-dom'
 
 import { DefaultHeader } from 'components'
 import DatosGeneralesForm from './DatosGeneralesForm'
+import useHeader from 'hooks/useHeader'
 
 function DatosGenerales (props) {
+  useHeader({ title: 'Convenios' })
   const navigate = useNavigate()
 
   return (

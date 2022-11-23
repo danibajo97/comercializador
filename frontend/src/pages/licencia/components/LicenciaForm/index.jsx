@@ -1,90 +1,36 @@
-import React, { useEffect } from 'react'
-import { Col, Form, Button, ButtonToolbar, Schema, SelectPicker, DatePicker, Radio, RadioGroup } from 'rsuite'
+import React from 'react'
+import { Col, Form, Button, ButtonToolbar, SelectPicker, DatePicker, Radio, RadioGroup } from 'rsuite'
 
-import { FormField, Textarea } from 'components'
-import useAuth from 'hooks/useAuth'
-import { useDispatch, useSelector } from 'react-redux'
+import { FormField, Textarea, Loader } from 'components'
+import useLicenciaForm from './useLicenciaForm'
 
-import { getConveniosAll } from 'redux/convenio/convenioSlice'
-import { getClientesFinales, stateResetOperation as stateResetOperationClientesFinales } from 'redux/clientesFinales/clientesFinalesSlice'
-import { getServiciosContratadosAll, stateResetOperation as stateResetOperationServiciosContratados } from 'redux/serviciosContratados/serviciosContratadosSlice'
-import OPERATIONS from 'constants/operationsRedux'
+export default function LicenciaForm ({ closeModal, solicitudLicencia }) {
+  const {
+    formRef,
+    formValue,
+    setFormValue,
+    formModel,
+    isUpdate,
+    isLoading,
+    convenios,
+    personasAsociadas,
+    clienteData,
+    servicioData,
+    handleSubmit,
+    isFormClienteFinal,
+    isFormServicios
+  } = useLicenciaForm({ solicitudLicencia, closeModal })
 
-export default function LicenciaForm ({ closeModal }) {
-  const dispatch = useDispatch()
-  const { user } = useAuth()
-  const formRef = React.useRef()
-
-  const [formValue, setFormValue] = React.useState({
-    tipo: 'venta',
-    convenio: '',
-    nro: '',
-    fecha: undefined,
-    clienteSolicita: '',
-    personaSolicita: '',
-    clienteFinal: '',
-    servicio: '',
-    claveRegistro: '',
-    observaciones: ''
-  })
-
-  const { StringType, DateType } = Schema.Types
-  const model = Schema.Model({
-    tipo: StringType().isRequired('Este campo es obligatorio.'),
-    convenio: StringType().isRequired('Este campo es obligatorio.'),
-    nro: StringType().isRequired('Este campo es obligatorio.'),
-    fecha: DateType().isRequired('Este campo es obligatorio.'),
-    clienteSolicita: StringType().isRequired('Este campo es obligatorio.'),
-    personaSolicita: StringType().isRequired('Este campo es obligatorio.'),
-    clienteFinal: StringType().isRequired('Este campo es obligatorio.'),
-    servicio: StringType().isRequired('Este campo es obligatorio.'),
-    claveRegistro: StringType().isRequired('Este campo es obligatorio.'),
-    observaciones: StringType().isRequired('Este campo es obligatorio.')
-  })
-
-  const { convenio } = formValue
-
-  const convenios = useSelector(state => state.convenio.convenios)
-  const isConvenios = useSelector(state => state.convenio.isConvenios)
-
-  const clientesFinales = useSelector(state => state.clientesFinales.clientesFinales)
-  const isListClientesFinales = useSelector(state => state.clientesFinales.isList)
-  const serviciosContratados = useSelector(state => state.serviciosContratados.serviciosContratados)
-  const isListServiciosContratados = useSelector(state => state.serviciosContratados.isList)
-
-  console.log({ convenios })
-
-  useEffect(() => {
-    dispatch(getConveniosAll({ page: 1 }))
-
-    return () => {
-      dispatch(stateResetOperationServiciosContratados())
-      dispatch(stateResetOperationClientesFinales())
-    }
-  }, [])
-
-  // useEffect(() => {
-  //   if (convenio) {
-  //     dispatch(getServiciosContratadosAll({ convenio }))
-  //     dispatch(getClientesFinales({ convenio }))
-  //   }
-  // }, [convenio])
-
-  const handleSubmit = () => {
-    // clienteSolicita = user.distribuidor.id
-    if (formRef.current.check()) { if (closeModal) closeModal() }
-  }
-
-  return (
+  const renderForm = () => (
     <Form
       fluid
       ref={formRef}
       onChange={setFormValue}
       formValue={formValue}
-      model={model}
+      model={formModel}
     >
       <Col xs={24}>
-        <Form.Group controlId='tipo' className='mb-2'>
+        <Form.Group controlId='tipo' className='mb-2' hidden={isUpdate()}>
           <Form.ControlLabel className='text-muted text-sm'>Tipo: <span className='text-danger'>*</span></Form.ControlLabel>
           <Form.Control name='tipo' accepter={RadioGroup} inline>
             <Radio value='venta'>Venta</Radio>
@@ -92,37 +38,43 @@ export default function LicenciaForm ({ closeModal }) {
           </Form.Control>
         </Form.Group>
         <FormField
-          name='convenio' label='Convenio' accepter={SelectPicker} data={[]} block required hidden={formValue.tipo !== 'venta'}
+          name='convenio'
+          label='Convenio'
+          accepter={SelectPicker}
+          data={convenios.map(convenio => ({
+            label: convenio.no_convenio + ' - ' + convenio.contacto_cliente_final,
+            value: convenio.id
+          }))}
+          block
+          required
+          hidden={formValue.tipo !== 'venta'}
         />
-        <FormField name='nro' label='Nro' required />
         <FormField name='fecha' label='Fecha' accepter={DatePicker} block required />
-        <FormField name='clienteSolicita' label='Cliente que Solicita' accepter={SelectPicker} data={[]} block required />
-        <FormField name='personaSolicita' label='Persona que Solicita' accepter={SelectPicker} data={[]} block required />
+        <FormField
+          name='clienteSolicita' label='Persona que Solicita' accepter={SelectPicker} data={personasAsociadas.map(persona => ({
+            label: persona.nombre_completo,
+            value: persona.id
+          }))} block required
+        />
         <FormField
           name='clienteFinal'
           label='Cliente Final'
           accepter={SelectPicker}
-          data={clientesFinales.map(cliente => ({
-            label: cliente.nombre,
-            value: cliente.id
-          }))}
+          data={clienteData}
           block
           required
-          readOnly={isListClientesFinales === OPERATIONS.PENDING}
-          loading={isListClientesFinales === OPERATIONS.PENDING}
+          readOnly={isFormClienteFinal()}
+          loading={isFormClienteFinal()}
         />
         <FormField
           name='servicio'
           label='Servicio'
           accepter={SelectPicker}
-          data={serviciosContratados.map(servicio => ({
-            label: servicio.nombre,
-            value: servicio.id
-          }))}
+          data={servicioData}
           block
           required
-          readOnly={isListServiciosContratados === OPERATIONS.PENDING}
-          loading={isListServiciosContratados === OPERATIONS.PENDING}
+          readOnly={isFormServicios()}
+          loading={isFormServicios()}
         />
         <FormField name='claveRegistro' label='Clave de Registro' required />
         <FormField name='observaciones' label='Observaciones' accepter={Textarea} rows={3} />
@@ -130,7 +82,7 @@ export default function LicenciaForm ({ closeModal }) {
       <Col xs={24} className='mt-4'>
         <ButtonToolbar>
           <Button appearance='primary' size='sm' onClick={handleSubmit}>
-            Enviar
+            {!isUpdate() ? 'Guardar' : 'Editar'}
           </Button>
           {closeModal &&
             <Button appearance='subtle' color='red' size='sm' onClick={closeModal}>
@@ -139,5 +91,13 @@ export default function LicenciaForm ({ closeModal }) {
         </ButtonToolbar>
       </Col>
     </Form>
+  )
+
+  return (
+    <>
+      {isLoading()
+        ? renderForm()
+        : <Loader.Paragraph rows={16} />}
+    </>
   )
 }
