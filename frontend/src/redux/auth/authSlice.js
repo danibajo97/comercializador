@@ -2,17 +2,24 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import { toast } from 'react-toastify'
 
 import api from 'redux/auth/authAPI'
+import OPERATIONS from 'constants/operationsRedux'
 
 const initialState = {
   user: null,
   isAuth: false,
   isLoading: null,
-  hasError: false
+  hasError: false,
+  isChangePassword: OPERATIONS.NONE
 }
 
 export const authSlice = createSlice({
   name: 'auth',
   initialState,
+  reducers: {
+    stateResetChangePassword: (state) => {
+      state.isChangePassword = OPERATIONS.NONE
+    }
+  },
   extraReducers: (builder) => {
     // LOGIN ACCION
     builder.addCase(login.pending, (state, action) => {
@@ -33,6 +40,7 @@ export const authSlice = createSlice({
       window.sessionStorage.removeItem('refresh')
       toast.error(action.error.message)
     })
+
     // GET_USER ACCION
     builder.addCase(getUser.pending, (state, action) => {
       state.isLoading = true
@@ -51,6 +59,7 @@ export const authSlice = createSlice({
       window.sessionStorage.removeItem('access')
       window.sessionStorage.removeItem('refresh')
     })
+
     // LOGOUT ACCION
     builder.addCase(logout.fulfilled, (state, action) => {
       state.user = null
@@ -62,6 +71,19 @@ export const authSlice = createSlice({
     builder.addCase(logout.rejected, (state, action) => {
       toast.error(action.error.message)
     })
+
+    // CHANGE_PASSWORD ACCION
+    builder.addCase(changePassword.pending, (state, action) => {
+      state.isChangePassword = OPERATIONS.PENDING
+    })
+    builder.addCase(changePassword.fulfilled, (state, action) => {
+      state.isChangePassword = OPERATIONS.FULFILLED
+      toast.success('La contraseña se ha cambiado correctamente.')
+    })
+    builder.addCase(changePassword.rejected, (state, action) => {
+      state.isChangePassword = OPERATIONS.REJECTED
+      toast.error(action.error.message)
+    })
   }
 
 })
@@ -69,5 +91,8 @@ export const authSlice = createSlice({
 export const getUser = createAsyncThunk('auth/getUser', api.getUser)
 export const login = createAsyncThunk('auth/login', api.login)
 export const logout = createAsyncThunk('auth/logout', api.logout)
+export const changePassword = createAsyncThunk('auth/changePassword', api.changePassword)
+
+export const { stateResetChangePassword } = authSlice.actions
 
 export default authSlice.reducer

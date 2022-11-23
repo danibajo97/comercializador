@@ -1,31 +1,17 @@
 import React from 'react'
-
-import { Col, Form, Button, ButtonToolbar, Schema } from 'rsuite'
+import { Col, Form, Button, ButtonToolbar } from 'rsuite'
 
 import { InputPassword } from 'components'
+import useChangePassword from './useChangePassword'
 
-function ChangePassword ({ changePassword, closeModal }) {
-  const formRef = React.useRef()
-
-  const [formValue, setFormValue] = React.useState({
-    password: '',
-    newPassword: '',
-    repeatPassword: ''
-  })
-
-  const { StringType } = Schema.Types
-  const model = Schema.Model({
-    password: StringType().isRequired('Este campo es obligatorio.'),
-    newPassword: StringType().isRequired('Este campo es obligatorio.'),
-    repeatPassword: StringType().isRequired('Este campo es obligatorio.')
-  })
-
-  const handleSubmit = () => {
-    if (formRef.current.check()) {
-      changePassword({ ...formValue })
-      if (closeModal) closeModal()
-    }
-  }
+function ChangePassword ({ closeModal }) {
+  const {
+    formRef,
+    formValue,
+    setFormValue,
+    formModel,
+    handleSubmit
+  } = useChangePassword({ closeModal })
 
   return (
     <Form
@@ -33,7 +19,7 @@ function ChangePassword ({ changePassword, closeModal }) {
       ref={formRef}
       onChange={setFormValue}
       formValue={formValue}
-      model={model}
+      model={formModel}
     >
       <Col xs={24}>
         <InputPassword name='password' label='Contraseña' />
@@ -45,9 +31,18 @@ function ChangePassword ({ changePassword, closeModal }) {
         <InputPassword name='repeatPassword' label='Repetir Contraseña' />
       </Col>
       <Col xs={24} className='mt-4'>
+        <h4>Requisitos de la contraseña:</h4>
+        <ul>
+          <li>Caracteres en mayúsculas y minúsculas.</li>
+          <li>Un mínimo de 8 caracteres.</li>
+          <li>Un máximo de 16 caracteres.</li>
+          <li>Carácter especial ($@$!%/*+?&).</li>
+        </ul>
+      </Col>
+      <Col xs={24} className='mt-4'>
         <ButtonToolbar>
           <Button appearance='primary' size='sm' onClick={handleSubmit}>
-            Cambiar
+            Cambiar Contraseña
           </Button>
           {closeModal &&
             <Button appearance='subtle' color='red' size='sm' onClick={closeModal}>
@@ -55,7 +50,6 @@ function ChangePassword ({ changePassword, closeModal }) {
             </Button>}
         </ButtonToolbar>
       </Col>
-
     </Form>
   )
 }
