@@ -1,16 +1,13 @@
 import useModal from 'hooks/useModal'
-import useAuth from 'hooks/useAuth'
 import ChangePassword from 'components/options/ChangePassword'
 import ContactUs from 'components/options/ContactUs'
 
 export default function useUserOptions () {
-  const { changePassword } = useAuth()
-
   const changePasswordModal = useModal({
     title: 'Cambiar Contraseña',
     size: 'xs',
     renderBody: ({ closeModal }) => {
-      return <ChangePassword closeModal={closeModal} changePassword={changePassword} />
+      return <ChangePassword closeModal={closeModal} />
     }
   })
 

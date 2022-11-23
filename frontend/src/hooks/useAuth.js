@@ -3,7 +3,9 @@ import { useSelector, useDispatch } from 'react-redux'
 import {
   login as loginAuth,
   logout as logoutAuth,
-  getUser as getUserAuth
+  getUser as getUserAuth,
+  changePassword as changePasswordAuth,
+  stateResetChangePassword as stateResetChangePasswordAuth
 } from 'redux/auth/authSlice'
 
 export default function useAuth () {
@@ -12,6 +14,7 @@ export default function useAuth () {
   const isAuth = useSelector(state => state.auth.isAuth)
   const isLoading = useSelector(state => state.auth.isLoading)
   const hasError = useSelector(state => state.auth.hasError)
+  const isChangePassword = useSelector(state => state.auth.isChangePassword)
 
   const login = ({ username, password }) => {
     dispatch(loginAuth({ username, password }))
@@ -25,8 +28,12 @@ export default function useAuth () {
     dispatch(getUserAuth())
   }
 
+  const stateResetChangePassword = () => {
+    dispatch(stateResetChangePasswordAuth())
+  }
+
   const changePassword = ({ password, newPassword, repeatPassword }) => {
-    console.log({ password, newPassword, repeatPassword })
+    if (newPassword === repeatPassword) { dispatch(changePasswordAuth({ id: user.id, oldPassword: password, newPassword })) }
   }
 
   return {
@@ -37,6 +44,8 @@ export default function useAuth () {
     login,
     logout,
     getUser,
-    changePassword
+    isChangePassword,
+    changePassword,
+    stateResetChangePassword
   }
 }
