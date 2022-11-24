@@ -46,7 +46,7 @@ export default function LicenciaForm ({ closeModal, solicitudLicencia }) {
             value: convenio.id
           }))}
           block
-          required
+          required={formValue.tipo === 'venta'}
           hidden={formValue.tipo !== 'venta'}
         />
         <FormField name='fecha' label='Fecha' accepter={DatePicker} block required />

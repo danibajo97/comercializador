@@ -7,7 +7,8 @@ export default {
   addSolicitudLicencia,
   updateSolicitudLicencia,
   deleteSolicitudLicencia,
-  getServiciosActualizacion
+  getServiciosActualizacion,
+  otorgarSolicitudLicencia
 }
 
 async function getSolicitudLicenciaAll ({ page = 1 }) {
@@ -79,17 +80,36 @@ async function deleteSolicitudLicencia ({ id }) {
   }
 }
 
-async function getServiciosActualizacion () {
+async function getServiciosActualizacion ({ cliente }) {
   const access = await window.sessionStorage.getItem('access')
   const options = {
     method: 'GET',
     url: `${API_URL}/api-acceso/solicitud_licencia/servicios_actualizacion/`,
-    headers: { Authorization: `Bearer ${access}` }
+    headers: { Authorization: `Bearer ${access}` },
+    params: {
+      cliente
+    }
   }
   try {
     const { data } = await axios(options)
     return data
   } catch (error) {
     throw new Error('Error al listar los servicios.')
+  }
+}
+
+async function otorgarSolicitudLicencia ({ detalle }) {
+  const access = await window.sessionStorage.getItem('access')
+  const options = {
+    method: 'PUT',
+    url: `${API_URL}/api-acceso/solicitud_licencia/otorgar_licencia/`,
+    headers: { Authorization: `Bearer ${access}` },
+    data: { detalle }
+  }
+  try {
+    await axios(options)
+    return true
+  } catch (error) {
+    throw new Error('Error al otorgar la solicitud de licencia.')
   }
 }

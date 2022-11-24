@@ -10,6 +10,7 @@ const initialState = {
   isAdd: OPERATIONS.NONE,
   isUpdate: OPERATIONS.NONE,
   isDelete: OPERATIONS.NONE,
+  isOtorgar: OPERATIONS.NONE,
   serviciosActualizacion: [],
   isListServiciosActualizacion: OPERATIONS.NONE
 }
@@ -22,6 +23,7 @@ export const solicitudLicenciaSlice = createSlice({
       state.isAdd = OPERATIONS.NONE
       state.isUpdate = OPERATIONS.NONE
       state.isDelete = OPERATIONS.NONE
+      state.isOtorgar = OPERATIONS.NONE
       state.serviciosActualizacion = []
       state.isListServiciosActualizacion = OPERATIONS.NONE
     }
@@ -93,6 +95,18 @@ export const solicitudLicenciaSlice = createSlice({
       state.serviciosActualizacion = []
       toast.error(action.error)
     })
+
+    // OTARGAR_SOLICITUD_LICENCIA ACCION
+    builder.addCase(otorgarSolicitudLicencia.pending, (state, action) => {
+      state.isOtorgar = OPERATIONS.PENDING
+    })
+    builder.addCase(otorgarSolicitudLicencia.fulfilled, (state, action) => {
+      state.isOtorgar = OPERATIONS.FULFILLED
+    })
+    builder.addCase(otorgarSolicitudLicencia.rejected, (state, action) => {
+      state.isOtorgar = OPERATIONS.REJECTED
+      toast.error(action.error.message)
+    })
   }
 })
 
@@ -101,6 +115,7 @@ export const addSolicitudLicencia = createAsyncThunk('solicitudLicencia/addSolic
 export const updateSolicitudLicencia = createAsyncThunk('solicitudLicencia/updateSolicitudLicencia', api.updateSolicitudLicencia)
 export const deleteSolicitudLicencia = createAsyncThunk('solicitudLicencia/deleteSolicitudLicencia', api.deleteSolicitudLicencia)
 export const getServiciosActualizacion = createAsyncThunk('solicitudLicencia/getServiciosActualizacion', api.getServiciosActualizacion)
+export const otorgarSolicitudLicencia = createAsyncThunk('solicitudLicencia/otorgarSolicitudLicencia', api.otorgarSolicitudLicencia)
 
 export const { stateResetOperation } = solicitudLicenciaSlice.actions
 

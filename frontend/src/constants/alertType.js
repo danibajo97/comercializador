@@ -13,5 +13,10 @@ export default {
     icon: 'check-circle',
     color: 'green',
     text: '¿Estas seguro de confirmar?'
+  },
+  licencia: {
+    icon: 'check-circle',
+    color: 'green',
+    text: '¿Estas seguro de otorgar la licencia?'
   }
 }
