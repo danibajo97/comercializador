@@ -55,6 +55,7 @@ class ActivationCodeView(generics.GenericAPIView):
     serializer_class = ActivateUserSerializer
     permission_classes = (AllowAny,)
 
+    @transaction.atomic()
     def post(self, request, uidb64, token):
         try:
             uid = urlsafe_base64_decode(uidb64).decode()
