@@ -12,14 +12,12 @@ class SolicitudLicenciaViewSet(viewsets.GenericViewSet):
 
     @transaction.atomic
     def create(self, request):
-        # request.data = {'venta': bool, ..... (atributos de la solicitud)}
         user = authenticated_user(request)
         url = 'cmz/solicitud_licencia_externo/'
-        json_data = {
-            **request.data,
-            'cliente_solicita': user.id_erp
-        }
-        response = self.responsebase.post(url=url, json=json_data)
+        request.data._mutable = True
+        request.data['cliente_solicita'] = user.id_erp
+        request.data._mutable = False
+        response = self.responsebase.post(url=url, json=request.data)
         if response.status_code == 201:
             return Response({'Comercializador-response': 'Creado correctamente'}, status=response.status_code)
         else:
@@ -38,16 +36,15 @@ class SolicitudLicenciaViewSet(viewsets.GenericViewSet):
     def update(self, request, pk):
         user = authenticated_user(request)
         url = 'cmz/solicitud_licencia_externo/%s/' % pk
-        json_data = {
-            **request.data,
-            'cliente_solicita': user.id_erp
-        }
-        response = self.responsebase.put(url=url, json=json_data)
+        request.data._mutable = True
+        request.data['cliente_solicita'] = user.id_erp
+        request.data._mutable = False
+        response = self.responsebase.put(url=url, json=request.data)
         if response.status_code == 200:
             return Response({'Comercializador-response': 'Actualizado Correctamente',
                              'versat_response': response.json()}, status=response.status_code)
         else:
-            return Response({'response': response.json()}, status=response.status_code)
+            return Response(response, status=response.status_code)
 
     @transaction.atomic
     def retrieve(self, request, pk):
