@@ -39,7 +39,7 @@ export default function useLicenciaForm ({ solicitudLicencia, closeModal }) {
   const { StringType, DateType } = Schema.Types
   const formModel = Schema.Model({
     tipo: StringType().isRequired('Este campo es obligatorio.'),
-    convenio: StringType().isRequired('Este campo es obligatorio.'),
+    convenio: StringType(), // .isRequired('Este campo es obligatorio.'),
     fecha: DateType().isRequired('Este campo es obligatorio.'),
     clienteSolicita: StringType().isRequired('Este campo es obligatorio.'),
     clienteFinal: StringType().isRequired('Este campo es obligatorio.'),
@@ -77,7 +77,6 @@ export default function useLicenciaForm ({ solicitudLicencia, closeModal }) {
       }
     }))
     dispatch(getGestionadosPor())
-    dispatch(getServiciosActualizacion())
 
     return () => {
       dispatch(stateResetOperationServiciosContratados())
@@ -140,17 +139,23 @@ export default function useLicenciaForm ({ solicitudLicencia, closeModal }) {
       setServicioData(servicios)
     } else {
       const cliente = gestionadosPor.map(cliente => ({
-        label: cliente.nombre_completo,
-        value: cliente.id
+        label: cliente.cliente_final_descripcion,
+        value: cliente.cliente_final_id
       }))
       const servicios = serviciosActualizacion.map(servicio => ({
-        label: servicio.producto_nombre,
-        value: servicio.servicio
+        label: servicio.servicio_descripcion,
+        value: servicio.servicio_id
       }))
       setClienteData(cliente)
       setServicioData(servicios)
     }
   }, [formValue.tipo, isListClientesFinales, isListGestionadosPor, isListServiciosActualizacion, isListServiciosContratados])
+
+  useEffect(() => {
+    if (formValue.tipo !== 'venta') {
+      dispatch(getServiciosActualizacion({ cliente: formValue.clienteFinal }))
+    }
+  }, [formValue.clienteFinal])
 
   const isFormClienteFinal = () => isListClientesFinales === OPERATIONS.PENDING || isListGestionadosPor === OPERATIONS.PENDING
   const isFormServicios = () => isListServiciosContratados === OPERATIONS.PENDING || isListServiciosActualizacion === OPERATIONS.PENDING

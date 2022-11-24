@@ -6,6 +6,7 @@ import Textarea from 'components/form/Textarea'
 import InputPassword from 'components/form/InputPassword'
 import InputNumber from 'components/form/InputNumber'
 import Loader from 'components/loader/Loader'
+import CopiarLicencia from 'components/licencia/CopiarLicencia'
 
 export {
   CardHeader,
@@ -15,5 +16,6 @@ export {
   InputNumber,
   InputPassword,
   renderEmpty,
-  Loader
+  Loader,
+  CopiarLicencia
 }
