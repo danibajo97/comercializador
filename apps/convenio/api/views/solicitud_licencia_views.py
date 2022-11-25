@@ -30,6 +30,7 @@ class SolicitudLicenciaViewSet(viewsets.GenericViewSet):
         url = 'cmz/solicitud_licencia_externo/'
         params = {
             'authenticated-user': user.id_erp,
+            **request.GET
         }
         response = self.responsebase.get(url=url, params=params)
         return Response(data=response.json(), status=response.status_code)
@@ -94,3 +95,13 @@ class SolicitudLicenciaViewSet(viewsets.GenericViewSet):
         else:
             return Response({'message': "Hubo problemas al conectar con el servidor"},
                             status=response.status_code)
+
+    @action(detail=False, methods=['get'])
+    def widges_info(self, request):
+        user = authenticated_user(request)
+        url = 'cmz/solicitud_licencia_externo/widges_info/'
+        params = {
+            'authenticated-user': user.id_erp,
+        }
+        response = self.responsebase.get(url=url, params=params)
+        return Response(response.json(), status=response.status_code)
