@@ -182,6 +182,6 @@ async function getWidgesInfo () {
     const { data } = await axios(options)
     return data
   } catch (error) {
-    throw new Error('Error al listar los convenios.')
+    throw new Error('Error al listar la información de los convenios.')
   }
 }

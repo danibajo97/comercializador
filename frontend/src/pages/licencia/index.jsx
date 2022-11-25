@@ -18,14 +18,25 @@ import useHeader from 'hooks/useHeader'
 import useLicencia from './useLicencia'
 
 export default function SolicitudLicencia () {
-  const { user, title, modal, openModal, solicitudLicencias, isList } = useLicencia()
+  const {
+    user,
+    title,
+    modal,
+    openModal,
+    solicitudLicencias,
+    isList,
+    totalLicencia,
+    totalOtorgada,
+    totalPendiente,
+    pagination
+  } = useLicencia()
   useHeader({ title: title() })
 
   return (
     <>
       {modal}
       {user?.rol === ROL.CLIENTE
-        ? <ConvenioHeader totalLicencia={0} totalOtorgada={0} totalPendient={0} />
+        ? <ConvenioHeader totalLicencia={totalLicencia} totalOtorgada={totalOtorgada} totalPendiente={totalPendiente} />
         : <DefaultHeader />}
       <Container className='mt--7' fluid>
         <Row>
@@ -51,7 +62,9 @@ export default function SolicitudLicencia () {
               </CardHeader>
               <Row>
                 <Col>
-                  {isList === OPERATIONS.FULFILLED ? <LicenciaTable clientes={solicitudLicencias} /> : <Loader.Paragraph rows={3} />}
+                  {isList === OPERATIONS.FULFILLED
+                    ? <LicenciaTable clientes={solicitudLicencias} pagination={pagination} />
+                    : <Loader.Grid rows={8} columns={7} />}
                 </Col>
               </Row>
             </Card>

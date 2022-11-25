@@ -7,21 +7,21 @@ export default function useConvenioTable () {
   const dispatch = useDispatch()
 
   const deleteAlert = useAlert({
-    type: 'delete',
+    type: 'eliminar',
     text: 'Se eliminará el convenio, esta acción no se puede deshacer.',
     isConfirm: true,
     textConfirm: 'Eliminar Convenio'
   })
 
   const validAlert = useAlert({
-    type: 'valid',
+    type: 'validar',
     text: 'Se validará el convenio.',
     isConfirm: true,
     textConfirm: 'Validar Convenio'
   })
 
   const terminarAlert = useAlert({
-    type: 'confirm',
+    type: 'terminar',
     text: 'Se terminará el convenio.',
     isConfirm: true,
     textConfirm: 'Terminar Convenio'
@@ -41,7 +41,7 @@ export default function useConvenioTable () {
     validAlert.openAlert()
   }
 
-  const operationConfirmar = ({ id }) => {
+  const operationTerminar = ({ id }) => {
     terminarAlert.setConfirmAccion(() => {
       dispatch(confirmarConvenio({ id }))
     })
@@ -70,7 +70,7 @@ export default function useConvenioTable () {
         operationValidar({ id: rowData.id })
         break
       case 7:
-        operationConfirmar({ id: rowData.id })
+        operationTerminar({ id: rowData.id })
         break
     }
   }

@@ -8,22 +8,25 @@ export default {
   updateSolicitudLicencia,
   deleteSolicitudLicencia,
   getServiciosActualizacion,
-  otorgarSolicitudLicencia
+  otorgarSolicitudLicencia,
+  getWidgesInfo
 }
 
-async function getSolicitudLicenciaAll ({ page = 1 }) {
+async function getSolicitudLicenciaAll ({ pagination }) {
+  const { page, limit } = pagination
   const access = await window.sessionStorage.getItem('access')
   const options = {
     method: 'GET',
     url: `${API_URL}/api-acceso/solicitud_licencia/`,
     headers: { Authorization: `Bearer ${access}` },
     params: {
-      page
+      page,
+      limit
     }
   }
   try {
     const { data } = await axios(options)
-    return data.results
+    return data
   } catch (error) {
     throw new Error('Error al listar las solicitudes de licencias.')
   }
@@ -111,5 +114,20 @@ async function otorgarSolicitudLicencia ({ detalle }) {
     return true
   } catch (error) {
     throw new Error('Error al otorgar la solicitud de licencia.')
+  }
+}
+
+async function getWidgesInfo () {
+  const access = await window.sessionStorage.getItem('access')
+  const options = {
+    method: 'GET',
+    url: `${API_URL}/api-acceso/solicitud_licencia/widges_info/`,
+    headers: { Authorization: `Bearer ${access}` }
+  }
+  try {
+    const { data } = await axios(options)
+    return data
+  } catch (error) {
+    throw new Error('Error al listar la información de las licencias.')
   }
 }

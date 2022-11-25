@@ -4,7 +4,7 @@ import { Col, Form, Button, ButtonToolbar } from 'rsuite'
 import { InputPassword } from 'components'
 import useChangePassword from './useChangePassword'
 
-function ChangePassword ({ closeModal }) {
+export default function ChangePassword ({ closeModal }) {
   const {
     formRef,
     formValue,
@@ -53,5 +53,3 @@ function ChangePassword ({ closeModal }) {
     </Form>
   )
 }
-
-export default ChangePassword

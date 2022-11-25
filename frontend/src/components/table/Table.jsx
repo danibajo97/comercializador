@@ -106,7 +106,7 @@ const styleHeaderWhite = {
 }
 
 const styleCell = {
-  fontSize: '0.75rem'
+  fontSize: '0.85rem'
 }
 
 export function renderEmpty () {

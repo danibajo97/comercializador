@@ -40,7 +40,7 @@ const ActionCell = ({ rowData, dataKey, ...props }) => {
   })
 
   const deleteAlert = useAlert({
-    type: 'delete',
+    type: 'eliminar',
     text: 'Se eliminará el plazo de pago, esta acción no se puede deshacer.',
     isConfirm: true,
     textConfirm: 'Eliminar Plazo de Pago'
