@@ -3,7 +3,6 @@ import { Popover, Whisper, Dropdown, IconButton, Table as TableRS } from 'rsuite
 import MoreIcon from '@rsuite/icons/legacy/More'
 
 import Table from 'components/table/Table'
-import usePagination from 'hooks/usePagination'
 import useAlert from 'hooks/useAlert'
 import { useDispatch, useSelector } from 'react-redux'
 import { deleteSolicitudLicencia, otorgarSolicitudLicencia, getSolicitudLicenciaAll, stateResetOperation } from 'redux/solicitudLicencia/solicitudLicenciaSlice'
@@ -12,6 +11,8 @@ import LicenciaForm from '../LicenciaForm'
 import { CopiarLicencia } from 'components'
 import OPERATIONS from 'constants/operationsRedux'
 
+const PAGINATION_LIMIT = parseInt(process.env.REACT_APP_PAGINATION_LIMIT)
+
 const ActionCell = ({ rowData, dataKey, ...props }) => {
   const isOtorgada = rowData.otorgada
   const dispatch = useDispatch()
@@ -19,7 +20,7 @@ const ActionCell = ({ rowData, dataKey, ...props }) => {
   const isOtorgar = useSelector(state => state.solicitudLicencia.isOtorgar)
 
   useEffect(() => {
-    if (isOtorgar === OPERATIONS.FULFILLED) { dispatch(getSolicitudLicenciaAll({ page: 1 })) }
+    if (isOtorgar === OPERATIONS.FULFILLED) { dispatch(getSolicitudLicenciaAll({ pagination: { page: 1, limit: PAGINATION_LIMIT } })) }
   }, [isOtorgar])
 
   useEffect(() => {
@@ -130,8 +131,6 @@ const ActionCell = ({ rowData, dataKey, ...props }) => {
 }
 
 export default function LicenciaTable ({ clientes, pagination }) {
-  // const { pagination, dataPage } = usePagination({ data: clientes })
-
   return (
     <>
       <Table data={clientes} autoHeight>
