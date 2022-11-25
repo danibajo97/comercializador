@@ -19,6 +19,8 @@ const Template = ({ routes }) => {
     if (isLoading === false && !isAuth) navigate('/login')
   }, [isLoading, isAuth])
 
+  if (isLoading) return <div />
+
   return (
     <>
       <Navbar routes={routes} />

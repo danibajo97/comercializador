@@ -19,7 +19,7 @@ const ActionCell = ({ rowData, dataKey, ...props }) => {
   const { id } = params
 
   const deleteAlert = useAlert({
-    type: 'delete',
+    type: 'eliminar',
     text: 'Se eliminará el servicio, esta acción no se puede deshacer.',
     isConfirm: true,
     textConfirm: 'Eliminar Servicio'

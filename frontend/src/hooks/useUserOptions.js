@@ -1,6 +1,6 @@
 import useModal from 'hooks/useModal'
-import ChangePassword from 'components/options/ChangePassword'
 import ContactUs from 'components/options/ContactUs'
+import ChangePassword from 'components/options/ChangePassword'
 
 export default function useUserOptions () {
   const changePasswordModal = useModal({

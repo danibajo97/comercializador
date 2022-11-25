@@ -5,7 +5,8 @@ import useAuth from 'hooks/useAuth'
 import useModal from 'hooks/useModal'
 import LicenciaForm from './components/LicenciaForm'
 import ROL from 'constants/rol'
-import { getSolicitudLicenciaAll, stateResetOperation } from 'redux/solicitudLicencia/solicitudLicenciaSlice'
+import { getSolicitudLicenciaAll, getWidgesInfo, stateResetOperation } from 'redux/solicitudLicencia/solicitudLicenciaSlice'
+import usePaginationServer from 'hooks/usePaginationServer'
 
 export default function useLicencia () {
   const { user } = useAuth()
@@ -20,10 +21,18 @@ export default function useLicencia () {
   })
 
   const solicitudLicencias = useSelector(state => state.solicitudLicencia.solicitudLicencias)
+  const solicitudLicenciasLimit = useSelector(state => state.solicitudLicencia.solicitudLicenciasLimit)
   const isList = useSelector(state => state.solicitudLicencia.isList)
+  const widges = useSelector(state => state.solicitudLicencia.widges)
+
+  const { pagination, page, limit } = usePaginationServer({ length: solicitudLicenciasLimit })
 
   useEffect(() => {
-    dispatch(getSolicitudLicenciaAll({ page: 1 }))
+    dispatch(getSolicitudLicenciaAll({ pagination: { page, limit } }))
+  }, [page])
+
+  useEffect(() => {
+    dispatch(getWidgesInfo())
 
     return () => {
       dispatch(stateResetOperation())
@@ -32,5 +41,16 @@ export default function useLicencia () {
 
   const title = () => user?.rol === ROL.CLIENTE ? 'Inicio' : 'Solicitud Licencia'
 
-  return { user, title, modal, openModal, solicitudLicencias, isList }
+  return {
+    user,
+    title,
+    modal,
+    openModal,
+    solicitudLicencias,
+    isList,
+    totalLicencia: widges?.total || 0,
+    totalOtorgada: widges?.otorgada || 0,
+    totalPendiente: widges?.pendiente || 0,
+    pagination
+  }
 }

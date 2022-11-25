@@ -1,18 +1,18 @@
 export default {
-  delete: {
+  eliminar: {
     icon: 'trash',
     color: 'red',
     text: '¿Estas seguro de eliminar?'
   },
-  valid: {
+  validar: {
     icon: 'check-circle',
     color: 'green',
     text: '¿Estas seguro de validar?'
   },
-  confirm: {
+  terminar: {
     icon: 'check-circle',
     color: 'green',
-    text: '¿Estas seguro de confirmar?'
+    text: '¿Estas seguro de terminar?'
   },
   licencia: {
     icon: 'check-circle',

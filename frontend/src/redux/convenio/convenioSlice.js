@@ -135,12 +135,12 @@ export const convenioSlice = createSlice({
       state.isValidar = OPERATIONS.FULFILLED
       toast.success(action.payload.message)
       state.convenios = state.convenios.map(convenio => {
-        const c = { ...convenio }
+        const temp = { ...convenio }
         if (convenio.id === action.payload.id) {
-          c.estado = 2
-          c.estado_display = 'Validado'
+          temp.estado = 2
+          temp.estado_display = 'Validado'
         }
-        return c
+        return temp
       })
     })
     builder.addCase(validarConvenio.rejected, (state, action) => {
@@ -156,12 +156,12 @@ export const convenioSlice = createSlice({
       state.isConfirmar = OPERATIONS.FULFILLED
       toast.success(action.payload.message)
       state.convenios = state.convenios.map(convenio => {
-        const c = { ...convenio }
+        const temp = { ...convenio }
         if (convenio.id === action.payload.id) {
-          c.estado = 3
-          c.estado_display = 'Confirmado'
+          temp.estado = 7
+          temp.estado_display = 'Terminado'
         }
-        return c
+        return temp
       })
     })
     builder.addCase(confirmarConvenio.rejected, (state, action) => {
