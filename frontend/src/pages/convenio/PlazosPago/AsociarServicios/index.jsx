@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Popover, Table as TableRS, Whisper, Dropdown, IconButton } from 'rsuite'
-import MoreIcon from '@rsuite/icons/legacy/More'
 
 import { getPlazoPagoServicioAll, deletePlazoPagoServicio, stateResetOperation } from 'redux/plazoPagoServicio/plazoPagoServicioSlice'
 import OPERATIONS from 'constants/operationsRedux'
@@ -79,7 +78,12 @@ const ActionCell = ({ rowData, dataKey, ...props }) => {
             )
           }}
         >
-          <IconButton className='mt--2 mb--2' size='sm' appearance='subtle' icon={<MoreIcon />} />
+          <IconButton
+            className='mt--2 mb--2 pl-2 pr-2'
+            size='sm'
+            appearance='subtle'
+            icon={<i className='fa fa-ellipsis-v' />}
+          />
         </Whisper>
       </TableRS.Cell>
     </>
@@ -95,7 +99,7 @@ const CantidadCell = ({ rowData, dataKey, ...props }) => {
       {rowData.usuarios_finales.map((item, key) => {
         return (
           <div key={key}>
-            <div className=''>{key + 1} - {item.contacto}</div>
+            <p className='mb-1' style={{ fontSize: '0.95rem' }}>{key + 1} - {item.contacto}</p>
           </div>
         )
       })}
@@ -134,9 +138,9 @@ export default function AsociarServicios ({ id, isConfirmado }) {
     if (id !== null) { return <div className='text-center text-muted mt-5 mb-5'>No hay elementos disponibles</div> } else { return <div className='text-center text-muted mt-5 mb-5'>Seleccione un plazo de pago</div> }
   }
 
-  const renderCantidadCell = ({ header, dataKey }) => {
+  const renderCantidadCell = ({ header, dataKey, minWidth }) => {
     return (
-      <TableRS.Column flexGrow={1}>
+      <TableRS.Column flexGrow={1} minWidth={minWidth}>
         <TableRS.HeaderCell style={Table.styleHeader}>
           {header}
         </TableRS.HeaderCell>
@@ -145,25 +149,13 @@ export default function AsociarServicios ({ id, isConfirmado }) {
     )
   }
 
-  const renderColumnAccion = (dataKey) => {
-    return (
-      <TableRS.Column width={100}>
-        <TableRS.HeaderCell style={Table.styleHeader}>
-          Acciones
-        </TableRS.HeaderCell>
-        <ActionCell dataKey={dataKey} style={Table.styleCell} />
-      </TableRS.Column>
-    )
-  }
-
   const renderTable = () => (
     <>
       <Table data={id ? dataPage : []} autoHeight renderEmpty={renderEmpty}>
-        {Table.Column({ header: 'Servicio', dataKey: 'servicio_nombre', flex: 1 })}
-        {/* {Table.Column({ header: 'Cantidad', dataKey: 'cantidad', flex: 1})} */}
-        {renderCantidadCell({ header: 'Cantidad', dataKey: 'cantidad' })}
-        {Table.ColumnNumberFormat({ header: 'Precio', dataKey: 'servicio_precio', flex: 1 })}
-        {!isConfirmado && renderColumnAccion('id')}
+        {Table.Column({ header: 'Servicio', dataKey: 'servicio_nombre', flex: 2.8, minWidth: 280 })}
+        {renderCantidadCell({ header: 'Cantidad', dataKey: 'cantidad', minWidth: 100 })}
+        {Table.ColumnNumberFormat({ header: 'Precio', dataKey: 'servicio_precio', flex: 1, minWidth: 100 })}
+        {!isConfirmado && Table.ColumnAccion({ action: ActionCell })}
       </Table>
       {pagination}
     </>

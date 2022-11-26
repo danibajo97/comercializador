@@ -6,25 +6,21 @@ import {
 
 import estadosConvenios from 'constants/estadosConvenios'
 
-function RenderColumn ({ header, dataKey, flex, white }) {
+function RenderColumn ({ header, dataKey, flex, minWidth = 100, white }) {
   const style = !white ? styleHeader : styleHeaderWhite
   return (
-    <TableRS.Column flexGrow={flex}>
-      <TableRS.HeaderCell style={style}>
-        {header}
-      </TableRS.HeaderCell>
+    <TableRS.Column flexGrow={flex} minWidth={minWidth}>
+      <TableRS.HeaderCell style={style}>{header}</TableRS.HeaderCell>
       <TableRS.Cell dataKey={dataKey} style={styleCell} />
     </TableRS.Column>
   )
 }
 
-const RenderColumnNumberFormat = ({ header, dataKey, flex, white }) => {
+const RenderColumnNumberFormat = ({ header, dataKey, flex, minWidth = 100, white }) => {
   const style = !white ? styleHeader : styleHeaderWhite
   return (
-    <TableRS.Column flexGrow={flex} align='right'>
-      <TableRS.HeaderCell style={style}>
-        {header}
-      </TableRS.HeaderCell>
+    <TableRS.Column flexGrow={flex} minWidth={minWidth} align='right'>
+      <TableRS.HeaderCell style={style}>{header}</TableRS.HeaderCell>
       <TableRS.Cell style={styleCell}>
         {rowData => <>{new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(rowData[dataKey])}</>}
       </TableRS.Cell>
@@ -32,13 +28,11 @@ const RenderColumnNumberFormat = ({ header, dataKey, flex, white }) => {
   )
 }
 
-const RenderColumnNumber = ({ header, dataKey, flex, white }) => {
+const RenderColumnNumber = ({ header, dataKey, flex, minWidth = 100, white }) => {
   const style = !white ? styleHeader : styleHeaderWhite
   return (
-    <TableRS.Column flexGrow={flex} align='right'>
-      <TableRS.HeaderCell style={style}>
-        {header}
-      </TableRS.HeaderCell>
+    <TableRS.Column flexGrow={flex} minWidth={minWidth} align='right'>
+      <TableRS.HeaderCell style={style}>{header}</TableRS.HeaderCell>
       <TableRS.Cell style={styleCell}>
         {rowData => <>{rowData[dataKey]}</>}
       </TableRS.Cell>
@@ -46,15 +40,13 @@ const RenderColumnNumber = ({ header, dataKey, flex, white }) => {
   )
 }
 
-const RenderColumnBoolean = ({ header, dataKey, flex, white = false, opcions }) => {
+const RenderColumnBoolean = ({ header, dataKey, flex, minWidth = 100, white = false, opcions }) => {
   const optionYes = opcions?.yes || 'Si'
   const optionNo = opcions?.no || 'No'
   const style = !white ? styleHeader : styleHeaderWhite
   return (
-    <TableRS.Column flexGrow={flex}>
-      <TableRS.HeaderCell style={style}>
-        {header}
-      </TableRS.HeaderCell>
+    <TableRS.Column flexGrow={flex} minWidth={minWidth}>
+      <TableRS.HeaderCell style={style}>{header}</TableRS.HeaderCell>
       <TableRS.Cell style={styleCell}>
         {rowData => <><Badge color={rowData[dataKey] ? 'green' : 'red'} className='mr-2' />{rowData[dataKey] ? optionYes : optionNo}</>}
       </TableRS.Cell>
@@ -62,13 +54,11 @@ const RenderColumnBoolean = ({ header, dataKey, flex, white = false, opcions }) 
   )
 }
 
-const RenderColumnEstado = ({ header, dataKey, flex, white = false }) => {
+const RenderColumnEstado = ({ header, dataKey, flex, minWidth = 100, white = false }) => {
   const style = !white ? styleHeader : styleHeaderWhite
   return (
-    <TableRS.Column flexGrow={flex}>
-      <TableRS.HeaderCell style={style}>
-        {header}
-      </TableRS.HeaderCell>
+    <TableRS.Column flexGrow={flex} minWidth={minWidth}>
+      <TableRS.HeaderCell style={style}>{header}</TableRS.HeaderCell>
       <TableRS.Cell style={styleCell}>
         {rowData => <><Badge className={`bg-${estadosConvenios[rowData[dataKey] - 1].color} mr-2`} />{estadosConvenios[rowData[dataKey] - 1].text}</>}
       </TableRS.Cell>
@@ -76,12 +66,10 @@ const RenderColumnEstado = ({ header, dataKey, flex, white = false }) => {
   )
 }
 
-const RenderColumnAccion = ({ header, dataKey, action: ActionCell }) => {
+const RenderColumnAccion = ({ dataKey = 'id', action: ActionCell }) => {
   return (
-    <TableRS.Column width={100}>
-      <TableRS.HeaderCell style={Table.styleHeader}>
-        {header}
-      </TableRS.HeaderCell>
+    <TableRS.Column width={45} fixed='right'>
+      <TableRS.HeaderCell style={Table.styleHeader} />
       <ActionCell dataKey={dataKey} style={Table.styleCell} />
     </TableRS.Column>
   )

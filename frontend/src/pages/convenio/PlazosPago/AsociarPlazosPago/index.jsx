@@ -8,7 +8,6 @@ import {
   Checkbox
 } from 'rsuite'
 import { useDispatch, useSelector } from 'react-redux'
-import MoreIcon from '@rsuite/icons/legacy/More'
 import { useParams } from 'react-router-dom'
 
 import OPERATIONS from 'constants/operationsRedux'
@@ -86,7 +85,7 @@ const ActionCell = ({ rowData, dataKey, ...props }) => {
             )
           }}
         >
-          <IconButton className='mt--2 mb--2' size='sm' appearance='subtle' icon={<MoreIcon />} />
+          <IconButton className='mt--2 mb--2 pl-2 pr-2' size='sm' appearance='subtle' icon={<i className='fa fa-ellipsis-v' />} />
         </Whisper>
       </TableRS.Cell>
     </>
@@ -136,17 +135,6 @@ export default function AsociarPlazosPago ({ setSelectedId, isConfirmado }) {
     setCheckedKeys(keys)
   }
 
-  const renderColumnAccion = dataKey => {
-    return (
-      <TableRS.Column width={100}>
-        <TableRS.HeaderCell style={Table.styleHeader}>
-          Acciones
-        </TableRS.HeaderCell>
-        <ActionCell dataKey={dataKey} style={Table.styleCell} />
-      </TableRS.Column>
-    )
-  }
-
   const renderCheckCell = () => {
     return (
       <TableRS.Column width={50}>
@@ -168,7 +156,7 @@ export default function AsociarPlazosPago ({ setSelectedId, isConfirmado }) {
         {Table.ColumnNumber({ header: 'Dias', dataKey: 'dias', flex: 0.5 })}
         {Table.ColumnBoolean({ header: 'Facturado', dataKey: 'facturado', flex: 0.8 })}
         {Table.ColumnBoolean({ header: 'Cobrado', dataKey: 'cobrado', flex: 0.8 })}
-        {!isConfirmado && renderColumnAccion('id')}
+        {!isConfirmado && Table.ColumnAccion({ action: ActionCell })}
       </Table>
       {pagination}
     </div>

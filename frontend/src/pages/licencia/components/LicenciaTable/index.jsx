@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react'
 import { Popover, Whisper, Dropdown, IconButton, Table as TableRS } from 'rsuite'
-import MoreIcon from '@rsuite/icons/legacy/More'
 
 import Table from 'components/table/Table'
 import useAlert from 'hooks/useAlert'
@@ -123,7 +122,7 @@ const ActionCell = ({ rowData, dataKey, ...props }) => {
             )
           }}
         >
-          <IconButton className='mt--2 mb--2' size='sm' appearance='subtle' icon={<MoreIcon />} />
+          <IconButton className='mt--2 mb--2 pl-2 pr-2' size='sm' appearance='subtle' icon={<i className='fa fa-ellipsis-v' />} />
         </Whisper>
       </TableRS.Cell>
     </>
@@ -134,14 +133,14 @@ export default function LicenciaTable ({ clientes, pagination }) {
   return (
     <>
       <Table data={clientes} autoHeight>
-        {Table.Column({ header: 'Nro', dataKey: 'no_solicitud', flex: 1 })}
+        {Table.Column({ header: 'Nro', dataKey: 'no_solicitud', flex: 1, minWidth: 50 })}
         {Table.Column({ header: 'Fecha', dataKey: 'fecha', flex: 1 })}
-        {Table.Column({ header: 'Persona que solicita', dataKey: 'solicitado_por_nombre', flex: 1.2 })}
-        {Table.Column({ header: 'Cliente final', dataKey: 'cliente_final_nombre', flex: 2 })}
-        {Table.Column({ header: 'Servicio', dataKey: 'servicio_nombre', flex: 2 })}
+        {Table.Column({ header: 'Persona que solicita', dataKey: 'solicitado_por_nombre', flex: 1.2, minWidth: 200 })}
+        {Table.Column({ header: 'Cliente final', dataKey: 'cliente_final_nombre', flex: 2, minWidth: 250 })}
+        {Table.Column({ header: 'Servicio', dataKey: 'servicio_nombre', flex: 2, minWidth: 200 })}
         {Table.ColumnBoolean({ header: 'Licencia', dataKey: 'licencia', flex: 1.2, opcions: { yes: 'Otorgada', no: 'Pendiente' } })}
-        {Table.Column({ header: 'Observación', dataKey: 'observacion', flex: 3 })}
-        {Table.ColumnAccion({ header: 'Acciones', dataKey: 'id', action: ActionCell })}
+        {Table.Column({ header: 'Observación', dataKey: 'observacion', flex: 3, minWidth: 250 })}
+        {Table.ColumnAccion({ action: ActionCell })}
       </Table>
       {pagination}
     </>

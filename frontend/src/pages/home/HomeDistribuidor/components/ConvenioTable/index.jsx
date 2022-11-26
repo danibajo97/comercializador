@@ -1,7 +1,6 @@
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Popover, Whisper, Dropdown, IconButton, Table as TableRS } from 'rsuite'
-import MoreIcon from '@rsuite/icons/legacy/More'
 
 import Table from 'components/table/Table'
 import { renderEmpty } from 'components'
@@ -24,17 +23,17 @@ const ActionCell = ({ rowData, dataKey, ...props }) => {
                   <Dropdown.Item eventKey={2} disabled={rowData.cantidad_bd <= 1}>Clientes Finales</Dropdown.Item>
                   <Dropdown.Item eventKey={3}>Servicios Contratados</Dropdown.Item>
                   <Dropdown.Item eventKey={4}>Plazos de Pagos</Dropdown.Item>
-                  <Dropdown.Item divider hidden={rowData.estado === 3} />
+                  <Dropdown.Item divider hidden={rowData.estado >= 3} />
                   <Dropdown.Item eventKey={6} hidden={rowData.estado !== 1}>Validar</Dropdown.Item>
                   <Dropdown.Item eventKey={7} hidden={rowData.estado !== 2}>Terminar</Dropdown.Item>
-                  <Dropdown.Item divider hidden={rowData.estado === 3} />
+                  <Dropdown.Item divider hidden={rowData.estado >= 3} />
                   <Dropdown.Item eventKey={5} hidden={rowData.estado >= 3}>Eliminar</Dropdown.Item>
                 </Dropdown.Menu>
               </Popover>
             )
           }}
         >
-          <IconButton className='mt--2 mb--2' size='sm' appearance='subtle' icon={<MoreIcon />} />
+          <IconButton className='mt--2 mb--2 pl-2 pr-2' size='sm' appearance='subtle' icon={<i className='fa fa-ellipsis-v' />} />
         </Whisper>
       </TableRS.Cell>
     </>
@@ -46,12 +45,12 @@ export default function ConvenioTable ({ convenios, pagination }) {
     <>
       <Table data={convenios} height={250} autoHeight renderEmpty={renderEmpty}>
         {Table.Column({ header: 'Nro Contrato', dataKey: 'contrato_no', flex: 1 })}
-        {Table.Column({ header: 'Cliente', dataKey: 'contacto_cliente_final', flex: 2.5 })}
         {Table.Column({ header: 'Nro Convenio', dataKey: 'no_convenio', flex: 1 })}
+        {Table.Column({ header: 'Cliente', dataKey: 'contacto_cliente_final', flex: 2.5, minWidth: 350 })}
         {Table.Column({ header: 'Fecha Emisión', dataKey: 'fecha_emision', flex: 1 })}
-        {Table.ColumnEstado({ header: 'Estado', dataKey: 'estado', flex: 1 })}
+        {Table.ColumnEstado({ header: 'Estado', dataKey: 'estado', flex: 1, minWidth: 120 })}
         {Table.Column({ header: 'Base de Datos', dataKey: 'cantidad_bd', flex: 1 })}
-        {Table.ColumnAccion({ header: 'Acciones', dataKey: 'id', action: ActionCell })}
+        {Table.ColumnAccion({ action: ActionCell })}
       </Table>
       {pagination}
     </>

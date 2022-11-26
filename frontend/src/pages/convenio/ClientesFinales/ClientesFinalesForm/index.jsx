@@ -44,8 +44,8 @@ function ClientesFinalesPanel () {
         <Col className='mt-4'>
           {tableData().length > 0 &&
             <Table data={tableData()} autoHeight>
-              {Table.Column({ header: 'Nombre Completo Cliente', dataKey: 'nombre_completo', flex: 1, white: true })}
-              {Table.Column({ header: 'Correo', dataKey: 'correo', flex: 1, white: true })}
+              {Table.Column({ header: 'Nombre Completo Cliente', dataKey: 'nombre_completo', flex: 1, white: true, minWidth: 250 })}
+              {Table.Column({ header: 'Correo', dataKey: 'correo', flex: 1, white: true, minWidth: 200 })}
             </Table>}
         </Col>
       </Row>
