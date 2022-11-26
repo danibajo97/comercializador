@@ -36,7 +36,7 @@ function DatosGeneralesForm () {
       {contrato?.fecha_inicial !== undefined &&
         <>
           <Row>
-            <Col xs={24} sm={12} md={12} lg={12}>
+            <Col xs={24} sm={12} md={12} lg={12} className='mb-4'>
               <FormField name='fechaEmision' label='Fecha Emisión' accepter={DatePicker} plaintext block />
             </Col>
             <Col xs={24} sm={12} md={12} lg={12}>
@@ -48,7 +48,7 @@ function DatosGeneralesForm () {
             Datos Convenio
           </h6>
           <Row>
-            <Col xs={24} sm={12} md={12} lg={12}>
+            <Col xs={24} sm={12} md={12} lg={12} className='mb-4'>
               <FormField
                 name='cliente' label='Cliente' accepter={SelectPicker} data={clientesFinales.map(cliente => ({
                   label: cliente.nombre,

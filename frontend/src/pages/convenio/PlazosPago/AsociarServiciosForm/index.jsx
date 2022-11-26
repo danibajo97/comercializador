@@ -110,7 +110,7 @@ export function AsociarServiciosForm ({ closeModal, convenioId, plazoPagoId, ser
       formValue={formValue}
       model={model}
     >
-      <Col xs={24} sm={24} md={12} lg={12}>
+      <Col xs={24} sm={24} md={12} lg={12} className='mb-4'>
         <FormField
           name='servicios' label='Servicios' accepter={SelectPicker} required block onSelect={onSelectServicio} data={serviciosContratados.map(item => ({
             label: item.producto_nombre,

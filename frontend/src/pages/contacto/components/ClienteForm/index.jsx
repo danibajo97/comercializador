@@ -26,12 +26,12 @@ export default function ClienteForm ({ closeModal }) {
         formValue={formValue}
         model={formModel}
       >
-        <Col xs={12}>
+        <Col xs={24} sm={12} className='mb-4'>
           <FormField name='nombre' label='Nombre' required />
           <FormField name='organismo_id' label='Organismo' accepter={SelectPicker} data={dataOrganismo} block required />
           <FormField name='correo' label='Correo' required />
         </Col>
-        <Col xs={12}>
+        <Col xs={24} sm={12}>
           <FormField name='abreviatura' label='Abreviatura' />
           <FormField name='telefono' label='Teléfono' />
           <FormField
