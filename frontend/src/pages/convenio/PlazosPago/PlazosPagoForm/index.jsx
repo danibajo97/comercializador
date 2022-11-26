@@ -88,7 +88,7 @@ export function PlazosPagoForm ({ closeModal, convenioId, plazoPago = null }) {
       formValue={formValue}
       model={model}
     >
-      <Col xs={24} sm={24} md={12} lg={12}>
+      <Col xs={24} sm={24} md={12} lg={12} className='mb-4'>
         <FormField name='numero' label='Número' value={convenio?.no_convenio} disabled />
       </Col>
       <Col xs={24} sm={24} md={12} lg={12}>
@@ -100,7 +100,7 @@ export function PlazosPagoForm ({ closeModal, convenioId, plazoPago = null }) {
           Información del plazo de pago
         </h6>
       </Col>
-      <Col xs={24} sm={24} md={12} lg={12}>
+      <Col xs={24} sm={24} md={12} lg={12} className='mb-4'>
         <FormField name='plazoDePago' label='Plazo de Pago (En días)' accepter={InputNumber} onChange={onChangeDays} />
       </Col>
       <Col xs={24} sm={24} md={12} lg={12}>
