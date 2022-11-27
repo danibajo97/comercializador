@@ -12,7 +12,7 @@ function ClientesFinalesPanel () {
     formRef,
     formValue,
     formModel,
-    isComfirmado,
+    isConfirmado,
     isLoading,
     listClientesFinales,
     tableData,
@@ -28,9 +28,9 @@ function ClientesFinalesPanel () {
       ref={formRef}
       formValue={formValue}
       model={formModel}
-      plaintext={isComfirmado()}
+      plaintext={isConfirmado()}
     >
-      <Row hidden={isComfirmado()}>
+      <Row hidden={isConfirmado()}>
         <Col xs='12'>
           <FormField
             name='cliente_final' label='Cliente Final' accepter={CheckPicker} data={listClientesFinales.map(cliente => ({
@@ -52,7 +52,7 @@ function ClientesFinalesPanel () {
       <Row>
         <Col xs='12' className='mt-4'>
           <ButtonToolbar>
-            <Button appearance='primary' size='sm' onClick={handleSubmit} hidden={isComfirmado()}>
+            <Button appearance='primary' size='sm' onClick={handleSubmit} hidden={isConfirmado()}>
               Guardar
             </Button>
           </ButtonToolbar>
@@ -66,7 +66,7 @@ function ClientesFinalesPanel () {
       {isLoading()
         ? (
           <>
-            {!isComfirmado() && isClientesFinalesRelacionados()}
+            {!isConfirmado() && isClientesFinalesRelacionados()}
             {renderForm()}
           </>)
         : <Loader.Paragraph rows={5} />}

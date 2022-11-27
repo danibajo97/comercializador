@@ -95,7 +95,7 @@ export default function useClientesFinalesForm () {
         </Message>)
   }
 
-  const isComfirmado = () => convenio && convenio.estado >= 3
+  const isConfirmado = () => convenio && convenio.estado >= 3
 
   const isLoading = () => isList === OPERATIONS.FULFILLED && isListClientesFinales === OPERATIONS.FULFILLED
 
@@ -104,7 +104,7 @@ export default function useClientesFinalesForm () {
     formValue,
     setFormValue,
     formModel,
-    isComfirmado,
+    isConfirmado,
     isLoading,
     listClientesFinales,
     tableData,
