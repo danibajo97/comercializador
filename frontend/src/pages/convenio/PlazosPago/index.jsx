@@ -63,7 +63,7 @@ function PlazosPago () {
                     <Button
                       size='sm'
                       appearance='default'
-                      onClick={() => navigate(-1)}
+                      onClick={() => navigate('/')}
                     >
                       <i className='d-sm-block d-md-none fa fa-arrow-left' />
                       <div className='mf-2 d-none d-md-inline-block'>Atrás</div>

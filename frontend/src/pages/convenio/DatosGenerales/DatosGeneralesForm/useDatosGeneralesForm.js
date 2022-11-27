@@ -21,7 +21,7 @@ const INI_VALUE = {
   observaciones: ''
 }
 
-export default function useDatosGeneralesForm () {
+export default function useDatosGeneralesForm ({ setCountBD }) {
   const dispatch = useDispatch()
   const formRef = useRef()
   const [formValue, setFormValue] = useState(INI_VALUE)
@@ -77,6 +77,7 @@ export default function useDatosGeneralesForm () {
         observaciones: convenio.observaciones,
         facturese_a: user.distribuidor.id
       })
+      setCountBD(convenio.cantidad_bd)
     }
   }, [convenio])
 
@@ -126,6 +127,7 @@ export default function useDatosGeneralesForm () {
         observaciones: formValue.observaciones,
         solicitado_por: formValue.solicitadoPor
       }
+      setCountBD(formValue.cantidadBaseDatos)
       if (id === undefined) {
         dispatch(addConvenio({ params }))
       } else {

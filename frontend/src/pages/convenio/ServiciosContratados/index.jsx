@@ -8,7 +8,7 @@ import {
   CardBody
 } from 'reactstrap'
 import { Panel, Button } from 'rsuite'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 
 import { DefaultHeader } from 'components'
 import ServiciosContratadosForm from './ServiciosContratadosForm'
@@ -17,6 +17,9 @@ import useHeader from 'hooks/useHeader'
 function ServiciosContratados (props) {
   useHeader({ title: 'Convenios' })
   const navigate = useNavigate()
+
+  const params = useParams()
+  const { id } = params
 
   return (
     <>
@@ -32,12 +35,21 @@ function ServiciosContratados (props) {
                   </Col>
                   <Col className='text-right' xs='4'>
                     <Button
+                      className='mr-2'
                       size='sm'
                       appearance='default'
-                      onClick={() => navigate(-1)}
+                      onClick={() => navigate('/')}
                     >
                       <i className='d-sm-block d-md-none fa fa-arrow-left' />
                       <div className='mf-2 d-none d-md-inline-block'>Atrás</div>
+                    </Button>
+                    <Button
+                      size='sm'
+                      appearance='primary'
+                      onClick={() => navigate(`/plazos-pago/${id}`)}
+                    >
+                      <i className='d-sm-block d-md-none fa fa-arrow-right' />
+                      <div className='mf-2 d-none d-md-inline-block'>Ir a plazos de pagos</div>
                     </Button>
                   </Col>
                 </Row>

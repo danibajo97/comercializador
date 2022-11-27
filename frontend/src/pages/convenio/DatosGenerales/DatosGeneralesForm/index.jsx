@@ -4,7 +4,7 @@ import { Row, Col, Form, Button, Divider, ButtonToolbar, SelectPicker, DatePicke
 import { FormField, Textarea, InputNumber, Loader } from 'components'
 import useDatosGeneralesForm from './useDatosGeneralesForm'
 
-function DatosGeneralesForm () {
+function DatosGeneralesForm ({ setCountBD }) {
   const {
     formRef,
     formModel,
@@ -17,7 +17,7 @@ function DatosGeneralesForm () {
     contrato,
     personasAsociadas,
     isLoading
-  } = useDatosGeneralesForm()
+  } = useDatosGeneralesForm({ setCountBD })
 
   const renderForm = () => (
     <Form

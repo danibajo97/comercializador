@@ -8,7 +8,7 @@ import {
   CardBody
 } from 'reactstrap'
 import { Button, Panel } from 'rsuite'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 
 import { DefaultHeader } from 'components'
 import ClientesFinalesForm from './ClientesFinalesForm'
@@ -18,6 +18,10 @@ import useHeader from 'hooks/useHeader'
 
 function ClientesFinales () {
   useHeader({ title: 'Convenios' })
+
+  const params = useParams()
+  const { id } = params
+
   const navigate = useNavigate()
   const { modal, openModal } = useModal({
     title: 'Nuevo Cliente',
@@ -44,6 +48,15 @@ function ClientesFinales () {
                     <Button
                       className='mr-2'
                       size='sm'
+                      appearance='default'
+                      onClick={() => navigate('/')}
+                    >
+                      <i className='d-sm-block d-md-none fa fa-arrow-left' />
+                      <div className='mf-2 d-none d-md-inline-block'>Atrás</div>
+                    </Button>
+                    <Button
+                      className='mr-2'
+                      size='sm'
                       appearance='primary'
                       onClick={openModal}
                     >
@@ -52,11 +65,11 @@ function ClientesFinales () {
                     </Button>
                     <Button
                       size='sm'
-                      appearance='default'
-                      onClick={() => navigate(-1)}
+                      appearance='primary'
+                      onClick={() => navigate(`/servicios-contratados/${id}`)}
                     >
-                      <i className='d-sm-block d-md-none fa fa-arrow-left' />
-                      <div className='mf-2 d-none d-md-inline-block'>Atrás</div>
+                      <i className='d-sm-block d-md-none fa fa-arrow-right' />
+                      <div className='mf-2 d-none d-md-inline-block'>Ir a servicios contratados</div>
                     </Button>
                   </Col>
                 </Row>
