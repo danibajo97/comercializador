@@ -37,7 +37,7 @@ function PlazosPago () {
     }
   })
 
-  const isComfirmado = () => convenio && convenio.estado === 3
+  const isComfirmado = () => convenio && convenio.estado >= 3
 
   const col = { xs: 24, sm: 24, md: 24, lg: 24, xl: 12 }
 
@@ -63,7 +63,7 @@ function PlazosPago () {
                     <Button
                       size='sm'
                       appearance='default'
-                      onClick={() => navigate(-1)}
+                      onClick={() => navigate('/')}
                     >
                       <i className='d-sm-block d-md-none fa fa-arrow-left' />
                       <div className='mf-2 d-none d-md-inline-block'>Atrás</div>

@@ -12,6 +12,8 @@ import OPERATIONS from 'constants/operationsRedux'
 import date from 'utils/date'
 import useAuth from 'hooks/useAuth'
 
+const PAGINATION_LIMIT = parseInt(process.env.REACT_APP_PAGINATION_LIMIT)
+
 export default function useLicenciaForm ({ solicitudLicencia, closeModal }) {
   const dispatch = useDispatch()
   const { user } = useAuth()
@@ -120,7 +122,7 @@ export default function useLicenciaForm ({ solicitudLicencia, closeModal }) {
 
   useEffect(() => {
     if (isAddLicencia === OPERATIONS.FULFILLED || isUpdateLicencia === OPERATIONS.FULFILLED) {
-      dispatch(getSolicitudLicenciaAll({ page: 1 }))
+      dispatch(getSolicitudLicenciaAll({ pagination: { page: 1, limit: PAGINATION_LIMIT } }))
       if (closeModal) closeModal()
     }
   }, [isAddLicencia, isUpdateLicencia])

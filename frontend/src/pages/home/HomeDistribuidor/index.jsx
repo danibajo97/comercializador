@@ -12,11 +12,11 @@ import useHomeDistribuidor from './useHomeDistribuidor'
 export default function HomeDistribuidor () {
   useHeader({ title: 'Inicio' })
   const navigate = useNavigate()
-  const { data, loading, totalConvenio, totalConfirmado, totalEdicion, estadoData, onSelectEstado, pagination } = useHomeDistribuidor()
+  const { data, loading, totalConvenio, totalTerminado, totalEdicion, estadoData, onSelectEstado, pagination } = useHomeDistribuidor()
 
   return (
     <>
-      <ConvenioHeader totalConvenio={totalConvenio} totalConfirmado={totalConfirmado} totalEdicion={totalEdicion} />
+      <ConvenioHeader totalConvenio={totalConvenio} totalTerminado={totalTerminado} totalEdicion={totalEdicion} />
       <Container className='mt--7' fluid>
         <Row>
           <Col>

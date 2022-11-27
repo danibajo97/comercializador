@@ -47,7 +47,7 @@ export default function useHomeDistribuidor () {
     data: convenios,
     loading,
     totalConvenio: widges?.total || 0,
-    totalConfirmado: widges?.confirmado || 0,
+    totalTerminado: widges?.terminado || 0,
     totalEdicion: widges?.edicion || 0,
     estadoData,
     onSelectEstado,

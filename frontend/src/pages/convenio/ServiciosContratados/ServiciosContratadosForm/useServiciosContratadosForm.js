@@ -93,7 +93,7 @@ export default function useServiciosContratadosForm () {
 
   const hasError = () => Object.keys(formError).length !== 0
 
-  const isComfirmado = () => convenio && convenio.estado === 3
+  const isComfirmado = () => convenio && convenio.estado >= 3
 
   const isLoading = () => isList === OPERATIONS.FULFILLED && isListServicios === OPERATIONS.FULFILLED
 
