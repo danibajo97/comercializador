@@ -136,7 +136,7 @@ export default function useDatosGeneralesForm ({ setCountBD }) {
     }
   }
 
-  const isConfirmado = () => convenio && convenio.estado === 3
+  const isConfirmado = () => convenio && convenio.estado >= 3
   const isUpdate = () => id !== undefined
   const isLoading = () => isClienteFinal === OPERATIONS.FULFILLED || listPersonasAsociadas === OPERATIONS.FULFILLED
 
