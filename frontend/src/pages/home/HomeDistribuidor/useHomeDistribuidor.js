@@ -2,9 +2,9 @@ import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
 import { getConveniosAll, getWidgesInfo, stateResetOperation } from 'redux/convenio/convenioSlice'
-import estadosConvenios from 'constants/estadosConvenios'
 import OPERATIONS from 'constants/operationsRedux'
 import usePaginationServer from 'hooks/usePaginationServer'
+import date from 'utils/date'
 
 export default function useHomeDistribuidor () {
   const dispatch = useDispatch()
@@ -28,15 +28,20 @@ export default function useHomeDistribuidor () {
     dispatch(getConveniosAll({ pagination: { page, limit } }))
   }, [page])
 
-  const estadoData = estadosConvenios.map(item => {
-    if (item.visible) { return { label: item.text, value: item.id } } else { return undefined }
-  }).filter(item => item !== undefined)
-
-  const onSelectEstado = (value) => {
+  const setValueFilter = (value) => {
+    const fecha = value?.fecha?.length === 2
+      ? `${date.toISODate({ date: value?.fecha[0] })},${date.toISODate({ date: value?.fecha[1] })}`
+      : undefined
     dispatch(getConveniosAll({
       pagination: { page: 1, limit },
       extras: {
-        estado__idestadooperacion__in: value.length > 0 ? value.join(',') : undefined
+        contrato__no_contrato__icontains: value?.nroContrato.length > 0 ? value.nroContrato : undefined,
+        no_convenio__icontains: value?.nroConvenio.length > 0 ? value.nroConvenio : undefined,
+        cliente_final__nombre__icontains: value?.cliente.length > 0 ? value.cliente : undefined,
+        fecha_emision__range: fecha,
+        estado__idestadooperacion__in: value?.estado?.length ? value.estado.join(',') : undefined,
+        cantidad_bd__gte: value?.baseDatos[0],
+        cantidad_bd__lte: value?.baseDatos[1]
       }
     }))
   }
@@ -49,8 +54,7 @@ export default function useHomeDistribuidor () {
     totalConvenio: widges?.total || 0,
     totalTerminado: widges?.terminado || 0,
     totalEdicion: widges?.edicion || 0,
-    estadoData,
-    onSelectEstado,
-    pagination
+    pagination,
+    setValueFilter
   }
 }
