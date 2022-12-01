@@ -1,34 +1,34 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { AutoComplete, Button, CheckPicker, Col, DateRangePicker, Drawer, Form, RangeSlider } from 'rsuite'
+import { Button, CheckPicker, Col, DateRangePicker, Drawer, Form } from 'rsuite'
+
+import { getServiciosActualizacion, stateResetOperation } from 'redux/solicitudLicencia/solicitudLicenciaSlice'
 
 import { FormField } from 'components'
-import estadosConvenios from 'constants/estadosConvenios'
-import { getClientesFinales, stateResetOperation } from 'redux/datosGenerales/datosGeneralesSlice'
 
 const INIT_FILTER = {
-  nroContrato: '',
-  nroConvenio: '',
-  cliente: '',
+  nro: '',
   fecha: [],
-  estado: [],
-  baseDatos: [1, 20]
+  persona: '',
+  cliente: '',
+  servicio: [],
+  licencia: []
 }
 
-export default function useFilterConvenio ({ setValueFilter }) {
+export default function useFilterLicencia ({ setValueFilter }) {
   const dispatch = useDispatch()
   const [open, setOpen] = useState(false)
 
   const [formValue, setFormValue] = useState(INIT_FILTER)
+  const serviciosActualizacion = useSelector(state => state.solicitudLicencia.serviciosActualizacion)
 
-  const clientesFinales = useSelector(state => state.datosGenerales.clientesFinales)
-
-  const estadoData = estadosConvenios.map(item => {
-    if (item.visible) { return { label: item.text, value: item.id } } else { return undefined }
-  }).filter(item => item !== undefined)
+  const estadoData = [
+    { label: 'Pendiente', value: true },
+    { label: 'Otorgado', value: false }
+  ]
 
   useEffect(() => {
-    dispatch(getClientesFinales())
+    dispatch(getServiciosActualizacion({ cliente: null }))
 
     return () => {
       dispatch(stateResetOperation())
@@ -36,7 +36,6 @@ export default function useFilterConvenio ({ setValueFilter }) {
   }, [])
 
   const clickFiltar = () => {
-    console.log({ formValue })
     setValueFilter(formValue)
     setOpen(false)
   }
@@ -48,7 +47,7 @@ export default function useFilterConvenio ({ setValueFilter }) {
   const drawerFilter = (
     <Drawer size='xs' keyboard backdrop='static' open={open} onClose={() => setOpen(false)}>
       <Drawer.Header>
-        <Drawer.Title>Filtrar Convenios</Drawer.Title>
+        <Drawer.Title>Filtrar Licencia</Drawer.Title>
         <Drawer.Actions>
           <Button size='sm' appearance='primary' onClick={clickFiltar}>
             Filtrar
@@ -66,12 +65,16 @@ export default function useFilterConvenio ({ setValueFilter }) {
           className='ml--4 mr--4'
         >
           <Col xs={24} className='mb-4'>
-            <FormField name='nroContrato' label='Nro Contrato' />
-            <FormField name='nroConvenio' label='Nro Convenio' />
-            <FormField name='cliente' label='Cliente' accepter={AutoComplete} data={clientesFinales.map(cliente => cliente.nombre)} />
+            <FormField name='nro' label='Nro' />
             <FormField name='fecha' label='Fecha' accepter={DateRangePicker} placement='bottomEnd' showWeekNumbers block />
-            <FormField name='estado' label='Estado' accepter={CheckPicker} data={estadoData} value={formValue.estado} block />
-            <FormField name='baseDatos' label='Cantidad de Base de Datos' accepter={RangeSlider} defaultValue={[1, 20]} min={1} step={1} max={20} />
+            <FormField name='cliente' label='Cliente Final' />
+            <FormField
+              name='servicio' label='Servicio' accepter={CheckPicker} data={serviciosActualizacion.map(item => ({
+                label: item.servicio_descripcion,
+                value: item.servicio_id
+              }))} block
+            />
+            <FormField name='licencia' label='Licencia' accepter={CheckPicker} data={estadoData} block />
           </Col>
         </Form>
       </Drawer.Body>

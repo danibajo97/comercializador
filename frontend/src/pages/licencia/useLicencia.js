@@ -7,6 +7,7 @@ import LicenciaForm from './components/LicenciaForm'
 import ROL from 'constants/rol'
 import { getSolicitudLicenciaAll, getWidgesInfo, stateResetOperation } from 'redux/solicitudLicencia/solicitudLicenciaSlice'
 import usePaginationServer from 'hooks/usePaginationServer'
+import date from 'utils/date'
 
 export default function useLicencia () {
   const { user } = useAuth()
@@ -39,6 +40,24 @@ export default function useLicencia () {
     }
   }, [])
 
+  const setValueFilter = (value) => {
+    const licencia = value?.licencia?.length === 1 ? value?.licencia[0] : undefined
+    const fecha = value?.fecha?.length === 2
+      ? `${date.toISODate({ date: value?.fecha[0], days: 0 })},${date.toISODate({ date: value?.fecha[1], days: 0 })}`
+      : undefined
+
+    dispatch(getSolicitudLicenciaAll({
+      pagination: { page: 1, limit },
+      extras: {
+        solicitud__no_solicitud__icontains: value?.nro?.length > 0 ? value.nro : undefined,
+        solicitud__fecha__range: fecha,
+        solicitud__cliente__contacto__nombre__icontains: value?.cliente.length > 0 ? value.cliente : undefined,
+        servicio__in: value?.servicio?.length ? value.servicio.join(',') : undefined,
+        licencia__isnull: licencia
+      }
+    }))
+  }
+
   const title = () => user?.rol === ROL.CLIENTE ? 'Inicio' : 'Solicitud Licencia'
 
   return {
@@ -51,6 +70,7 @@ export default function useLicencia () {
     totalLicencia: widges?.total || 0,
     totalOtorgada: widges?.otorgada || 0,
     totalPendiente: widges?.pendiente || 0,
-    pagination
+    pagination,
+    setValueFilter
   }
 }

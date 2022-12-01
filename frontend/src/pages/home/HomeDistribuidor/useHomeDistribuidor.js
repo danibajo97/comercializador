@@ -30,7 +30,7 @@ export default function useHomeDistribuidor () {
 
   const setValueFilter = (value) => {
     const fecha = value?.fecha?.length === 2
-      ? `${date.toISODate({ date: value?.fecha[0] })},${date.toISODate({ date: value?.fecha[1] })}`
+      ? `${date.toISODate({ date: value?.fecha[0], days: 0 })},${date.toISODate({ date: value?.fecha[1], days: 0 })}`
       : undefined
     dispatch(getConveniosAll({
       pagination: { page: 1, limit },
