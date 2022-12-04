@@ -2,6 +2,7 @@
 
 Este proyecto es creado con las tecnologías [Django](https://www.djangoproject.com/) y [React JS](https://es.reactjs.org/)
 
+
 ## Tabla de Contenido
 
 - [Desarrollo Local](#desarrollo-local)
@@ -50,7 +51,7 @@ pip install -r requirements.txt
 Inicial servidor del backend
 
 ```
-python .\manage.py runserver --settings comercializador.settings.base
+python .\manage.py runserver
 ```
 
 ### 2 - Pasos para instalar las dependencias e inicial el servidor del frontend
