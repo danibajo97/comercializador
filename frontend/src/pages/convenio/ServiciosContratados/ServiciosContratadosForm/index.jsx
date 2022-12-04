@@ -1,4 +1,4 @@
-import React from 'react'
+import { useState } from 'react'
 import { Form, Button, ButtonGroup, SelectPicker, Row, Col, IconButton, Divider } from 'rsuite'
 import PlusIcon from '@rsuite/icons/Plus'
 import MinusIcon from '@rsuite/icons/Minus'
@@ -65,7 +65,7 @@ const ServiciosContratadosItem = ({ label, rowValue = {}, onChange, rowIndex, ro
 
 const ServiciosContratadosInputControl = ({ value = [], onChange, fieldError, plaintext }) => {
   const errors = fieldError ? fieldError.array : []
-  const [serviciosContratados, setServiciosContratados] = React.useState(value)
+  const [serviciosContratados, setServiciosContratados] = useState(value)
   const handleChangeServiciosContratados = nextServiciosContratados => {
     setServiciosContratados(nextServiciosContratados)
     onChange(nextServiciosContratados)
