@@ -1,4 +1,3 @@
-import React from 'react'
 import { Card, Row, Col, Container, CardHeader } from 'reactstrap'
 import { Button } from 'rsuite'
 import { useNavigate } from 'react-router-dom'
@@ -13,7 +12,7 @@ import useFilterConvenio from './useFilterConvenio'
 export default function HomeDistribuidor () {
   useHeader({ title: 'Inicio' })
   const navigate = useNavigate()
-  const { data, loading, totalConvenio, totalTerminado, totalEdicion, pagination, setValueFilter } = useHomeDistribuidor()
+  const { data, loading, totalConvenio, totalTerminado, totalEdicion, pagination, setValueFilter, onSortColumn, sortInfo } = useHomeDistribuidor()
 
   const { drawerFilter, open } = useFilterConvenio({ setValueFilter })
 
@@ -45,7 +44,7 @@ export default function HomeDistribuidor () {
               <Row>
                 <Col>
                   {loading
-                    ? <ConvenioTable convenios={data} pagination={pagination} />
+                    ? <ConvenioTable convenios={data} pagination={pagination} onSortColumn={onSortColumn} sortInfo={sortInfo} />
                     : <Loader.Grid rows={7} columns={6} />}
                 </Col>
               </Row>

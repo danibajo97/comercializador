@@ -1,4 +1,4 @@
-import React from 'react'
+import { useEffect } from 'react'
 import { useLocation, Route, Routes } from 'react-router-dom'
 
 import ForgotPassword from 'pages/authentication/ForgotPassword'
@@ -13,7 +13,7 @@ import routes from 'routes'
 export default function App () {
   const location = useLocation()
 
-  React.useEffect(() => {
+  useEffect(() => {
     document.documentElement.scrollTop = 0
     document.scrollingElement.scrollTop = 0
   }, [location])

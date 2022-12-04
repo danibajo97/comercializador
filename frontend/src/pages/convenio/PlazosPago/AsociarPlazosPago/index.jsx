@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import {
   Popover,
   Whisper,
@@ -110,7 +110,7 @@ export default function AsociarPlazosPago ({ setSelectedId, isConfirmado }) {
   const dispatch = useDispatch()
   const isList = useSelector(state => state.plazoPago.isList)
   const plazosPagos = useSelector(state => state.plazoPago.plazosPagos)
-  const [checkedKeys, setCheckedKeys] = React.useState(null)
+  const [checkedKeys, setCheckedKeys] = useState(null)
 
   const { pagination, dataPage } = usePagination({ data: plazosPagos })
 
@@ -126,7 +126,7 @@ export default function AsociarPlazosPago ({ setSelectedId, isConfirmado }) {
     }
   }, [])
 
-  React.useEffect(() => {
+  useEffect(() => {
     setSelectedId(checkedKeys)
   }, [checkedKeys])
 

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
 import { Popover, Whisper, Dropdown, IconButton, Table as TableRS } from 'rsuite'
 
 import Table from 'components/table/Table'

@@ -1,4 +1,3 @@
-import React from 'react'
 import { Col, Form, Button, ButtonToolbar } from 'rsuite'
 
 import { InputPassword } from 'components'

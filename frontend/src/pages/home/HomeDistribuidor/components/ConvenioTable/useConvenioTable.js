@@ -1,7 +1,7 @@
-import useAlert from 'hooks/useAlert'
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
+import useAlert from 'hooks/useAlert'
 import { deleteConvenio, validarConvenio, terminarConvenio, getWidgesInfo } from 'redux/convenio/convenioSlice'
 import OPERATIONS from 'constants/operationsRedux'
 

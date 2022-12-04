@@ -1,4 +1,3 @@
-import React from 'react'
 import { Col, Form, Button, ButtonToolbar, SelectPicker, DatePicker, Radio, RadioGroup } from 'rsuite'
 
 import { FormField, Textarea, Loader } from 'components'

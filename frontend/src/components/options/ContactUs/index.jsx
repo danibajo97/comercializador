@@ -1,13 +1,12 @@
-import React from 'react'
-
+import { useRef, useState } from 'react'
 import { Col, Form, Button, ButtonToolbar, Schema } from 'rsuite'
 
 import { FormField, Textarea } from 'components'
 
 function ContactUs ({ closeModal }) {
-  const formRef = React.useRef()
+  const formRef = useRef()
 
-  const [formValue, setFormValue] = React.useState({
+  const [formValue, setFormValue] = useState({
     asunto: '',
     descripcion: ''
   })
