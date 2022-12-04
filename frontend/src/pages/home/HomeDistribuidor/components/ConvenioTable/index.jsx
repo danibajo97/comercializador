@@ -1,4 +1,3 @@
-import React from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Popover, Whisper, Dropdown, IconButton, Table as TableRS } from 'rsuite'
 
@@ -40,16 +39,24 @@ const ActionCell = ({ rowData, dataKey, ...props }) => {
   )
 }
 
-export default function ConvenioTable ({ convenios, pagination }) {
+export default function ConvenioTable ({ convenios, pagination, onSortColumn, sortInfo }) {
   return (
     <>
-      <Table data={convenios} height={250} autoHeight renderEmpty={renderEmpty}>
-        {Table.Column({ header: 'Nro Contrato', dataKey: 'contrato_no', flex: 1 })}
-        {Table.Column({ header: 'Nro Convenio', dataKey: 'no_convenio', flex: 1 })}
-        {Table.Column({ header: 'Cliente', dataKey: 'contacto_cliente_final', flex: 2.5, minWidth: 350 })}
-        {Table.Column({ header: 'Fecha Emisión', dataKey: 'fecha_emision', flex: 1 })}
-        {Table.ColumnEstado({ header: 'Estado', dataKey: 'estado', flex: 1, minWidth: 120 })}
-        {Table.Column({ header: 'Base de Datos', dataKey: 'cantidad_bd', flex: 1 })}
+      <Table
+        sortColumn={sortInfo.sortColumn}
+        sortType={sortInfo.sortType}
+        onSortColumn={onSortColumn}
+        data={convenios}
+        height={250}
+        autoHeight
+        renderEmpty={renderEmpty}
+      >
+        {Table.Column({ header: 'Nro Contrato', dataKey: 'contrato_no', flex: 1, sortable: true })}
+        {Table.Column({ header: 'Nro Convenio', dataKey: 'no_convenio', flex: 1, sortable: true })}
+        {Table.Column({ header: 'Cliente', dataKey: 'contacto_cliente_final', flex: 2.5, minWidth: 350, sortable: true })}
+        {Table.Column({ header: 'Fecha Emisión', dataKey: 'fecha_emision', flex: 1, sortable: true })}
+        {Table.ColumnEstado({ header: 'Estado', dataKey: 'estado', flex: 1, minWidth: 120, sortable: true })}
+        {Table.Column({ header: 'Base de Datos', dataKey: 'cantidad_bd', flex: 1, sortable: true })}
         {Table.ColumnAccion({ action: ActionCell })}
       </Table>
       {pagination}

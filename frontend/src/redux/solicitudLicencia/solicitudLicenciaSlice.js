@@ -26,7 +26,6 @@ export const solicitudLicenciaSlice = createSlice({
       state.isUpdate = OPERATIONS.NONE
       state.isDelete = OPERATIONS.NONE
       state.isOtorgar = OPERATIONS.NONE
-      state.serviciosActualizacion = []
       state.isListServiciosActualizacion = OPERATIONS.NONE
     }
   },

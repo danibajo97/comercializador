@@ -1,4 +1,3 @@
-import React from 'react'
 import { Provider } from 'react-redux'
 import { CustomProvider } from 'rsuite'
 import esES from 'rsuite/locales/es_ES'

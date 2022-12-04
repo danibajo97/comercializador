@@ -125,7 +125,7 @@ class ConvenioWebViewSet(viewsets.GenericViewSet):
 
     @swagger_auto_schema(manual_parameters=[id])
     @action(detail=False, methods=['get'])
-    def confirmar_convenio(self, request):
+    def terminar_convenio(self, request):
         params = {
             'id': request.GET.get('id'),
         }

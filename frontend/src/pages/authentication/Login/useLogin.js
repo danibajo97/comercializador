@@ -1,6 +1,7 @@
-import useAuth from 'hooks/useAuth'
 import { useRef, useState } from 'react'
 import { Schema } from 'rsuite'
+
+import useAuth from 'hooks/useAuth'
 
 export default function useLogin () {
   const { isAuth, isLoading, login } = useAuth()

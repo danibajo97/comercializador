@@ -1,7 +1,6 @@
-import useAuth from 'hooks/useAuth'
-import React from 'react'
 import { Container, Row, Col } from 'reactstrap'
 
+import useAuth from 'hooks/useAuth'
 import { CardHeader } from 'components'
 
 const ConvenioHeader = ({ totalLicencia, totalOtorgada, totalPendiente }) => {

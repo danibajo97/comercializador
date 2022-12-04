@@ -1,5 +1,4 @@
-import React from 'react'
-import {
+/* import {
   Card,
   Row,
   Col,
@@ -11,10 +10,10 @@ import { Button } from 'rsuite'
 import { DefaultHeader } from 'components'
 import ClienteForm from 'pages/clientes/ClienteForm/'
 import useModal from 'hooks/useModal'
-import ClientesTable from './components/ClientesTable'
+import ClientesTable from './components/ClientesTable' */
 
 function Contacto () {
-  const { modal, openModal } = useModal({
+  /* const { modal, openModal } = useModal({
     title: 'Nuevo Cliente',
     renderBody: ({ closeModal }) => {
       return <ClienteForm closeModal={closeModal} />
@@ -57,7 +56,7 @@ function Contacto () {
         </Row>
       </Container>
     </>
-  )
+  ) */
 }
 
 export default Contacto

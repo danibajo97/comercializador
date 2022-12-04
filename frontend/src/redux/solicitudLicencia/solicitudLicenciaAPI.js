@@ -12,7 +12,7 @@ export default {
   getWidgesInfo
 }
 
-async function getSolicitudLicenciaAll ({ pagination }) {
+async function getSolicitudLicenciaAll ({ pagination, extras }) {
   const { page, limit } = pagination
   const access = await window.sessionStorage.getItem('access')
   const options = {
@@ -21,7 +21,8 @@ async function getSolicitudLicenciaAll ({ pagination }) {
     headers: { Authorization: `Bearer ${access}` },
     params: {
       page,
-      limit
+      limit,
+      ...extras
     }
   }
   try {

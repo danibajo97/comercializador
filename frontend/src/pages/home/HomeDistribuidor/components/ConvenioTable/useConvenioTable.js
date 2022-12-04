@@ -1,22 +1,22 @@
-import useAlert from 'hooks/useAlert'
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
-import { deleteConvenio, validarConvenio, confirmarConvenio, getWidgesInfo } from 'redux/convenio/convenioSlice'
+import useAlert from 'hooks/useAlert'
+import { deleteConvenio, validarConvenio, terminarConvenio, getWidgesInfo } from 'redux/convenio/convenioSlice'
 import OPERATIONS from 'constants/operationsRedux'
 
 export default function useConvenioTable () {
   const dispatch = useDispatch()
 
   const isValidar = useSelector(state => state.convenio.isValidar)
-  const isConfirmar = useSelector(state => state.convenio.isConfirmar)
+  const isTerminar = useSelector(state => state.convenio.isTerminar)
   const isDelete = useSelector(state => state.convenio.isDelete)
 
   useEffect(() => {
-    if (isValidar === OPERATIONS.FULFILLED || isConfirmar === OPERATIONS.FULFILLED || isDelete === OPERATIONS.FULFILLED) {
+    if (isValidar === OPERATIONS.FULFILLED || isTerminar === OPERATIONS.FULFILLED || isDelete === OPERATIONS.FULFILLED) {
       dispatch(getWidgesInfo())
     }
-  }, [isValidar, isConfirmar, isDelete])
+  }, [isValidar, isTerminar, isDelete])
 
   const deleteAlert = useAlert({
     type: 'eliminar',
@@ -55,7 +55,7 @@ export default function useConvenioTable () {
 
   const operationTerminar = ({ id }) => {
     terminarAlert.setConfirmAccion(() => {
-      dispatch(confirmarConvenio({ id }))
+      dispatch(terminarConvenio({ id }))
     })
     terminarAlert.openAlert()
   }

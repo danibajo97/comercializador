@@ -1,7 +1,4 @@
-import React from 'react'
-import { useNavigate } from 'react-router-dom'
-import { Badge, Row, Col } from 'reactstrap'
-import { Popover, Whisper, Dropdown, IconButton, Table as TableRS, Pagination } from 'rsuite'
+/* import { Popover, Whisper, Dropdown, IconButton, Table as TableRS } from 'rsuite'
 import MoreIcon from '@rsuite/icons/legacy/More'
 
 import Table from 'components/table/Table'
@@ -34,10 +31,10 @@ const ActionCell = ({ rowData, dataKey, ...props }) => {
       </Whisper>
     </TableRS.Cell>
   )
-}
+} */
 
 export default function ClientesTable ({ clientes }) {
-  const { pagination, dataPage } = usePagination({ data: clientes, title: 'Clientes' })
+  /* const { pagination, dataPage } = usePagination({ data: clientes, title: 'Clientes' })
 
   const renderColumnAccion = (dataKey) => {
     return (
@@ -62,5 +59,5 @@ export default function ClientesTable ({ clientes }) {
       </Table>
       {pagination}
     </>
-  )
+  ) */
 }

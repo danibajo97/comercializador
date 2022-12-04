@@ -1,8 +1,6 @@
-import React from 'react'
 import { Col, Form, Button, ButtonToolbar, SelectPicker } from 'rsuite'
 
 import { FormField, Textarea, Loader } from 'components'
-
 import useClienteForm from './useClienteForm'
 
 export default function ClienteForm ({ closeModal }) {

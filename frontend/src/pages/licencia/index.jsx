@@ -1,4 +1,3 @@
-import React from 'react'
 import {
   Card,
   Row,
@@ -16,6 +15,7 @@ import ConvenioHeader from 'pages/licencia/components/LicenciaHeader'
 import ROL from 'constants/rol'
 import useHeader from 'hooks/useHeader'
 import useLicencia from './useLicencia'
+import useFilterLicencia from './useFilterLicencia'
 
 export default function SolicitudLicencia () {
   const {
@@ -28,12 +28,17 @@ export default function SolicitudLicencia () {
     totalLicencia,
     totalOtorgada,
     totalPendiente,
-    pagination
+    pagination,
+    setValueFilter
   } = useLicencia()
+
   useHeader({ title: title() })
+
+  const { drawerFilter, open } = useFilterLicencia({ setValueFilter })
 
   return (
     <>
+      {drawerFilter}
       {modal}
       {user?.rol === ROL.CLIENTE
         ? <ConvenioHeader totalLicencia={totalLicencia} totalOtorgada={totalOtorgada} totalPendiente={totalPendiente} />
@@ -56,6 +61,10 @@ export default function SolicitudLicencia () {
                     >
                       <i className='d-sm-block d-md-none fa fa-plus' />
                       <div className='mf-2 d-none d-md-inline-block'>Nueva Licencia</div>
+                    </Button>
+                    <Button appearance='primary' size='sm' onClick={open}>
+                      <i className='d-sm-block d-md-none fa fa-filter ' />
+                      <div className='mf-2 d-none d-md-inline-block'>Filtrar</div>
                     </Button>
                   </Col>
                 </Row>

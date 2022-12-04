@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { Textarea, FormField } from 'components'
 import { Button, ButtonToolbar, Col, Form } from 'rsuite'
 

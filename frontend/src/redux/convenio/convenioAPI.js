@@ -10,7 +10,7 @@ export default {
   deleteConvenio,
   getListadoServicios,
   validarConvenio,
-  confirmarConvenio,
+  terminarConvenio,
   getWidgesInfo
 }
 
@@ -145,11 +145,11 @@ async function validarConvenio ({ id }) {
   }
 }
 
-async function confirmarConvenio ({ id }) {
+async function terminarConvenio ({ id }) {
   const access = await window.sessionStorage.getItem('access')
   const options = {
     method: 'GET',
-    url: `${API_URL}/api-acceso/convenio/confirmar_convenio/`,
+    url: `${API_URL}/api-acceso/convenio/terminar_convenio/`,
     headers: { Authorization: `Bearer ${access}` },
     params: {
       id

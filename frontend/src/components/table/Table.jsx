@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import { Component } from 'react'
 import {
   Table as TableRS,
   Badge
@@ -6,20 +6,20 @@ import {
 
 import estadosConvenios from 'constants/estadosConvenios'
 
-function RenderColumn ({ header, dataKey, flex, minWidth = 100, white }) {
+function RenderColumn ({ header, dataKey, flex, minWidth = 100, white, sortable = false }) {
   const style = !white ? styleHeader : styleHeaderWhite
   return (
-    <TableRS.Column flexGrow={flex} minWidth={minWidth}>
+    <TableRS.Column flexGrow={flex} minWidth={minWidth} sortable={sortable}>
       <TableRS.HeaderCell style={style}>{header}</TableRS.HeaderCell>
       <TableRS.Cell dataKey={dataKey} style={styleCell} />
     </TableRS.Column>
   )
 }
 
-const RenderColumnNumberFormat = ({ header, dataKey, flex, minWidth = 100, white }) => {
+const RenderColumnNumberFormat = ({ header, dataKey, flex, minWidth = 100, white, sortable = false }) => {
   const style = !white ? styleHeader : styleHeaderWhite
   return (
-    <TableRS.Column flexGrow={flex} minWidth={minWidth} align='right'>
+    <TableRS.Column flexGrow={flex} minWidth={minWidth} align='right' sortable={sortable}>
       <TableRS.HeaderCell style={style}>{header}</TableRS.HeaderCell>
       <TableRS.Cell style={styleCell}>
         {rowData => <>{new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(rowData[dataKey])}</>}
@@ -28,10 +28,10 @@ const RenderColumnNumberFormat = ({ header, dataKey, flex, minWidth = 100, white
   )
 }
 
-const RenderColumnNumber = ({ header, dataKey, flex, minWidth = 100, white }) => {
+const RenderColumnNumber = ({ header, dataKey, flex, minWidth = 100, white, sortable = false }) => {
   const style = !white ? styleHeader : styleHeaderWhite
   return (
-    <TableRS.Column flexGrow={flex} minWidth={minWidth} align='right'>
+    <TableRS.Column flexGrow={flex} minWidth={minWidth} align='right' sortable={sortable}>
       <TableRS.HeaderCell style={style}>{header}</TableRS.HeaderCell>
       <TableRS.Cell style={styleCell}>
         {rowData => <>{rowData[dataKey]}</>}
@@ -40,26 +40,26 @@ const RenderColumnNumber = ({ header, dataKey, flex, minWidth = 100, white }) =>
   )
 }
 
-const RenderColumnBoolean = ({ header, dataKey, flex, minWidth = 100, white = false, opcions }) => {
+const RenderColumnBoolean = ({ header, dataKey, flex, minWidth = 100, white = false, opcions, sortable = false }) => {
   const optionYes = opcions?.yes || 'Si'
   const optionNo = opcions?.no || 'No'
   const style = !white ? styleHeader : styleHeaderWhite
   return (
-    <TableRS.Column flexGrow={flex} minWidth={minWidth}>
+    <TableRS.Column flexGrow={flex} minWidth={minWidth} sortable={sortable}>
       <TableRS.HeaderCell style={style}>{header}</TableRS.HeaderCell>
-      <TableRS.Cell style={styleCell}>
+      <TableRS.Cell style={styleCell} dataKey={dataKey}>
         {rowData => <><Badge color={rowData[dataKey] ? 'green' : 'red'} className='mr-2' />{rowData[dataKey] ? optionYes : optionNo}</>}
       </TableRS.Cell>
     </TableRS.Column>
   )
 }
 
-const RenderColumnEstado = ({ header, dataKey, flex, minWidth = 100, white = false }) => {
+const RenderColumnEstado = ({ header, dataKey, flex, minWidth = 100, white = false, sortable = false }) => {
   const style = !white ? styleHeader : styleHeaderWhite
   return (
-    <TableRS.Column flexGrow={flex} minWidth={minWidth}>
+    <TableRS.Column flexGrow={flex} minWidth={minWidth} sortable={sortable}>
       <TableRS.HeaderCell style={style}>{header}</TableRS.HeaderCell>
-      <TableRS.Cell style={styleCell}>
+      <TableRS.Cell style={styleCell} dataKey={dataKey}>
         {rowData => <><Badge className={`bg-${estadosConvenios[rowData[dataKey] - 1].color} mr-2`} />{estadosConvenios[rowData[dataKey] - 1].text}</>}
       </TableRS.Cell>
     </TableRS.Column>
