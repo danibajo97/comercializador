@@ -1,8 +1,8 @@
-import React, { useEffect } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { Col, Form, Button, ButtonToolbar, Schema, Divider, DatePicker } from 'rsuite'
+import { Col, Form, ButtonToolbar, Schema, Divider, DatePicker } from 'rsuite'
 
-import { FormField, InputNumber, Loader } from 'components'
+import { FormField, InputNumber, Loader, Button } from 'components'
 import { retrieveConvenio, stateResetOperation as stateResetOperationConvenio } from 'redux/convenio/convenioSlice'
 import { getPlazoPagoAll, addPlazoPago, updatePlazoPago, stateResetOperation as stateResetOperationPlazosPagos } from 'redux/plazoPago/plazoPagoSlice'
 import OPERATIONS from 'constants/operationsRedux'
@@ -10,14 +10,14 @@ import { date } from 'utils'
 
 export function PlazosPagoForm ({ closeModal, convenioId, plazoPago = null }) {
   const dispatch = useDispatch()
-  const formRef = React.useRef()
+  const formRef = useRef()
 
   const convenio = useSelector(state => state.convenio.convenio)
   const isRetrieve = useSelector(state => state.convenio.isRetrieve)
   const isAdd = useSelector(state => state.plazoPago.isAdd)
   const isUpdate = useSelector(state => state.plazoPago.isUpdate)
 
-  const [formValue, setFormValue] = React.useState({
+  const [formValue, setFormValue] = useState({
     plazoDePago: plazoPago?.dias || 30,
     fecha: undefined
   })
@@ -108,13 +108,20 @@ export function PlazosPagoForm ({ closeModal, convenioId, plazoPago = null }) {
       </Col>
       <Col xs={24} className='mt-4'>
         <ButtonToolbar>
-          <Button appearance='primary' size='sm' onClick={handleSubmit}>
-            {plazoPago === null ? 'Guardar' : 'Editar'}
-          </Button>
+          <Button
+            icon={plazoPago === null ? 'save' : 'edit'}
+            text={plazoPago === null ? 'Guardar' : 'Editar'}
+            appearance='primary'
+            onClick={handleSubmit}
+          />
           {closeModal &&
-            <Button appearance='subtle' color='red' size='sm' onClick={closeModal}>
-              Cerrar
-            </Button>}
+            <Button
+              icon='times'
+              text='Cerrar'
+              appearance='subtle'
+              color='red'
+              onClick={closeModal}
+            />}
         </ButtonToolbar>
       </Col>
     </Form>

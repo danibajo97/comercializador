@@ -7,10 +7,10 @@ import {
   CardHeader,
   CardBody
 } from 'reactstrap'
-import { Button, Panel } from 'rsuite'
+import { Panel } from 'rsuite'
 import { useNavigate, useParams } from 'react-router-dom'
 
-import { DefaultHeader } from 'components'
+import { DefaultHeader, Button } from 'components'
 import DatosGeneralesForm from './DatosGeneralesForm'
 import useHeader from 'hooks/useHeader'
 
@@ -29,13 +29,11 @@ function DatosGenerales (props) {
       const botonURL = parseInt(db) === 1 ? 'servicios-contratados' : 'clientes-finales'
       return (
         <Button
-          size='sm'
+          icon='arrow-right'
+          text={`Ir a ${botonText}`}
           appearance='primary'
           onClick={() => navigate(`/${botonURL}/${id}`)}
-        >
-          <i className='d-sm-block d-md-none fa fa-arrow-right' />
-          <div className='mf-2 d-none d-md-inline-block'>Ir a {botonText}</div>
-        </Button>
+        />
       )
     }
   }
@@ -49,19 +47,17 @@ function DatosGenerales (props) {
             <Card className='bg-secondary shadow'>
               <CardHeader className='bg-white border-0'>
                 <Row className='align-items-center'>
-                  <Col xs='8'>
+                  <Col xs='6'>
                     <h3 className='mb-0'>Convenios <span className='text-muted'>(Datos Generales)</span></h3>
                   </Col>
-                  <Col className='text-right' xs='4'>
+                  <Col className='text-right' xs='6'>
                     <Button
+                      icon='arrow-left'
+                      text='Atrás'
                       className='mr-2'
-                      size='sm'
                       appearance='default'
                       onClick={() => navigate(-1)}
-                    >
-                      <i className='d-sm-block d-md-none fa fa-arrow-left' />
-                      <div className='mf-2 d-none d-md-inline-block'>Atrás</div>
-                    </Button>
+                    />
                     {botonSiguiente(countBD)}
                   </Col>
                 </Row>

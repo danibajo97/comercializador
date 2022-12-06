@@ -1,6 +1,6 @@
-import { Col, Form, Button, ButtonToolbar, SelectPicker } from 'rsuite'
+import { Col, Form, ButtonToolbar, SelectPicker } from 'rsuite'
 
-import { FormField, Textarea, Loader } from 'components'
+import { FormField, Textarea, Loader, Button } from 'components'
 import useClienteForm from './useClienteForm'
 
 export default function ClienteForm ({ closeModal }) {
@@ -47,13 +47,20 @@ export default function ClienteForm ({ closeModal }) {
         </Col>
         <Col xs={24} className='mt-4'>
           <ButtonToolbar>
-            <Button appearance='primary' size='sm' onClick={handleSubmit}>
-              Guardar
-            </Button>
+            <Button
+              icon='plus'
+              text='Guardar'
+              appearance='primary'
+              onClick={handleSubmit}
+            />
             {closeModal &&
-              <Button appearance='subtle' color='red' size='sm' onClick={closeModal}>
-                Cerrar
-              </Button>}
+              <Button
+                icon='times'
+                text='Cerrar'
+                appearance='subtle'
+                color='red'
+                onClick={closeModal}
+              />}
           </ButtonToolbar>
         </Col>
       </Form>

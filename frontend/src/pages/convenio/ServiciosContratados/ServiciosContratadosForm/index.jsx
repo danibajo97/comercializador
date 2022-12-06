@@ -1,9 +1,9 @@
 import { useState } from 'react'
-import { Form, Button, ButtonGroup, SelectPicker, Row, Col, IconButton, Divider } from 'rsuite'
+import { Form, ButtonGroup, SelectPicker, Row, Col, IconButton, Divider } from 'rsuite'
 import PlusIcon from '@rsuite/icons/Plus'
 import MinusIcon from '@rsuite/icons/Minus'
 
-import { FormField, InputNumber, Loader } from 'components'
+import { FormField, InputNumber, Loader, Button } from 'components'
 import useServiciosContratadosForm from './useServiciosContratadosForm'
 import { useSelector } from 'react-redux'
 
@@ -155,14 +155,13 @@ function ServiciosContratadosForm () {
         <Row className='mt-4'>
           <Col xs={24}>
             <Button
+              icon='save'
+              text='Guardar'
+              appearance='primary'
               disabled={hasError()}
               hidden={isComfirmado()}
-              size='sm'
-              appearance='primary'
               onClick={guardarForm}
-            >
-              Guardar
-            </Button>
+            />
           </Col>
         </Row>
       </Form>

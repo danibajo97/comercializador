@@ -1,8 +1,7 @@
-import React from 'react'
 import { Row, Col } from 'reactstrap'
-import { Form, ButtonToolbar, Button, CheckPicker } from 'rsuite'
+import { Form, ButtonToolbar, CheckPicker } from 'rsuite'
 
-import { FormField, Loader } from 'components'
+import { FormField, Loader, Button } from 'components'
 import Table from 'components/table/Table'
 
 import useClientesFinalesForm from './useClientesFinalesForm'
@@ -52,9 +51,13 @@ function ClientesFinalesPanel () {
       <Row>
         <Col xs='12' className='mt-4'>
           <ButtonToolbar>
-            <Button appearance='primary' size='sm' onClick={handleSubmit} hidden={isConfirmado()}>
-              Guardar
-            </Button>
+            <Button
+              icon='save'
+              text='Guardar'
+              appearance='primary'
+              onClick={handleSubmit}
+              hidden={isConfirmado()}
+            />
           </ButtonToolbar>
         </Col>
       </Row>

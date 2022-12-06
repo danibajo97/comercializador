@@ -1,6 +1,6 @@
-import { Row, Col, Form, Button, Divider, ButtonToolbar, SelectPicker, DatePicker } from 'rsuite'
+import { Row, Col, Form, Divider, ButtonToolbar, SelectPicker, DatePicker } from 'rsuite'
 
-import { FormField, Textarea, InputNumber, Loader } from 'components'
+import { Button, FormField, Textarea, InputNumber, Loader } from 'components'
 import useDatosGeneralesForm from './useDatosGeneralesForm'
 
 function DatosGeneralesForm ({ setCountBD }) {
@@ -76,14 +76,13 @@ function DatosGeneralesForm ({ setCountBD }) {
         <Col xs={24} className='mt-4'>
           <ButtonToolbar>
             <Button
+              icon='save'
+              text='Guardar'
               appearance='primary'
-              size='sm'
               onClick={handleSubmit}
               hidden={isConfirmado()}
               disabled={contrato?.fecha_inicial === undefined}
-            >
-              {!isUpdate() ? 'Guardar' : 'Editar'}
-            </Button>
+            />
           </ButtonToolbar>
         </Col>
       </Row>
