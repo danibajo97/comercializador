@@ -25,6 +25,7 @@ function PlazosPago () {
 
   const modalPlazoPago = useModal({
     title: 'Nuevo Plazos de Pagos',
+    size: 'sm',
     renderBody: ({ closeModal }) => {
       return <PlazosPagoForm closeModal={closeModal} convenioId={id} />
     }

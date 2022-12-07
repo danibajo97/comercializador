@@ -5,7 +5,7 @@ import {
   Dropdown,
   IconButton,
   Table as TableRS,
-  Checkbox
+  Radio
 } from 'rsuite'
 import { useDispatch, useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
@@ -26,6 +26,7 @@ const ActionCell = ({ rowData, dataKey, ...props }) => {
 
   const modalPlazoPago = useModal({
     title: 'Editar Plazos de Pagos',
+    size: 'sm',
     renderBody: ({ closeModal }) => {
       return (
         <PlazosPagoForm
@@ -96,7 +97,7 @@ const ActionCell = ({ rowData, dataKey, ...props }) => {
 const CheckCell = ({ rowData, onChange, checkedKeys, dataKey, ...props }) => (
   <TableRS.Cell {...props} style={{ padding: 0 }}>
     <div style={{ lineHeight: '46px' }}>
-      <Checkbox
+      <Radio
         value={rowData[dataKey]}
         inline
         onChange={onChange}
@@ -126,13 +127,9 @@ export default function AsociarPlazosPago ({ setSelectedId, isConfirmado }) {
     }
   }, [])
 
-  useEffect(() => {
-    setSelectedId(checkedKeys)
-  }, [checkedKeys])
-
-  const handleCheck = (value, checked) => {
-    const keys = checked ? value : null
-    setCheckedKeys(keys)
+  const handleCheck = (value) => {
+    setCheckedKeys(value)
+    setSelectedId(value)
   }
 
   const renderCheckCell = () => {
@@ -144,13 +141,9 @@ export default function AsociarPlazosPago ({ setSelectedId, isConfirmado }) {
     )
   }
 
-  const onRowClick = rowData => {
-    handleCheck(rowData.id, checkedKeys !== rowData.id)
-  }
-
   const renderTable = () => (
     <div>
-      <Table data={dataPage} autoHeight onRowClick={onRowClick}>
+      <Table data={dataPage} autoHeight onRowClick={({ id }) => handleCheck(id)}>
         {renderCheckCell('id')}
         {Table.Column({ header: 'Fecha', dataKey: 'fecha', flex: 0.8 })}
         {Table.ColumnNumber({ header: 'Dias', dataKey: 'dias', flex: 0.5 })}

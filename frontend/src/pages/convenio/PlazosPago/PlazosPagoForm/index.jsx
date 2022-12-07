@@ -109,8 +109,8 @@ export function PlazosPagoForm ({ closeModal, convenioId, plazoPago = null }) {
       <Col xs={24} className='mt-4'>
         <ButtonToolbar>
           <Button
-            icon={plazoPago === null ? 'save' : 'edit'}
-            text={plazoPago === null ? 'Guardar' : 'Editar'}
+            icon='save'
+            text='Guardar'
             appearance='primary'
             onClick={handleSubmit}
           />

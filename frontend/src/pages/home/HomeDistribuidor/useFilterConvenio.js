@@ -75,7 +75,7 @@ export default function useFilterConvenio ({ setValueFilter }) {
             <FormField name='nroContrato' label='Nro Contrato' />
             <FormField name='nroConvenio' label='Nro Convenio' />
             <FormField name='cliente' label='Cliente' accepter={AutoComplete} data={clientesFinales.map(cliente => cliente.nombre)} />
-            <FormField name='fecha' label='Fecha' accepter={DateRangePicker} placement='bottomEnd' showWeekNumbers block />
+            <FormField name='fecha' label='Fecha' accepter={DateRangePicker} placement='auto' showWeekNumbers block />
             <FormField name='estado' label='Estado' accepter={CheckPicker} data={estadoData} value={formValue.estado} block />
             <FormField name='baseDatos' label='Cantidad de Base de Datos' accepter={RangeSlider} defaultValue={[1, 20]} min={1} step={1} max={20} />
           </Col>
