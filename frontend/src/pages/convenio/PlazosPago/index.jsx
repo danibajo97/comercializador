@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Card, Container, CardHeader } from 'reactstrap'
-import { Row, Col, Button } from 'rsuite'
+import { Row, Col } from 'rsuite'
 import { useNavigate, useParams } from 'react-router-dom'
 
 import AsociarPlazosPago from './AsociarPlazosPago'
@@ -8,7 +8,7 @@ import AsociarServicios from './AsociarServicios'
 import { PlazosPagoForm } from './PlazosPagoForm'
 import { AsociarServiciosForm } from './AsociarServiciosForm'
 
-import { DefaultHeader } from 'components'
+import { DefaultHeader, Button } from 'components'
 import useModal from 'hooks/useModal'
 import useConvenio from 'hooks/useConvenio'
 import useHeader from 'hooks/useHeader'
@@ -32,6 +32,7 @@ function PlazosPago () {
 
   const modalServicio = useModal({
     title: 'Nuevo Servicios',
+    size: 'sm',
     renderBody: ({ closeModal }) => {
       return <AsociarServiciosForm closeModal={closeModal} convenioId={id} plazoPagoId={selectedId} />
     }
@@ -56,18 +57,20 @@ function PlazosPago () {
                     <h3 className='mb-0'>Convenios <span className='text-muted'>(Plazos de Pago)</span></h3>
                   </Col>
                   <Col className='text-right' xs={8}>
-                    <Button appearance='primary' size='sm' hidden={isComfirmado()} color='blue' onClick={() => modalPlazoPago.openModal()} className='mr-2'>
-                      <i className='d-sm-block d-md-none fa fa-plus' />
-                      <div className='mf-2 d-none d-md-inline-block'>Adicionar</div>
-                    </Button>
                     <Button
-                      size='sm'
+                      icon='plus'
+                      text='Adicionar'
+                      appearance='primary'
+                      hidden={isComfirmado()}
+                      onClick={() => modalPlazoPago.openModal()}
+                      className='mr-2'
+                    />
+                    <Button
+                      icon='arrow-left'
+                      text='Atrás'
                       appearance='default'
                       onClick={() => navigate('/')}
-                    >
-                      <i className='d-sm-block d-md-none fa fa-arrow-left' />
-                      <div className='mf-2 d-none d-md-inline-block'>Atrás</div>
-                    </Button>
+                    />
                   </Col>
                 </Row>
               </CardHeader>
@@ -83,10 +86,14 @@ function PlazosPago () {
                     </h3>
                   </Col>
                   <Col className='text-right' xs={8}>
-                    <Button appearance='primary' size='sm' hidden={isComfirmado()} color='blue' onClick={() => modalServicio.openModal()} disabled={selectedId === null}>
-                      <i className='d-sm-block d-md-none fa fa-plus' />
-                      <div className='mf-2 d-none d-md-inline-block'>Adicionar</div>
-                    </Button>
+                    <Button
+                      icon='plus'
+                      text='Adicionar'
+                      appearance='primary'
+                      hidden={isComfirmado()}
+                      onClick={() => modalServicio.openModal()}
+                      disabled={selectedId === null}
+                    />
                   </Col>
                 </Row>
               </CardHeader>

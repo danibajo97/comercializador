@@ -2,7 +2,8 @@ import { useEffect, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Schema } from 'rsuite'
 
-import { getProvincias, addContacto, stateResetOperation } from 'redux/contacto/contactoSlice'
+import { getProvincias, stateResetOperation as stateResetOperationContacto } from 'redux/contacto/contactoSlice'
+import { addContacto, stateResetOperationAddContacto } from 'redux/clientesFinales/clientesFinalesSlice'
 import OPERATIONS from 'constants/operationsRedux'
 
 export default function useClienteForm ({ closeModal }) {
@@ -12,7 +13,7 @@ export default function useClienteForm ({ closeModal }) {
   const provincias = useSelector(state => state.contacto.provincias)
   const isListProvincia = useSelector(state => state.contacto.isListProvincia)
 
-  const isAdd = useSelector(state => state.contacto.isAdd)
+  const isAddContacto = useSelector(state => state.clientesFinales.isAddContacto)
 
   const [formValue, setFormValue] = useState({
     nombre: '',
@@ -39,13 +40,14 @@ export default function useClienteForm ({ closeModal }) {
     dispatch(getProvincias())
 
     return () => {
-      dispatch(stateResetOperation())
+      dispatch(stateResetOperationContacto())
+      dispatch(stateResetOperationAddContacto())
     }
   }, [])
 
   useEffect(() => {
-    if (isAdd === OPERATIONS.FULFILLED && closeModal) { closeModal() }
-  }, [isAdd])
+    if (isAddContacto === OPERATIONS.FULFILLED && closeModal) { closeModal() }
+  }, [isAddContacto])
 
   const handleSubmit = () => {
     if (formRef.current.check()) {

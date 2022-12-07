@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { AutoComplete, Button, CheckPicker, Col, DateRangePicker, Drawer, Form, RangeSlider } from 'rsuite'
+import { AutoComplete, CheckPicker, Col, DateRangePicker, Drawer, Form, RangeSlider } from 'rsuite'
 
-import { FormField } from 'components'
+import { FormField, Button } from 'components'
 import estadosConvenios from 'constants/estadosConvenios'
 import { getClientesFinales, stateResetOperation } from 'redux/datosGenerales/datosGeneralesSlice'
 
@@ -49,16 +49,19 @@ export default function useFilterConvenio ({ setValueFilter }) {
   const drawerFilter = (
     <Drawer size='xs' keyboard backdrop='static' open={open} onClose={() => setOpen(false)}>
       <Drawer.Header>
-        <Drawer.Title>Filtrar Convenios</Drawer.Title>
         <Drawer.Actions>
-          <Button appearance='primary' size='sm' onClick={clickFiltar}>
-            <i className='d-sm-block d-md-none fa fa-filter ' />
-            <div className='mf-2 d-none d-md-inline-block'>Filtrar</div>
-          </Button>
-          <Button appearance='default' size='sm' onClick={clickLimpiarFiltar}>
-            <FilterClearIcon className='d-sm-block d-md-none' />
-            <div className='mf-2 d-none d-md-inline-block'>Limpiar</div>
-          </Button>
+          <Button
+            icon='filter'
+            text='Filtrar'
+            appearance='primary'
+            onClick={clickFiltar}
+          />
+          <Button
+            icon={FilterClearIcon}
+            text='Limpiar'
+            appearance='default'
+            onClick={clickLimpiarFiltar}
+          />
         </Drawer.Actions>
       </Drawer.Header>
       <Drawer.Body>

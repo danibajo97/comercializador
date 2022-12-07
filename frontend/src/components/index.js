@@ -1,3 +1,4 @@
+import Button from 'components/button/Button'
 import CardHeader from 'components/headers/CardHeader'
 import DefaultHeader from 'components/headers/DefaultHeader'
 import { renderEmpty } from 'components/table/Table'
@@ -9,6 +10,7 @@ import Loader from 'components/loader/Loader'
 import CopiarLicencia from 'components/licencia/CopiarLicencia'
 
 export {
+  Button,
   CardHeader,
   DefaultHeader,
   FormField,

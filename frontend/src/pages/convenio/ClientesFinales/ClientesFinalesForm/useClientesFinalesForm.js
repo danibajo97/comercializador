@@ -20,6 +20,7 @@ export default function useClientesFinalesForm () {
   const clientesFinales = useSelector(state => state.clientesFinales.clientesFinales)
 
   const [db, serDB] = useState(0)
+  const [nuevoContacto, serNuevoContacto] = useState([])
 
   const formRef = useRef()
   const [formValue, setFormValue] = useState({
@@ -47,6 +48,20 @@ export default function useClientesFinalesForm () {
     const data = clientesFinales.map(cf => cf.id)
     if (data.length > 0) { setFormValue({ cliente_final: data }) }
   }, [clientesFinales])
+
+  useEffect(() => {
+    listClientesFinales.forEach(data => {
+      if (data?.nuevo === true) {
+        serNuevoContacto([data.id])
+        setFormValue({
+          cliente_final: [
+            ...formValue.cliente_final,
+            data.id
+          ]
+        })
+      }
+    })
+  }, [listClientesFinales])
 
   useEffect(() => {
     if (convenio !== null) {
@@ -107,6 +122,7 @@ export default function useClientesFinalesForm () {
     isConfirmado,
     isLoading,
     listClientesFinales,
+    nuevoContacto,
     tableData,
     onSelectClienteFinal,
     onClean,

@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { Button, CheckPicker, Col, DateRangePicker, Drawer, Form } from 'rsuite'
+import { CheckPicker, Col, DateRangePicker, Drawer, Form } from 'rsuite'
 
 import { getServiciosActualizacion, stateResetOperation } from 'redux/solicitudLicencia/solicitudLicenciaSlice'
+import { FormField, Button } from 'components'
 
-import { FormField } from 'components'
+import FilterClearIcon from '@rsuite/icons/Funnel'
 
 const INIT_FILTER = {
   nro: '',
@@ -47,14 +48,19 @@ export default function useFilterLicencia ({ setValueFilter }) {
   const drawerFilter = (
     <Drawer size='xs' keyboard backdrop='static' open={open} onClose={() => setOpen(false)}>
       <Drawer.Header>
-        <Drawer.Title>Filtrar Licencia</Drawer.Title>
         <Drawer.Actions>
-          <Button size='sm' appearance='primary' onClick={clickFiltar}>
-            Filtrar
-          </Button>
-          <Button size='sm' appearance='default' onClick={clickLimpiarFiltar}>
-            Limpiar
-          </Button>
+          <Button
+            icon='filter'
+            text='Filtrar'
+            appearance='primary'
+            onClick={clickFiltar}
+          />
+          <Button
+            icon={FilterClearIcon}
+            text='Limpiar'
+            appearance='default'
+            onClick={clickLimpiarFiltar}
+          />
         </Drawer.Actions>
       </Drawer.Header>
       <Drawer.Body>
