@@ -33,6 +33,7 @@ const ActionCell = ({ rowData, dataKey, ...props }) => {
 
   const modalServicio = useModal({
     title: 'Editar Servicios',
+    size: 'sm',
     renderBody: ({ closeModal }) => {
       return (
         <AsociarServiciosForm

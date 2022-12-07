@@ -48,7 +48,7 @@ export default function ClienteForm ({ closeModal }) {
         <Col xs={24} className='mt-4'>
           <ButtonToolbar>
             <Button
-              icon='plus'
+              icon='save'
               text='Guardar'
               appearance='primary'
               onClick={handleSubmit}

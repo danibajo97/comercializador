@@ -39,11 +39,11 @@ function ClientesFinales () {
             <Card className='bg-secondary shadow'>
               <CardHeader className='bg-white border-0'>
                 <Row className='align-items-center'>
-                  <Col xs='7' md='4'>
+                  <Col xs='6' md='4'>
                     <h3 className='mb-0'>Convenios <span className='text-muted'>(Clientes Finales)</span></h3>
 
                   </Col>
-                  <Col className='text-right' xs='5' md='8'>
+                  <Col className='text-right' xs='6' md='8'>
                     <Button
                       icon='arrow-left'
                       text='Atrás'

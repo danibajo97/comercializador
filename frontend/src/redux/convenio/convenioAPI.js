@@ -159,7 +159,7 @@ async function terminarConvenio ({ id }) {
     await axios(options)
     return {
       id,
-      message: 'Se confirmó el convenio correctamente.'
+      message: 'Se terminó el convenio correctamente.'
     }
   } catch (error) {
     const { responseText } = error?.request
