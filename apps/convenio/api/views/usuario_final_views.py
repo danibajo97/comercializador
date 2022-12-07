@@ -37,11 +37,11 @@ class UsuarioFinalWebViewSet(viewsets.GenericViewSet):
             }
             response = self.responsebase.post(
                 url=url, json=request.data, params=params)
-        if response.status_code == 201:
-            return Response({'Comercializador-response': 'Creado correctamente',
-                             'Versat-response': response.json()}, status=response.status_code)
+        if response.status_code == 200:
+            return Response({'comercializador_response': 'Creado correctamente',
+                             'versat_response': response.json()}, status=response.status_code)
         else:
-            return Response({'Versat-response': response.json()},
+            return Response({'versat_response': response.json()},
                             status=response.status_code)
 
     @transaction.atomic
