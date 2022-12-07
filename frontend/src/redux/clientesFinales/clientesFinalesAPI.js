@@ -6,7 +6,8 @@ export default {
   getListaClientesFinales,
   getClientesFinales,
   addClientesFinales,
-  getGestionadosPor
+  getGestionadosPor,
+  addContacto
 }
 
 async function getListaClientesFinales () {
@@ -73,5 +74,24 @@ async function getGestionadosPor () {
     return data
   } catch (error) {
     throw new Error('Error al listar los clientes finales.')
+  }
+}
+
+async function addContacto ({ params }) {
+  const access = await window.sessionStorage.getItem('access')
+  const options = {
+    method: 'POST',
+    url: `${API_URL}/api-acceso/usuario_final/`,
+    headers: { Authorization: `Bearer ${access}` },
+    data: params
+  }
+  try {
+    const { data } = await axios(options)
+    return {
+      data: data.versat_response,
+      message: 'Se adicionó el contacto correctamente.'
+    }
+  } catch (error) {
+    throw new Error('Error al adicionar el contacto.')
   }
 }

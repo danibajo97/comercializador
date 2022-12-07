@@ -1,10 +1,9 @@
 import { Card, Row, Col, Container, CardHeader } from 'reactstrap'
-import { Button } from 'rsuite'
 import { useNavigate } from 'react-router-dom'
 
 import ConvenioTable from './components/ConvenioTable'
 import ConvenioHeader from './components/ConvenioHeader'
-import { Loader } from 'components'
+import { Loader, Button } from 'components'
 import useHeader from 'hooks/useHeader'
 import useHomeDistribuidor from './useHomeDistribuidor'
 import useFilterConvenio from './useFilterConvenio'
@@ -26,18 +25,23 @@ export default function HomeDistribuidor () {
             <Card className='bg-secondary shadow'>
               <CardHeader className='bg-white border-0'>
                 <Row className='align-items-center'>
-                  <Col xs='8'>
+                  <Col xs='5'>
                     <h3 className='mb-0'>Listado de Convenios</h3>
                   </Col>
-                  <Col className='text-right' xs='4'>
-                    <Button className='mr-2' appearance='primary' size='sm' onClick={() => navigate('/datos-generales')}>
-                      <i className='d-sm-block d-md-none fa fa-plus ' />
-                      <div className='mf-2 d-none d-md-inline-block'>Nuevo Convenio</div>
-                    </Button>
-                    <Button appearance='primary' size='sm' onClick={open}>
-                      <i className='d-sm-block d-md-none fa fa-filter ' />
-                      <div className='mf-2 d-none d-md-inline-block'>Filtrar</div>
-                    </Button>
+                  <Col className='text-right' xs='7'>
+                    <Button
+                      icon='plus'
+                      text='Nuevo Convenio'
+                      appearance='primary'
+                      onClick={() => navigate('/datos-generales')}
+                      className='mr-2'
+                    />
+                    <Button
+                      icon='filter'
+                      text='Filtrar'
+                      appearance='primary'
+                      onClick={open}
+                    />
                   </Col>
                 </Row>
               </CardHeader>

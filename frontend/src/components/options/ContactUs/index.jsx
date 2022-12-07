@@ -1,7 +1,7 @@
 import { useRef, useState } from 'react'
-import { Col, Form, Button, ButtonToolbar, Schema } from 'rsuite'
+import { Col, Form, ButtonToolbar, Schema } from 'rsuite'
 
-import { FormField, Textarea } from 'components'
+import { FormField, Textarea, Button } from 'components'
 
 function ContactUs ({ closeModal }) {
   const formRef = useRef()
@@ -39,13 +39,20 @@ function ContactUs ({ closeModal }) {
       </Col>
       <Col xs={24} className='mt-4'>
         <ButtonToolbar>
-          <Button appearance='primary' size='sm' onClick={handleSubmit}>
-            Enviar
-          </Button>
+          <Button
+            icon='paper-plane'
+            text='Enviar'
+            appearance='primary'
+            onClick={handleSubmit}
+          />
           {closeModal &&
-            <Button appearance='subtle' color='red' size='sm' onClick={closeModal}>
-              Cerrar
-            </Button>}
+            <Button
+              icon='times'
+              text='Cerrar'
+              appearance='subtle'
+              color='red'
+              onClick={closeModal}
+            />}
         </ButtonToolbar>
       </Col>
 
