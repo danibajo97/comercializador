@@ -14,6 +14,7 @@ function ClientesFinalesPanel () {
     isConfirmado,
     isLoading,
     listClientesFinales,
+    nuevoContacto,
     tableData,
     onSelectClienteFinal,
     onClean,
@@ -32,10 +33,18 @@ function ClientesFinalesPanel () {
       <Row hidden={isConfirmado()}>
         <Col xs='12'>
           <FormField
-            name='cliente_final' label='Cliente Final' accepter={CheckPicker} data={listClientesFinales.map(cliente => ({
+            name='cliente_final'
+            label='Cliente Final'
+            accepter={CheckPicker}
+            data={listClientesFinales.map(cliente => ({
               label: cliente.nombre,
               value: cliente.id
-            }))} onSelect={onSelectClienteFinal} onClean={onClean} required block
+            }))}
+            onSelect={onSelectClienteFinal}
+            onClean={onClean}
+            disabledItemValues={nuevoContacto}
+            required
+            block
           />
         </Col>
       </Row>
