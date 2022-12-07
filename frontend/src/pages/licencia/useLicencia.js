@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
 import useAuth from 'hooks/useAuth'
@@ -12,6 +12,10 @@ import date from 'utils/date'
 export default function useLicencia () {
   const { user } = useAuth()
   const dispatch = useDispatch()
+
+  const [filterParams, setFilterParams] = useState({})
+  const [sortColumn, setSortColumn] = useState('solicitud__fecha')
+  const [sortType, setSortType] = useState('desc')
 
   const { modal, openModal } = useModal({
     title: 'Solicitud de Licencia',
@@ -46,14 +50,46 @@ export default function useLicencia () {
       ? `${date.toISODate({ date: value?.fecha[0], days: 0 })},${date.toISODate({ date: value?.fecha[1], days: 0 })}`
       : undefined
 
+    const extras = {
+      solicitud__no_solicitud__icontains: value?.nro?.length > 0 ? value.nro : undefined,
+      solicitud__fecha__range: fecha,
+      solicitud__cliente__contacto__nombre__icontains: value?.cliente.length > 0 ? value.cliente : undefined,
+      servicio__in: value?.servicio?.length ? value.servicio.join(',') : undefined,
+      licencia__isnull: licencia
+    }
+    setSortColumn('')
+    setSortType('desc')
+    setFilterParams(extras)
+    dispatch(getSolicitudLicenciaAll({
+      pagination: { page: 1, limit },
+      extras
+    }))
+  }
+
+  const onSortColumn = (sortColumn, sortType) => {
+    setSortColumn(sortColumn)
+    setSortType(sortType)
+
+    const sort = {
+      asc: '',
+      desc: '-'
+    }
+
+    const columns = {
+      no_solicitud: 'solicitud__no_solicitud',
+      fecha: 'solicitud__fecha',
+      // solicitado_por_nombre: 'cliente_final',
+      cliente_final_nombre: 'solicitud__cliente',
+      servicio_nombre: 'servicio',
+      licencia: 'licencia',
+      observacion: 'observacion'
+    }
+
     dispatch(getSolicitudLicenciaAll({
       pagination: { page: 1, limit },
       extras: {
-        solicitud__no_solicitud__icontains: value?.nro?.length > 0 ? value.nro : undefined,
-        solicitud__fecha__range: fecha,
-        solicitud__cliente__contacto__nombre__icontains: value?.cliente.length > 0 ? value.cliente : undefined,
-        servicio__in: value?.servicio?.length ? value.servicio.join(',') : undefined,
-        licencia__isnull: licencia
+        ...filterParams,
+        ordering: `${sort[sortType]}${columns[sortColumn]}`
       }
     }))
   }
@@ -71,6 +107,11 @@ export default function useLicencia () {
     totalOtorgada: widges?.otorgada || 0,
     totalPendiente: widges?.pendiente || 0,
     pagination,
-    setValueFilter
+    setValueFilter,
+    onSortColumn,
+    sortInfo: {
+      sortColumn,
+      sortType
+    }
   }
 }
