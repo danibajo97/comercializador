@@ -28,7 +28,9 @@ export default function SolicitudLicencia () {
     totalOtorgada,
     totalPendiente,
     pagination,
-    setValueFilter
+    setValueFilter,
+    onSortColumn,
+    sortInfo
   } = useLicencia()
 
   useHeader({ title: title() })
@@ -71,7 +73,7 @@ export default function SolicitudLicencia () {
               <Row>
                 <Col>
                   {isList === OPERATIONS.FULFILLED
-                    ? <LicenciaTable clientes={solicitudLicencias} pagination={pagination} />
+                    ? <LicenciaTable clientes={solicitudLicencias} pagination={pagination} onSortColumn={onSortColumn} sortInfo={sortInfo} />
                     : <Loader.Grid rows={8} columns={7} />}
                 </Col>
               </Row>
