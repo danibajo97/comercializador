@@ -9,7 +9,8 @@ const initialState = {
   isAuth: false,
   isLoading: null,
   hasError: false,
-  isChangePassword: OPERATIONS.NONE
+  isChangePassword: OPERATIONS.NONE,
+  isActivateAccount: OPERATIONS.NONE
 }
 
 export const authSlice = createSlice({
@@ -18,6 +19,9 @@ export const authSlice = createSlice({
   reducers: {
     stateResetChangePassword: (state) => {
       state.isChangePassword = OPERATIONS.NONE
+    },
+    stateResetActivateAccount: (state) => {
+      state.isActivateAccount = OPERATIONS.NONE
     }
   },
   extraReducers: (builder) => {
@@ -84,6 +88,19 @@ export const authSlice = createSlice({
       state.isChangePassword = OPERATIONS.REJECTED
       toast.error(action.error.message)
     })
+
+    // ACTIVATE ACCOUNT ACCION
+    builder.addCase(activateAccount.pending, (state, action) => {
+      state.isActivateAccount = OPERATIONS.PENDING
+    })
+    builder.addCase(activateAccount.fulfilled, (state, action) => {
+      state.isActivateAccount = OPERATIONS.FULFILLED
+      toast.success('La cuenta se ha activado correctamente.')
+    })
+    builder.addCase(activateAccount.rejected, (state, action) => {
+      state.isActivateAccount = OPERATIONS.REJECTED
+      toast.error(action.error.message)
+    })
   }
 
 })
@@ -92,7 +109,8 @@ export const getUser = createAsyncThunk('auth/getUser', api.getUser)
 export const login = createAsyncThunk('auth/login', api.login)
 export const logout = createAsyncThunk('auth/logout', api.logout)
 export const changePassword = createAsyncThunk('auth/changePassword', api.changePassword)
+export const activateAccount = createAsyncThunk('auth/activateAccount', api.activateAccount)
 
-export const { stateResetChangePassword } = authSlice.actions
+export const { stateResetChangePassword, stateResetActivateAccount } = authSlice.actions
 
 export default authSlice.reducer
