@@ -7,9 +7,8 @@ import {
 } from 'reactstrap'
 import { Form, Button } from 'rsuite'
 
-import { DefaultHeader, FormField } from 'components'
+import { DefaultHeader, FormField, InputPassword } from 'components'
 import useHeader from 'hooks/useHeader'
-import InputPassword from 'components/form/InputPassword'
 import useActivateAccount from './useActivateAccount'
 
 export default function ActivateAccount () {

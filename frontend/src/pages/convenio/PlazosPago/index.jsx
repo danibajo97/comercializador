@@ -1,45 +1,24 @@
-import { useState } from 'react'
 import { Card, Container, CardHeader } from 'reactstrap'
 import { Row, Col } from 'rsuite'
-import { useNavigate, useParams } from 'react-router-dom'
 
 import AsociarPlazosPago from './AsociarPlazosPago'
 import AsociarServicios from './AsociarServicios'
-import { PlazosPagoForm } from './PlazosPagoForm'
-import { AsociarServiciosForm } from './AsociarServiciosForm'
 
 import { DefaultHeader, Button } from 'components'
-import useModal from 'hooks/useModal'
-import useConvenio from 'hooks/useConvenio'
 import useHeader from 'hooks/useHeader'
+import usePlazosPago from './usePlazosPago'
 
 function PlazosPago () {
   useHeader({ title: 'Convenios' })
-  const navigate = useNavigate()
-  const [selectedId, setSelectedId] = useState(null)
 
-  const params = useParams()
-  const { id } = params
-
-  const { convenio } = useConvenio({ id })
-
-  const modalPlazoPago = useModal({
-    title: 'Nuevo Plazos de Pagos',
-    size: 'sm',
-    renderBody: ({ closeModal }) => {
-      return <PlazosPagoForm closeModal={closeModal} convenioId={id} />
-    }
-  })
-
-  const modalServicio = useModal({
-    title: 'Nuevo Servicios',
-    size: 'sm',
-    renderBody: ({ closeModal }) => {
-      return <AsociarServiciosForm closeModal={closeModal} convenioId={id} plazoPagoId={selectedId} />
-    }
-  })
-
-  const isComfirmado = () => convenio && convenio.estado >= 3
+  const {
+    selectedId,
+    setSelectedId,
+    modalPlazoPago,
+    modalServicio,
+    isComfirmado,
+    goToBack
+  } = usePlazosPago()
 
   const col = { xs: 24, sm: 24, md: 24, lg: 24, xl: 12 }
 
@@ -70,7 +49,7 @@ function PlazosPago () {
                       icon='arrow-left'
                       text='Atrás'
                       appearance='default'
-                      onClick={() => navigate('/')}
+                      onClick={goToBack}
                     />
                   </Col>
                 </Row>
