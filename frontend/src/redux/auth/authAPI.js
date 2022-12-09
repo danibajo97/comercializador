@@ -5,7 +5,8 @@ export default {
   getUser,
   login,
   logout,
-  changePassword
+  changePassword,
+  activateAccount
 }
 
 async function login ({ username, password }) {
@@ -66,5 +67,27 @@ async function changePassword ({ id, oldPassword, newPassword }) {
     return true
   } catch (error) {
     throw new Error('Error al cambiar la contraseña, asegúrese que la contraseña actual coincida.')
+  }
+}
+
+async function activateAccount ({ tokenInfo, user }) {
+  const { token, uidb } = tokenInfo
+  const { username, firstname, lastname, password } = user
+  const options = {
+    method: 'POST',
+    url: `${API_URL}/activacion/${uidb}/${token}/`,
+    headers: { 'Content-Type': 'application/json' },
+    data: {
+      username,
+      name: firstname,
+      last_name: lastname,
+      password
+    }
+  }
+  try {
+    await axios(options)
+  } catch (error) {
+    const message = error?.response?.data?.message
+    throw new Error(message || 'Error al activar la cuenta.')
   }
 }

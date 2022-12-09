@@ -1,4 +1,3 @@
-import { useEffect, useState } from 'react'
 import {
   Popover,
   Whisper,
@@ -7,55 +6,18 @@ import {
   Table as TableRS,
   Radio
 } from 'rsuite'
-import { useDispatch, useSelector } from 'react-redux'
-import { useParams } from 'react-router-dom'
 
-import OPERATIONS from 'constants/operationsRedux'
-import { getPlazoPagoAll, deletePlazoPago, stateResetOperation } from 'redux/plazoPago/plazoPagoSlice'
 import Table from 'components/table/Table'
-import useModal from 'hooks/useModal'
-import { PlazosPagoForm } from '../PlazosPagoForm'
 import { Loader } from 'components'
-import usePagination from 'hooks/usePagination'
-import useAlert from 'hooks/useAlert'
+import useAsociarPlazosPago from './useAsociarPlazosPago'
+import useActionCell from './useActionCell'
 
 const ActionCell = ({ rowData, dataKey, ...props }) => {
-  const dispatch = useDispatch()
-  const params = useParams()
-  const { id } = params
-
-  const modalPlazoPago = useModal({
-    title: 'Editar Plazos de Pagos',
-    size: 'sm',
-    renderBody: ({ closeModal }) => {
-      return (
-        <PlazosPagoForm
-          closeModal={closeModal} convenioId={id} plazoPago={{
-            id: rowData.id,
-            dias: rowData.dias
-          }}
-        />
-      )
-    }
-  })
-
-  const deleteAlert = useAlert({
-    type: 'eliminar',
-    text: 'Se eliminará el plazo de pago, esta acción no se puede deshacer.',
-    isConfirm: true,
-    textConfirm: 'Eliminar Plazo de Pago'
-  })
-
-  const operationDelete = () => {
-    deleteAlert.setConfirmAccion(() => {
-      dispatch(deletePlazoPago({ id: rowData.id }))
-    })
-    deleteAlert.openAlert()
-  }
-
-  const operationUpdate = () => {
-    modalPlazoPago.openModal()
-  }
+  const {
+    deleteAlert,
+    modalPlazoPago,
+    handleSelect
+  } = useActionCell()
 
   return (
     <>
@@ -63,21 +25,10 @@ const ActionCell = ({ rowData, dataKey, ...props }) => {
       <TableRS.Cell {...props} className='link-group'>
         <Whisper
           placement='bottomEnd' trigger='click' speaker={({ onClose, left, top, className }, ref) => {
-            const handleSelect = eventKey => {
-              onClose()
-              switch (eventKey) {
-                case 1:
-                  operationUpdate()
-                  break
-                case 2:
-                  operationDelete()
-                  break
-              }
-            }
             return (
               <>
                 <Popover ref={ref} className={className} style={{ left, top }} full>
-                  <Dropdown.Menu onSelect={handleSelect}>
+                  <Dropdown.Menu onSelect={eventKey => handleSelect(eventKey, rowData, onClose)}>
                     <Dropdown.Item eventKey={1}>Editar</Dropdown.Item>
                     <Dropdown.Item eventKey={2}>Eliminar</Dropdown.Item>
                   </Dropdown.Menu>
@@ -108,29 +59,13 @@ const CheckCell = ({ rowData, onChange, checkedKeys, dataKey, ...props }) => (
 )
 
 export default function AsociarPlazosPago ({ setSelectedId, isConfirmado }) {
-  const dispatch = useDispatch()
-  const isList = useSelector(state => state.plazoPago.isList)
-  const plazosPagos = useSelector(state => state.plazoPago.plazosPagos)
-  const [checkedKeys, setCheckedKeys] = useState(null)
-
-  const { pagination, dataPage } = usePagination({ data: plazosPagos })
-
-  const params = useParams()
-  const { id } = params
-
-  useEffect(() => {
-    if (id !== undefined) {
-      dispatch(getPlazoPagoAll({ convenio: id }))
-    }
-    return () => {
-      dispatch(stateResetOperation())
-    }
-  }, [])
-
-  const handleCheck = (value) => {
-    setCheckedKeys(value)
-    setSelectedId(value)
-  }
+  const {
+    dataPage,
+    pagination,
+    checkedKeys,
+    handleCheck,
+    isLoading
+  } = useAsociarPlazosPago({ setSelectedId })
 
   const renderCheckCell = () => {
     return (
@@ -157,7 +92,7 @@ export default function AsociarPlazosPago ({ setSelectedId, isConfirmado }) {
 
   return (
     <>
-      {isList === OPERATIONS.FULFILLED
+      {isLoading()
         ? renderTable()
         : <Loader.Grid rows={4} columns={5} />}
     </>

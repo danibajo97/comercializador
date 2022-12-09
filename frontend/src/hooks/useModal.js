@@ -1,13 +1,18 @@
 import { useState } from 'react'
 import { Modal, Button } from 'rsuite'
 
-export default function useModal ({ title, renderBody, footer = false, size = 'md' }) {
+export default function useModal ({ title, renderBody = null, footer = false, size = 'md' }) {
   const [visible, setVisible] = useState(false)
+  const [body, setBody] = useState(<></>)
 
   const openModal = () => setVisible(true)
   const closeModal = () => setVisible(false)
 
   const renderTitle = () => typeof title === 'function' ? title() : title
+
+  const addBody = (Componet, props) => {
+    setBody(<Componet closeModal={closeModal} {...props} />)
+  }
 
   const modal = (
     <Modal backdrop='static' size={size} open={visible} onClose={closeModal}>
@@ -15,7 +20,8 @@ export default function useModal ({ title, renderBody, footer = false, size = 'm
         <Modal.Title>{renderTitle()}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        {renderBody({ openModal, closeModal })}
+        {renderBody && renderBody({ openModal, closeModal })}
+        {body}
       </Modal.Body>
       {footer &&
         <Modal.Footer>
@@ -26,5 +32,5 @@ export default function useModal ({ title, renderBody, footer = false, size = 'm
     </Modal>
   )
 
-  return { modal, openModal, closeModal }
+  return { modal, openModal, closeModal, addBody }
 }
