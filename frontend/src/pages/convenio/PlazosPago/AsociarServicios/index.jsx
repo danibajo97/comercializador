@@ -1,56 +1,16 @@
-import { useEffect } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+
 import { Popover, Table as TableRS, Whisper, Dropdown, IconButton } from 'rsuite'
 
-import { getPlazoPagoServicioAll, deletePlazoPagoServicio, stateResetOperation } from 'redux/plazoPagoServicio/plazoPagoServicioSlice'
-import OPERATIONS from 'constants/operationsRedux'
-import Table from 'components/table/Table'
-import { Loader } from 'components'
-import usePagination from 'hooks/usePagination'
-import useModal from 'hooks/useModal'
-import { AsociarServiciosForm } from '../AsociarServiciosForm'
-import { useParams } from 'react-router-dom'
-import useAlert from 'hooks/useAlert'
+import { Table, Loader } from 'components'
+import useAsociarServicios from './useAsociarServicios'
+import useActionCell from './useActionCell'
 
 const ActionCell = ({ rowData, dataKey, ...props }) => {
-  const dispatch = useDispatch()
-  const params = useParams()
-  const { id } = params
-
-  const deleteAlert = useAlert({
-    type: 'eliminar',
-    text: 'Se eliminará el servicio, esta acción no se puede deshacer.',
-    isConfirm: true,
-    textConfirm: 'Eliminar Servicio'
-  })
-
-  const operationDelete = () => {
-    deleteAlert.setConfirmAccion(() => {
-      dispatch(deletePlazoPagoServicio({ id: rowData.id }))
-    })
-    deleteAlert.openAlert()
-  }
-
-  const modalServicio = useModal({
-    title: 'Editar Servicios',
-    size: 'sm',
-    renderBody: ({ closeModal }) => {
-      return (
-        <AsociarServiciosForm
-          closeModal={closeModal} convenioId={id} plazoPagoId={rowData.plazo} servicioAsociado={{
-            id: rowData.id,
-            servicio: rowData.servicio,
-            usuariosfinales: rowData.usuariosfinales,
-            cantidad: rowData.cantidad
-          }}
-        />
-      )
-    }
-  })
-
-  const operationUpdate = () => {
-    modalServicio.openModal()
-  }
+  const {
+    deleteAlert,
+    modalServicio,
+    handleSelect
+  } = useActionCell()
 
   return (
     <>
@@ -58,20 +18,9 @@ const ActionCell = ({ rowData, dataKey, ...props }) => {
       <TableRS.Cell {...props} className='link-group'>
         <Whisper
           placement='bottomEnd' trigger='click' speaker={({ onClose, left, top, className }, ref) => {
-            const handleSelect = eventKey => {
-              onClose()
-              switch (eventKey) {
-                case 1:
-                  operationUpdate()
-                  break
-                case 2:
-                  operationDelete()
-                  break
-              }
-            }
             return (
               <Popover ref={ref} className={className} style={{ left, top }} full>
-                <Dropdown.Menu onSelect={handleSelect}>
+                <Dropdown.Menu onSelect={eventKey => handleSelect(eventKey, rowData, onClose)}>
                   <Dropdown.Item eventKey={1}>Editar</Dropdown.Item>
                   <Dropdown.Item eventKey={2}>Eliminar</Dropdown.Item>
                 </Dropdown.Menu>
@@ -117,26 +66,18 @@ const CantidadCell = ({ rowData, dataKey, ...props }) => {
 }
 
 export default function AsociarServicios ({ id, isConfirmado }) {
-  const dispatch = useDispatch()
-  const plazoPagoServicio = useSelector(state => state.plazoPagoServicio.plazoPagoServicio)
-  const isList = useSelector(state => state.plazoPagoServicio.isList)
-
-  const { pagination, dataPage } = usePagination({ data: id ? plazoPagoServicio : [] })
-
-  useEffect(() => {
-    if (id !== undefined) {
-      dispatch(getPlazoPagoServicioAll({ plazoPagoId: id }))
-    }
-  }, [id])
-
-  useEffect(() => {
-    return () => {
-      dispatch(stateResetOperation())
-    }
-  }, [])
+  const {
+    dataPage,
+    pagination,
+    isLoading
+  } = useAsociarServicios({ id })
 
   const renderEmpty = () => {
-    if (id !== null) { return <div className='text-center text-muted mt-5 mb-5'>No hay elementos disponibles</div> } else { return <div className='text-center text-muted mt-5 mb-5'>Seleccione un plazo de pago</div> }
+    if (id !== null) {
+      return <div className='text-center text-muted mt-5 mb-5'>No hay elementos disponibles</div>
+    } else {
+      return <div className='text-center text-muted mt-5 mb-5'>Seleccione un plazo de pago</div>
+    }
   }
 
   const renderCantidadCell = ({ header, dataKey, minWidth }) => {
@@ -164,7 +105,7 @@ export default function AsociarServicios ({ id, isConfirmado }) {
 
   return (
     <>
-      {isList === OPERATIONS.FULFILLED
+      {isLoading()
         ? renderTable()
         : <Loader.Grid rows={4} columns={5} />}
     </>
