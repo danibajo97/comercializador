@@ -94,7 +94,6 @@ export const clientesFinalesSlice = createSlice({
     })
     builder.addCase(addContacto.fulfilled, (state, action) => {
       const payload = action.payload
-      console.log({ payload })
       state.isAddContacto = OPERATIONS.FULFILLED
       state.listClientesFinales.push({
         ...payload.data,

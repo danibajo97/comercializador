@@ -11,27 +11,17 @@ import { useNavigate, useParams } from 'react-router-dom'
 
 import { DefaultHeader, Button } from 'components'
 import ClientesFinalesForm from './ClientesFinalesForm'
-import ClienteForm from 'pages/contacto/components/ClienteForm'
-import useModal from 'hooks/useModal'
 import useHeader from 'hooks/useHeader'
 
 function ClientesFinales () {
   useHeader({ title: 'Convenios' })
+  const navigate = useNavigate()
 
   const params = useParams()
   const { id } = params
 
-  const navigate = useNavigate()
-  const { modal, openModal } = useModal({
-    title: 'Nuevo Cliente',
-    renderBody: ({ closeModal }) => {
-      return <ClienteForm closeModal={closeModal} />
-    }
-  })
-
   return (
     <>
-      {modal}
       <DefaultHeader />
       <Container className='mt--7' fluid>
         <Row>
@@ -49,13 +39,6 @@ function ClientesFinales () {
                       text='Atrás'
                       appearance='default'
                       onClick={() => navigate('/')}
-                      className='mr-2'
-                    />
-                    <Button
-                      icon='plus'
-                      text='Nuevo Cliente'
-                      appearance='primary'
-                      onClick={openModal}
                       className='mr-2'
                     />
                     <Button

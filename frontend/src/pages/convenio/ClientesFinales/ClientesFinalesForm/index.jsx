@@ -1,7 +1,7 @@
 import { Row, Col } from 'reactstrap'
-import { Form, ButtonToolbar, CheckPicker } from 'rsuite'
+import { Form, ButtonToolbar, CheckPicker, Badge } from 'rsuite'
 
-import { FormField, Loader, Button } from 'components'
+import { Loader, Button, FormFieldAddon } from 'components'
 import Table from 'components/table/Table'
 
 import useClientesFinalesForm from './useClientesFinalesForm'
@@ -19,7 +19,8 @@ function ClientesFinalesPanel () {
     onSelectClienteFinal,
     onClean,
     isClientesFinalesRelacionados,
-    handleSubmit
+    handleSubmit,
+    modalInfo
   } = useClientesFinalesForm()
 
   const renderForm = () => (
@@ -32,7 +33,7 @@ function ClientesFinalesPanel () {
     >
       <Row hidden={isConfirmado()}>
         <Col xs='12'>
-          <FormField
+          <FormFieldAddon
             name='cliente_final'
             label='Cliente Final'
             accepter={CheckPicker}
@@ -40,11 +41,27 @@ function ClientesFinalesPanel () {
               label: cliente.nombre,
               value: cliente.id
             }))}
+            renderValue={(value, item) => {
+              const context = `${item.length} cliente${item.length === 1 ? '' : 's'}`
+              let text = item.map(i => i.label).join(', ')
+              if (text.length > 40) text = text.substring(0, 40) + '...'
+              return (
+                <>
+                  <span className='d-none d-md-inline-block'>{text}</span>
+                  <Badge style={{ backgroundColor: '#3498FF', fontSize: 14, margin: 1 }} content={context} />
+                </>
+              )
+            }}
             onSelect={onSelectClienteFinal}
             onClean={onClean}
             disabledItemValues={nuevoContacto}
             required
             block
+            buttonInfo={{
+              icon: 'plus',
+              text: 'Nuevo Cliente',
+              onClick: modalInfo.openModal
+            }}
           />
         </Col>
       </Row>
@@ -75,6 +92,7 @@ function ClientesFinalesPanel () {
 
   return (
     <>
+      {modalInfo.modal}
       {isLoading()
         ? (
           <>

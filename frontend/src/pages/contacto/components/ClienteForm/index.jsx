@@ -3,7 +3,7 @@ import { Col, Form, ButtonToolbar, SelectPicker } from 'rsuite'
 import { FormField, Textarea, Loader, Button } from 'components'
 import useClienteForm from './useClienteForm'
 
-export default function ClienteForm ({ closeModal }) {
+export default function ClienteForm ({ closeModal, type }) {
   const {
     formModel,
     formRef,
@@ -13,7 +13,7 @@ export default function ClienteForm ({ closeModal }) {
     handleSubmit,
     isLoading,
     dataOrganismo
-  } = useClienteForm({ closeModal })
+  } = useClienteForm({ closeModal, type })
 
   const renderForm = () => (
     <div>

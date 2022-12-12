@@ -8,6 +8,8 @@ import { useParams } from 'react-router-dom'
 import useAuth from 'hooks/useAuth'
 import { date } from 'utils'
 import OPERATIONS from 'constants/operationsRedux'
+import useModal from 'hooks/useModal'
+import ClienteForm from 'pages/contacto/components/ClienteForm'
 
 const INI_VALUE = {
   nroContrato: '',
@@ -29,6 +31,13 @@ export default function useDatosGeneralesForm ({ setCountBD }) {
   const { user } = useAuth()
   const params = useParams()
   const { id } = params
+
+  const { modal, openModal } = useModal({
+    title: 'Nuevo Cliente',
+    renderBody: ({ closeModal }) => {
+      return <ClienteForm closeModal={closeModal} type='datos_generales' />
+    }
+  })
 
   const contrato = useSelector(state => state.datosGenerales.contrato)
   const clientesFinales = useSelector(state => state.datosGenerales.clientesFinales)
@@ -140,5 +149,18 @@ export default function useDatosGeneralesForm ({ setCountBD }) {
   const isUpdate = () => id !== undefined
   const isLoading = () => isClienteFinal === OPERATIONS.FULFILLED || listPersonasAsociadas === OPERATIONS.FULFILLED
 
-  return { formRef, formModel, formValue, setFormValue, handleSubmit, contrato, clientesFinales, personasAsociadas, isLoading, isConfirmado, isUpdate }
+  return {
+    formRef,
+    formModel,
+    formValue,
+    setFormValue,
+    handleSubmit,
+    contrato,
+    clientesFinales,
+    personasAsociadas,
+    isLoading,
+    isConfirmado,
+    isUpdate,
+    nuevoClienteModal: { modal, openModal }
+  }
 }

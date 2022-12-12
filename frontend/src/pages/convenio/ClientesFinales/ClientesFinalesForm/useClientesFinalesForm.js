@@ -7,11 +7,20 @@ import { toast } from 'react-toastify'
 import { retrieveConvenio, stateResetOperation as stateResetOperationConvenio } from 'redux/convenio/convenioSlice'
 import { getListaClientesFinales, addClientesFinales, getClientesFinales, stateResetOperation as stateResetOperationClientesFinales } from 'redux/clientesFinales/clientesFinalesSlice'
 import OPERATIONS from 'constants/operationsRedux'
+import useModal from 'hooks/useModal'
+import ClienteForm from 'pages/contacto/components/ClienteForm'
 
 export default function useClientesFinalesForm () {
   const dispatch = useDispatch()
   const params = useParams()
   const { id } = params
+
+  const { modal, openModal } = useModal({
+    title: 'Nuevo Cliente',
+    renderBody: ({ closeModal }) => {
+      return <ClienteForm closeModal={closeModal} type='cliente_finales' />
+    }
+  })
 
   const convenio = useSelector(state => state.convenio.convenio)
   const listClientesFinales = useSelector(state => state.clientesFinales.listClientesFinales)
@@ -127,6 +136,7 @@ export default function useClientesFinalesForm () {
     onSelectClienteFinal,
     onClean,
     isClientesFinalesRelacionados,
-    handleSubmit
+    handleSubmit,
+    modalInfo: { modal, openModal }
   }
 }

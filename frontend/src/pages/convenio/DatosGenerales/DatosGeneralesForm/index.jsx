@@ -1,6 +1,6 @@
 import { Row, Col, Form, Divider, ButtonToolbar, SelectPicker, DatePicker } from 'rsuite'
 
-import { Button, FormField, Textarea, InputNumber, Loader } from 'components'
+import { Button, FormField, Textarea, InputNumber, Loader, FormFieldAddon } from 'components'
 import useDatosGeneralesForm from './useDatosGeneralesForm'
 
 function DatosGeneralesForm ({ setCountBD }) {
@@ -15,6 +15,7 @@ function DatosGeneralesForm ({ setCountBD }) {
     clientesFinales,
     contrato,
     personasAsociadas,
+    nuevoClienteModal,
     isLoading
   } = useDatosGeneralesForm({ setCountBD })
 
@@ -48,12 +49,29 @@ function DatosGeneralesForm ({ setCountBD }) {
           </h6>
           <Row>
             <Col xs={24} sm={12} md={12} lg={12} className='mb-4'>
-              <FormField
-                name='cliente' label='Cliente' accepter={SelectPicker} data={clientesFinales.map(cliente => ({
+              <FormFieldAddon
+                name='cliente'
+                label='Cliente'
+                accepter={SelectPicker}
+                data={clientesFinales.map(cliente => ({
                   label: cliente.nombre,
                   value: cliente.id
-                }))} required block
+                }))}
+                renderValue={(value, item) => {
+                  if (!item) return <span className='text-muted'>Seleccionar</span>
+                  let text = item.label
+                  if (text.length > 10) text = text.substring(0, 10) + '...'
+                  return <div title={item.label}>{text}</div>
+                }}
+                buttonInfo={{
+                  icon: 'plus',
+                  text: 'Nuevo Cliente',
+                  onClick: () => nuevoClienteModal.openModal()
+                }}
+                required
+                block
               />
+              <div style={{ marginTop: 20 }} />
               <FormField
                 name='solicitadoPor' label='Solicitado Por' accepter={SelectPicker} data={personasAsociadas.map(persona => ({
                   label: persona.nombre_completo,
@@ -91,6 +109,7 @@ function DatosGeneralesForm ({ setCountBD }) {
 
   return (
     <>
+      {nuevoClienteModal.modal}
       {isLoading()
         ? renderForm()
         : <Loader.Paragraph rows={3} />}
