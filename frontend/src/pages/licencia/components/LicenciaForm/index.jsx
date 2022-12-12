@@ -1,4 +1,4 @@
-import { Col, Form, ButtonToolbar, SelectPicker, DatePicker, Radio, RadioGroup } from 'rsuite'
+import { Col, Form, ButtonToolbar, SelectPicker, DatePicker, Radio, RadioGroup, Checkbox } from 'rsuite'
 
 import { FormField, Textarea, Loader, Button } from 'components'
 import useLicenciaForm from './useLicenciaForm'
@@ -77,6 +77,7 @@ export default function LicenciaForm ({ closeModal, solicitudLicencia }) {
         />
         <FormField name='claveRegistro' label='Clave de Registro' required />
         <FormField name='observaciones' label='Observaciones' accepter={Textarea} rows={3} />
+        <Checkbox name='problemaRegistroLicencia' value='Aprob'>Problemas con el registro licencia anterior</Checkbox>
       </Col>
       <Col xs={24} className='mt-4'>
         <ButtonToolbar>
