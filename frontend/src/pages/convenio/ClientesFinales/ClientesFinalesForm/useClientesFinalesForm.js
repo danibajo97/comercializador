@@ -18,7 +18,7 @@ export default function useClientesFinalesForm () {
   const { modal, openModal } = useModal({
     title: 'Nuevo Cliente',
     renderBody: ({ closeModal }) => {
-      return <ClienteForm closeModal={closeModal} />
+      return <ClienteForm closeModal={closeModal} type='cliente_finales' />
     }
   })
 

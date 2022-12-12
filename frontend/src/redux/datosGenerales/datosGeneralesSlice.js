@@ -1,4 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
+import { toast } from 'react-toastify'
 
 import api from 'redux/datosGenerales/datosGeneralesAPI'
 import OPERATIONS from 'constants/operationsRedux'
@@ -9,7 +10,8 @@ const initialState = {
   clientesFinales: [],
   isClienteFinal: OPERATIONS.NONE,
   personasAsociadas: [],
-  listPersonasAsociadas: OPERATIONS.NONE
+  listPersonasAsociadas: OPERATIONS.NONE,
+  isAddContacto: OPERATIONS.NONE
 }
 
 export const datosGeneralesSlice = createSlice({
@@ -23,6 +25,9 @@ export const datosGeneralesSlice = createSlice({
       state.isClienteFinal = OPERATIONS.NONE
       state.personasAsociadas = []
       state.listPersonasAsociadas = OPERATIONS.NONE
+    },
+    stateResetOperationAddContacto: (state) => {
+      state.isAddContacto = OPERATIONS.NONE
     }
   },
   extraReducers: (builder) => {
@@ -68,13 +73,32 @@ export const datosGeneralesSlice = createSlice({
       state.personasAsociadas = []
       state.listPersonasAsociadas = OPERATIONS.REJECTED
     })
+
+    // ADD_CONTACTO ACCION
+    builder.addCase(addContacto.pending, (state, action) => {
+      state.isAddContacto = OPERATIONS.PENDING
+    })
+    builder.addCase(addContacto.fulfilled, (state, action) => {
+      const payload = action.payload
+      state.isAddContacto = OPERATIONS.FULFILLED
+      state.clientesFinales.push({
+        ...payload.data,
+        nuevo: true
+      })
+      toast.success(payload.message)
+    })
+    builder.addCase(addContacto.rejected, (state, action) => {
+      state.isAddContacto = OPERATIONS.REJECTED
+      toast.error(action.error.message)
+    })
   }
 })
 
 export const getBuscarContrato = createAsyncThunk('datosGenerales/getBuscarContrato', api.getBuscarContrato)
 export const getClientesFinales = createAsyncThunk('datosGenerales/getClientesFinales', api.getClientesFinales)
 export const getPersonasAsociadas = createAsyncThunk('datosGenerales/getPersonasAsociadas', api.getPersonasAsociadas)
+export const addContacto = createAsyncThunk('datosGenerales/addContacto', api.addContacto)
 
-export const { stateResetOperation } = datosGeneralesSlice.actions
+export const { stateResetOperation, stateResetOperationAddContacto } = datosGeneralesSlice.actions
 
 export default datosGeneralesSlice.reducer

@@ -3,17 +3,19 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Schema } from 'rsuite'
 
 import { getProvincias, stateResetOperation as stateResetOperationContacto } from 'redux/contacto/contactoSlice'
-import { addContacto, stateResetOperationAddContacto } from 'redux/clientesFinales/clientesFinalesSlice'
+import { addContacto as addContactoCF, stateResetOperationAddContacto as stateResetOperationAddContactoCF } from 'redux/clientesFinales/clientesFinalesSlice'
+import { addContacto as addContactoDG, stateResetOperationAddContacto as stateResetOperationAddContactoDG } from 'redux/datosGenerales/datosGeneralesSlice'
 import OPERATIONS from 'constants/operationsRedux'
 
-export default function useClienteForm ({ closeModal }) {
+export default function useClienteForm ({ closeModal, type }) {
   const dispatch = useDispatch()
   const formRef = useRef()
 
   const provincias = useSelector(state => state.contacto.provincias)
   const isListProvincia = useSelector(state => state.contacto.isListProvincia)
 
-  const isAddContacto = useSelector(state => state.clientesFinales.isAddContacto)
+  const isAddContactoCF = useSelector(state => state.clientesFinales.isAddContacto)
+  const isAddContactoDG = useSelector(state => state.datosGenerales.isAddContacto)
 
   const [formValue, setFormValue] = useState({
     nombre: '',
@@ -41,13 +43,15 @@ export default function useClienteForm ({ closeModal }) {
 
     return () => {
       dispatch(stateResetOperationContacto())
-      dispatch(stateResetOperationAddContacto())
+      dispatch(stateResetOperationAddContactoCF())
+      dispatch(stateResetOperationAddContactoDG())
     }
   }, [])
 
   useEffect(() => {
-    if (isAddContacto === OPERATIONS.FULFILLED && closeModal) { closeModal() }
-  }, [isAddContacto])
+    const isAdd = type === 'datos_generales' ? isAddContactoDG : isAddContactoCF
+    if (isAdd === OPERATIONS.FULFILLED && closeModal) { closeModal() }
+  }, [isAddContactoDG, isAddContactoCF])
 
   const handleSubmit = () => {
     if (formRef.current.check()) {
@@ -57,7 +61,11 @@ export default function useClienteForm ({ closeModal }) {
         pais_id: UUID_PAIS,
         contacto_existe: false
       }
-      dispatch(addContacto({ params }))
+      if (type === 'datos_generales') {
+        dispatch(addContactoDG({ params }))
+      } else {
+        dispatch(addContactoCF({ params }))
+      }
     }
   }
 
