@@ -9,9 +9,11 @@ import 'assets/css/argon-dashboard-react.css'
 import 'assets/vendor/nucleo/css/nucleo.css'
 import 'assets/vendor/futura/css/futura.css'
 
-import reportWebVitals from 'reportWebVitals'
 import AppProvider from 'AppProvider'
 import App from 'App'
+
+import * as serviceWorkerRegistration from './serviceWorkerRegistration'
+import reportWebVitals from 'reportWebVitals'
 
 const root = ReactDOM.createRoot(document.getElementById('root'))
 
@@ -20,5 +22,7 @@ root.render(
     <App />
   </AppProvider>
 )
+
+serviceWorkerRegistration.register()
 
 reportWebVitals()
