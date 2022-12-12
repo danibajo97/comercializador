@@ -8,12 +8,14 @@ import InputPassword from 'components/form/InputPassword'
 import InputNumber from 'components/form/InputNumber'
 import Loader from 'components/loader/Loader'
 import CopiarLicencia from 'components/licencia/CopiarLicencia'
+import FormFieldAddon from 'components/form/FormFieldAddon'
 
 export {
   Button,
   CardHeader,
   DefaultHeader,
   FormField,
+  FormFieldAddon,
   Textarea,
   InputNumber,
   InputPassword,
