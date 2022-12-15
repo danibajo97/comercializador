@@ -7,11 +7,20 @@ import { toast } from 'react-toastify'
 import { retrieveConvenio, stateResetOperation as stateResetOperationConvenio } from 'redux/convenio/convenioSlice'
 import { getListaClientesFinales, addClientesFinales, getClientesFinales, stateResetOperation as stateResetOperationClientesFinales } from 'redux/clientesFinales/clientesFinalesSlice'
 import OPERATIONS from 'constants/operationsRedux'
+import useModal from 'hooks/useModal'
+import ClienteForm from 'pages/contacto/components/ClienteForm'
 
 export default function useClientesFinalesForm () {
   const dispatch = useDispatch()
   const params = useParams()
   const { id } = params
+
+  const { modal, openModal } = useModal({
+    title: 'Nuevo Cliente',
+    renderBody: ({ closeModal }) => {
+      return <ClienteForm closeModal={closeModal} type='cliente_finales' />
+    }
+  })
 
   const convenio = useSelector(state => state.convenio.convenio)
   const listClientesFinales = useSelector(state => state.clientesFinales.listClientesFinales)
@@ -20,6 +29,7 @@ export default function useClientesFinalesForm () {
   const clientesFinales = useSelector(state => state.clientesFinales.clientesFinales)
 
   const [db, serDB] = useState(0)
+  const [nuevoContacto, serNuevoContacto] = useState([])
 
   const formRef = useRef()
   const [formValue, setFormValue] = useState({
@@ -47,6 +57,20 @@ export default function useClientesFinalesForm () {
     const data = clientesFinales.map(cf => cf.id)
     if (data.length > 0) { setFormValue({ cliente_final: data }) }
   }, [clientesFinales])
+
+  useEffect(() => {
+    listClientesFinales.forEach(data => {
+      if (data?.nuevo === true) {
+        serNuevoContacto([data.id])
+        setFormValue({
+          cliente_final: [
+            ...formValue.cliente_final,
+            data.id
+          ]
+        })
+      }
+    })
+  }, [listClientesFinales])
 
   useEffect(() => {
     if (convenio !== null) {
@@ -95,7 +119,7 @@ export default function useClientesFinalesForm () {
         </Message>)
   }
 
-  const isComfirmado = () => convenio && convenio.estado === 3
+  const isConfirmado = () => convenio && convenio.estado >= 3
 
   const isLoading = () => isList === OPERATIONS.FULFILLED && isListClientesFinales === OPERATIONS.FULFILLED
 
@@ -104,13 +128,15 @@ export default function useClientesFinalesForm () {
     formValue,
     setFormValue,
     formModel,
-    isComfirmado,
+    isConfirmado,
     isLoading,
     listClientesFinales,
+    nuevoContacto,
     tableData,
     onSelectClienteFinal,
     onClean,
     isClientesFinalesRelacionados,
-    handleSubmit
+    handleSubmit,
+    modalInfo: { modal, openModal }
   }
 }

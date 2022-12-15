@@ -5,7 +5,8 @@ const API_URL = process.env.REACT_APP_API_URL
 export default {
   getBuscarContrato,
   getClientesFinales,
-  getPersonasAsociadas
+  getPersonasAsociadas,
+  addContacto
 }
 
 async function getBuscarContrato ({ contrato }) {
@@ -57,5 +58,24 @@ async function getPersonasAsociadas ({ convenio = null, cliente = null }) {
     return data.response
   } catch (error) {
     throw new Error('Error al listar las personas osociadas.')
+  }
+}
+
+async function addContacto ({ params }) {
+  const access = await window.sessionStorage.getItem('access')
+  const options = {
+    method: 'POST',
+    url: `${API_URL}/api-acceso/usuario_final/`,
+    headers: { Authorization: `Bearer ${access}` },
+    data: params
+  }
+  try {
+    const { data } = await axios(options)
+    return {
+      data: data.versat_response,
+      message: 'Se adicionó el contacto correctamente.'
+    }
+  } catch (error) {
+    throw new Error('Error al adicionar el contacto.')
   }
 }

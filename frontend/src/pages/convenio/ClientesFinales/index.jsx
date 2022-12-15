@@ -1,4 +1,3 @@
-import React from 'react'
 import {
   Card,
   Row,
@@ -7,28 +6,22 @@ import {
   CardHeader,
   CardBody
 } from 'reactstrap'
-import { Button, Panel } from 'rsuite'
-import { useNavigate } from 'react-router-dom'
+import { Panel } from 'rsuite'
+import { useNavigate, useParams } from 'react-router-dom'
 
-import { DefaultHeader } from 'components'
+import { DefaultHeader, Button } from 'components'
 import ClientesFinalesForm from './ClientesFinalesForm'
-import ClienteForm from 'pages/contacto/components/ClienteForm'
-import useModal from 'hooks/useModal'
 import useHeader from 'hooks/useHeader'
 
 function ClientesFinales () {
   useHeader({ title: 'Convenios' })
   const navigate = useNavigate()
-  const { modal, openModal } = useModal({
-    title: 'Nuevo Cliente',
-    renderBody: ({ closeModal }) => {
-      return <ClienteForm closeModal={closeModal} />
-    }
-  })
+
+  const params = useParams()
+  const { id } = params
 
   return (
     <>
-      {modal}
       <DefaultHeader />
       <Container className='mt--7' fluid>
         <Row>
@@ -36,28 +29,24 @@ function ClientesFinales () {
             <Card className='bg-secondary shadow'>
               <CardHeader className='bg-white border-0'>
                 <Row className='align-items-center'>
-                  <Col xs='8'>
+                  <Col xs='6' md='4'>
                     <h3 className='mb-0'>Convenios <span className='text-muted'>(Clientes Finales)</span></h3>
 
                   </Col>
-                  <Col className='text-right' xs='4'>
+                  <Col className='text-right' xs='6' md='8'>
                     <Button
-                      className='mr-2'
-                      size='sm'
-                      appearance='primary'
-                      onClick={openModal}
-                    >
-                      <i className='d-sm-block d-md-none fa fa-plus' />
-                      <div className='mf-2 d-none d-md-inline-block'>Nuevo Cliente</div>
-                    </Button>
-                    <Button
-                      size='sm'
+                      icon='arrow-left'
+                      text='Atrás'
                       appearance='default'
-                      onClick={() => navigate(-1)}
-                    >
-                      <i className='d-sm-block d-md-none fa fa-arrow-left' />
-                      <div className='mf-2 d-none d-md-inline-block'>Atrás</div>
-                    </Button>
+                      onClick={() => navigate('/')}
+                      className='mr-2'
+                    />
+                    <Button
+                      icon='arrow-right'
+                      text='Ir a servicios contratados'
+                      appearance='primary'
+                      onClick={() => navigate(`/servicios-contratados/${id}`)}
+                    />
                   </Col>
                 </Row>
               </CardHeader>

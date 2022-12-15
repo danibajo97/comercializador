@@ -6,12 +6,12 @@ export default {
   setDate
 }
 
-function datetime ({ date }) {
-  return DateTime.fromJSDate(new Date(date)).plus({ days: 1 })
+function datetime ({ date, days = 1 }) {
+  return DateTime.fromJSDate(new Date(date)).plus({ days })
 }
 
-function toISODate ({ date }) {
-  return datetime({ date }).toISODate()
+function toISODate ({ date, days = 1 }) {
+  return datetime({ date, days }).toISODate()
 }
 
 function toJSDate ({ date }) {

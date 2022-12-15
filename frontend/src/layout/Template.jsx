@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
 import { Container } from 'reactstrap'
 import { Outlet, useNavigate } from 'react-router-dom'
 
@@ -18,6 +18,8 @@ const Template = ({ routes }) => {
   useEffect(() => {
     if (isLoading === false && !isAuth) navigate('/login')
   }, [isLoading, isAuth])
+
+  if (isLoading) return <div />
 
   return (
     <>

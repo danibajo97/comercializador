@@ -1,11 +1,9 @@
-import React from 'react'
-import { Col, Form, Button, ButtonToolbar, SelectPicker } from 'rsuite'
+import { Col, Form, ButtonToolbar, SelectPicker } from 'rsuite'
 
-import { FormField, Textarea, Loader } from 'components'
-
+import { FormField, Textarea, Loader, Button } from 'components'
 import useClienteForm from './useClienteForm'
 
-export default function ClienteForm ({ closeModal }) {
+export default function ClienteForm ({ closeModal, type }) {
   const {
     formModel,
     formRef,
@@ -15,7 +13,7 @@ export default function ClienteForm ({ closeModal }) {
     handleSubmit,
     isLoading,
     dataOrganismo
-  } = useClienteForm({ closeModal })
+  } = useClienteForm({ closeModal, type })
 
   const renderForm = () => (
     <div>
@@ -26,12 +24,12 @@ export default function ClienteForm ({ closeModal }) {
         formValue={formValue}
         model={formModel}
       >
-        <Col xs={12}>
+        <Col xs={24} sm={12} className='mb-4'>
           <FormField name='nombre' label='Nombre' required />
           <FormField name='organismo_id' label='Organismo' accepter={SelectPicker} data={dataOrganismo} block required />
           <FormField name='correo' label='Correo' required />
         </Col>
-        <Col xs={12}>
+        <Col xs={24} sm={12}>
           <FormField name='abreviatura' label='Abreviatura' />
           <FormField name='telefono' label='Teléfono' />
           <FormField
@@ -49,13 +47,20 @@ export default function ClienteForm ({ closeModal }) {
         </Col>
         <Col xs={24} className='mt-4'>
           <ButtonToolbar>
-            <Button appearance='primary' size='sm' onClick={handleSubmit}>
-              Guardar
-            </Button>
+            <Button
+              icon='save'
+              text='Guardar'
+              appearance='primary'
+              onClick={handleSubmit}
+            />
             {closeModal &&
-              <Button appearance='subtle' color='red' size='sm' onClick={closeModal}>
-                Cerrar
-              </Button>}
+              <Button
+                icon='times'
+                text='Cerrar'
+                appearance='subtle'
+                color='red'
+                onClick={closeModal}
+              />}
           </ButtonToolbar>
         </Col>
       </Form>

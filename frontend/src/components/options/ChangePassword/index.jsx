@@ -1,10 +1,9 @@
-import React from 'react'
-import { Col, Form, Button, ButtonToolbar } from 'rsuite'
+import { Col, Form, ButtonToolbar } from 'rsuite'
 
-import { InputPassword } from 'components'
+import { InputPassword, Button } from 'components'
 import useChangePassword from './useChangePassword'
 
-function ChangePassword ({ closeModal }) {
+export default function ChangePassword ({ closeModal }) {
   const {
     formRef,
     formValue,
@@ -41,17 +40,22 @@ function ChangePassword ({ closeModal }) {
       </Col>
       <Col xs={24} className='mt-4'>
         <ButtonToolbar>
-          <Button appearance='primary' size='sm' onClick={handleSubmit}>
-            Cambiar Contraseña
-          </Button>
+          <Button
+            icon='key'
+            text='Cambiar Contraseña'
+            appearance='primary'
+            onClick={handleSubmit}
+          />
           {closeModal &&
-            <Button appearance='subtle' color='red' size='sm' onClick={closeModal}>
-              Cerrar
-            </Button>}
+            <Button
+              icon='times'
+              text='Cerrar'
+              appearance='subtle'
+              color='red'
+              onClick={closeModal}
+            />}
         </ButtonToolbar>
       </Col>
     </Form>
   )
 }
-
-export default ChangePassword

@@ -10,7 +10,7 @@ export default {
   deleteConvenio,
   getListadoServicios,
   validarConvenio,
-  confirmarConvenio,
+  terminarConvenio,
   getWidgesInfo
 }
 
@@ -145,11 +145,11 @@ async function validarConvenio ({ id }) {
   }
 }
 
-async function confirmarConvenio ({ id }) {
+async function terminarConvenio ({ id }) {
   const access = await window.sessionStorage.getItem('access')
   const options = {
     method: 'GET',
-    url: `${API_URL}/api-acceso/convenio/confirmar_convenio/`,
+    url: `${API_URL}/api-acceso/convenio/terminar_convenio/`,
     headers: { Authorization: `Bearer ${access}` },
     params: {
       id
@@ -159,7 +159,7 @@ async function confirmarConvenio ({ id }) {
     await axios(options)
     return {
       id,
-      message: 'Se confirmó el convenio correctamente.'
+      message: 'Se terminó el convenio correctamente.'
     }
   } catch (error) {
     const { responseText } = error?.request
@@ -182,6 +182,6 @@ async function getWidgesInfo () {
     const { data } = await axios(options)
     return data
   } catch (error) {
-    throw new Error('Error al listar los convenios.')
+    throw new Error('Error al listar la información de los convenios.')
   }
 }

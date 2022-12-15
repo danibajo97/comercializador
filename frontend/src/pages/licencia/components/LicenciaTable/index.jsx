@@ -1,17 +1,30 @@
-import React from 'react'
+import { useEffect } from 'react'
 import { Popover, Whisper, Dropdown, IconButton, Table as TableRS } from 'rsuite'
-import MoreIcon from '@rsuite/icons/legacy/More'
 
 import Table from 'components/table/Table'
-import usePagination from 'hooks/usePagination'
 import useAlert from 'hooks/useAlert'
-import { useDispatch } from 'react-redux'
-import { deleteSolicitudLicencia } from 'redux/solicitudLicencia/solicitudLicenciaSlice'
+import { useDispatch, useSelector } from 'react-redux'
+import { deleteSolicitudLicencia, otorgarSolicitudLicencia, getSolicitudLicenciaAll, stateResetOperation } from 'redux/solicitudLicencia/solicitudLicenciaSlice'
 import useModal from 'hooks/useModal'
 import LicenciaForm from '../LicenciaForm'
+import { CopiarLicencia } from 'components'
+import OPERATIONS from 'constants/operationsRedux'
+
+const PAGINATION_LIMIT = parseInt(process.env.REACT_APP_PAGINATION_LIMIT)
 
 const ActionCell = ({ rowData, dataKey, ...props }) => {
+  const isOtorgada = rowData.otorgada
   const dispatch = useDispatch()
+
+  const isOtorgar = useSelector(state => state.solicitudLicencia.isOtorgar)
+
+  useEffect(() => {
+    if (isOtorgar === OPERATIONS.FULFILLED) { dispatch(getSolicitudLicenciaAll({ pagination: { page: 1, limit: PAGINATION_LIMIT } })) }
+  }, [isOtorgar])
+
+  useEffect(() => {
+    dispatch(stateResetOperation())
+  }, [])
 
   const modalSolicitud = useModal({
     title: 'Solicitud de Licencia',
@@ -27,11 +40,28 @@ const ActionCell = ({ rowData, dataKey, ...props }) => {
     }
   })
 
+  const modalCopiarLicencia = useModal({
+    title: 'Copiar Licencia',
+    size: 'sm',
+    renderBody: ({ closeModal }) => {
+      return (
+        <CopiarLicencia closeModal={closeModal} textLicencia={rowData.licencia} />
+      )
+    }
+  })
+
   const deleteAlert = useAlert({
-    type: 'delete',
+    type: 'eliminar',
     text: 'Se eliminará la solicitud de licencia, esta acción no se puede deshacer.',
     isConfirm: true,
     textConfirm: 'Eliminar Solicitud'
+  })
+
+  const otorgarLicenciaAlert = useAlert({
+    type: 'licencia',
+    text: 'Se otorgará la licencia, esta acción no se puede deshacer.',
+    isConfirm: true,
+    textConfirm: 'Otorgar Licencia'
   })
 
   const operationUpdate = () => {
@@ -45,9 +75,20 @@ const ActionCell = ({ rowData, dataKey, ...props }) => {
     deleteAlert.openAlert()
   }
 
+  const operationOtorgarLicencia = () => {
+    otorgarLicenciaAlert.setConfirmAccion(() => {
+      dispatch(otorgarSolicitudLicencia({ detalle: rowData.iddetalle }))
+    })
+    otorgarLicenciaAlert.openAlert()
+  }
+
+  const operationCopiarLicencia = () => {
+    modalCopiarLicencia.openModal()
+  }
+
   return (
     <>
-      {modalSolicitud.modal}{deleteAlert.alert}
+      {modalCopiarLicencia.modal}{modalSolicitud.modal}{deleteAlert.alert}{otorgarLicenciaAlert.alert}
       <TableRS.Cell {...props} className='link-group'>
         <Whisper
           placement='bottomEnd' trigger='click' speaker={({ onClose, left, top, className }, ref) => {
@@ -60,40 +101,52 @@ const ActionCell = ({ rowData, dataKey, ...props }) => {
                 case 2:
                   operationDelete()
                   break
+                case 3:
+                  operationOtorgarLicencia()
+                  break
+                case 4:
+                  operationCopiarLicencia()
+                  break
               }
             }
             return (
               <Popover ref={ref} className={className} style={{ left, top }} full>
                 <Dropdown.Menu onSelect={handleSelect}>
-                  <Dropdown.Item eventKey={1}>Editar</Dropdown.Item>
-                  <Dropdown.Item eventKey={2}>Eliminar</Dropdown.Item>
+                  <Dropdown.Item eventKey={4} hidden={!isOtorgada}>Copiar Licencia</Dropdown.Item>
+                  <Dropdown.Item eventKey={3} hidden={isOtorgada}>Otorgar Licencia</Dropdown.Item>
+                  <Dropdown.Item divider hidden={isOtorgada} />
+                  <Dropdown.Item eventKey={1} hidden={isOtorgada}>Editar</Dropdown.Item>
+                  <Dropdown.Item eventKey={2} hidden={isOtorgada}>Eliminar</Dropdown.Item>
                 </Dropdown.Menu>
               </Popover>
             )
           }}
         >
-          <IconButton className='mt--2 mb--2' size='sm' appearance='subtle' icon={<MoreIcon />} />
+          <IconButton className='mt--2 mb--2 pl-2 pr-2' size='sm' appearance='subtle' icon={<i className='fa fa-ellipsis-v' />} />
         </Whisper>
       </TableRS.Cell>
     </>
   )
 }
 
-export default function LicenciaTable ({ clientes }) {
-  const { pagination, dataPage } = usePagination({ data: clientes })
-
+export default function LicenciaTable ({ clientes, pagination, onSortColumn, sortInfo }) {
   return (
     <>
-      <Table data={dataPage} autoHeight>
-        {Table.Column({ header: 'Nro', dataKey: 'no_solicitud', flex: 0.5 })}
-        {Table.Column({ header: 'Fecha', dataKey: 'fecha', flex: 0.8 })}
-        {Table.Column({ header: 'Persona que solicita', dataKey: 'solicitado_por_nombre', flex: 1 })}
-        {Table.Column({ header: 'Cliente final', dataKey: 'cliente_final_nombre', flex: 1 })}
-        {Table.Column({ header: 'Servicio', dataKey: 'servicio_nombre', flex: 1 })}
-        {Table.Column({ header: 'Clave Registro', dataKey: 'semilla', flex: 1 })}
-        {Table.ColumnBoolean({ header: 'Licencia', dataKey: 'licencia', flex: 1, opcions: { yes: 'Otorgada', no: 'Pendiente' } })}
-        {Table.Column({ header: 'Observaciones', dataKey: 'observacion', flex: 1 })}
-        {Table.ColumnAccion({ header: 'Acciones', dataKey: 'id', action: ActionCell })}
+      <Table
+        sortColumn={sortInfo.sortColumn}
+        sortType={sortInfo.sortType}
+        onSortColumn={onSortColumn}
+        data={clientes}
+        autoHeight
+      >
+        {Table.Column({ header: 'Nro', dataKey: 'no_solicitud', flex: 0.3, minWidth: 50, sortable: true })}
+        {Table.Column({ header: 'Fecha', dataKey: 'fecha', flex: 0.5, sortable: true })}
+        {Table.Column({ header: 'Persona que solicita', dataKey: 'solicitado_por_nombre', flex: 1, minWidth: 200, sortable: true })}
+        {Table.Column({ header: 'Cliente final', dataKey: 'cliente_final_nombre', flex: 1.5, minWidth: 200, sortable: true })}
+        {Table.Column({ header: 'Servicio', dataKey: 'servicio_nombre', flex: 1.5, minWidth: 200, sortable: true })}
+        {Table.ColumnBoolean({ header: 'Licencia', dataKey: 'licencia', flex: 1, opcions: { yes: 'Otorgada', no: 'Pendiente', sortable: true } })}
+        {Table.Column({ header: 'Observación', dataKey: 'observacion', flex: 2, minWidth: 250, sortable: true })}
+        {Table.ColumnAccion({ action: ActionCell })}
       </Table>
       {pagination}
     </>

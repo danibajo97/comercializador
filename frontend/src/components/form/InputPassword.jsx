@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { Form, InputGroup } from 'rsuite'
 import EyeIcon from '@rsuite/icons/legacy/Eye'
 import EyeSlashIcon from '@rsuite/icons/legacy/EyeSlash'

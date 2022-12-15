@@ -1,27 +1,39 @@
-import useAlert from 'hooks/useAlert'
-import { useDispatch } from 'react-redux'
+import { useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 
-import { deleteConvenio, validarConvenio, confirmarConvenio } from 'redux/convenio/convenioSlice'
+import useAlert from 'hooks/useAlert'
+import { deleteConvenio, validarConvenio, terminarConvenio, getWidgesInfo } from 'redux/convenio/convenioSlice'
+import OPERATIONS from 'constants/operationsRedux'
 
 export default function useConvenioTable () {
   const dispatch = useDispatch()
 
+  const isValidar = useSelector(state => state.convenio.isValidar)
+  const isTerminar = useSelector(state => state.convenio.isTerminar)
+  const isDelete = useSelector(state => state.convenio.isDelete)
+
+  useEffect(() => {
+    if (isValidar === OPERATIONS.FULFILLED || isTerminar === OPERATIONS.FULFILLED || isDelete === OPERATIONS.FULFILLED) {
+      dispatch(getWidgesInfo())
+    }
+  }, [isValidar, isTerminar, isDelete])
+
   const deleteAlert = useAlert({
-    type: 'delete',
+    type: 'eliminar',
     text: 'Se eliminará el convenio, esta acción no se puede deshacer.',
     isConfirm: true,
     textConfirm: 'Eliminar Convenio'
   })
 
   const validAlert = useAlert({
-    type: 'valid',
+    type: 'validar',
     text: 'Se validará el convenio.',
     isConfirm: true,
     textConfirm: 'Validar Convenio'
   })
 
   const terminarAlert = useAlert({
-    type: 'confirm',
+    type: 'terminar',
     text: 'Se terminará el convenio.',
     isConfirm: true,
     textConfirm: 'Terminar Convenio'
@@ -41,9 +53,9 @@ export default function useConvenioTable () {
     validAlert.openAlert()
   }
 
-  const operationConfirmar = ({ id }) => {
+  const operationTerminar = ({ id }) => {
     terminarAlert.setConfirmAccion(() => {
-      dispatch(confirmarConvenio({ id }))
+      dispatch(terminarConvenio({ id }))
     })
     terminarAlert.openAlert()
   }
@@ -70,7 +82,7 @@ export default function useConvenioTable () {
         operationValidar({ id: rowData.id })
         break
       case 7:
-        operationConfirmar({ id: rowData.id })
+        operationTerminar({ id: rowData.id })
         break
     }
   }

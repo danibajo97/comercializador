@@ -8,6 +8,8 @@ import { useParams } from 'react-router-dom'
 import useAuth from 'hooks/useAuth'
 import { date } from 'utils'
 import OPERATIONS from 'constants/operationsRedux'
+import useModal from 'hooks/useModal'
+import ClienteForm from 'pages/contacto/components/ClienteForm'
 
 const INI_VALUE = {
   nroContrato: '',
@@ -21,7 +23,7 @@ const INI_VALUE = {
   observaciones: ''
 }
 
-export default function useDatosGeneralesForm () {
+export default function useDatosGeneralesForm ({ setCountBD }) {
   const dispatch = useDispatch()
   const formRef = useRef()
   const [formValue, setFormValue] = useState(INI_VALUE)
@@ -29,6 +31,13 @@ export default function useDatosGeneralesForm () {
   const { user } = useAuth()
   const params = useParams()
   const { id } = params
+
+  const { modal, openModal } = useModal({
+    title: 'Nuevo Cliente',
+    renderBody: ({ closeModal }) => {
+      return <ClienteForm closeModal={closeModal} type='datos_generales' />
+    }
+  })
 
   const contrato = useSelector(state => state.datosGenerales.contrato)
   const clientesFinales = useSelector(state => state.datosGenerales.clientesFinales)
@@ -77,6 +86,7 @@ export default function useDatosGeneralesForm () {
         observaciones: convenio.observaciones,
         facturese_a: user.distribuidor.id
       })
+      setCountBD(convenio.cantidad_bd)
     }
   }, [convenio])
 
@@ -126,6 +136,7 @@ export default function useDatosGeneralesForm () {
         observaciones: formValue.observaciones,
         solicitado_por: formValue.solicitadoPor
       }
+      setCountBD(formValue.cantidadBaseDatos)
       if (id === undefined) {
         dispatch(addConvenio({ params }))
       } else {
@@ -134,9 +145,22 @@ export default function useDatosGeneralesForm () {
     }
   }
 
-  const isConfirmado = () => convenio && convenio.estado === 3
+  const isConfirmado = () => convenio && convenio.estado >= 3
   const isUpdate = () => id !== undefined
   const isLoading = () => isClienteFinal === OPERATIONS.FULFILLED || listPersonasAsociadas === OPERATIONS.FULFILLED
 
-  return { formRef, formModel, formValue, setFormValue, handleSubmit, contrato, clientesFinales, personasAsociadas, isLoading, isConfirmado, isUpdate }
+  return {
+    formRef,
+    formModel,
+    formValue,
+    setFormValue,
+    handleSubmit,
+    contrato,
+    clientesFinales,
+    personasAsociadas,
+    isLoading,
+    isConfirmado,
+    isUpdate,
+    nuevoClienteModal: { modal, openModal }
+  }
 }

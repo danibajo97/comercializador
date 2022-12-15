@@ -11,7 +11,8 @@ const initialState = {
   isList: OPERATIONS.NONE,
   isAdd: OPERATIONS.NONE,
   gestionadosPor: [],
-  isListGestionadosPor: OPERATIONS.NONE
+  isListGestionadosPor: OPERATIONS.NONE,
+  isAddContacto: OPERATIONS.NONE
 }
 
 export const clientesFinalesSlice = createSlice({
@@ -26,6 +27,9 @@ export const clientesFinalesSlice = createSlice({
       state.clientesFinales = []
       state.isListGestionadosPor = OPERATIONS.NONE
       state.gestionadosPor = []
+    },
+    stateResetOperationAddContacto: (state) => {
+      state.isAddContacto = OPERATIONS.NONE
     }
   },
   extraReducers: (builder) => {
@@ -83,6 +87,24 @@ export const clientesFinalesSlice = createSlice({
       state.gestionadosPor = []
       toast.error(action.error)
     })
+
+    // ADD_CONTACTO ACCION
+    builder.addCase(addContacto.pending, (state, action) => {
+      state.isAddContacto = OPERATIONS.PENDING
+    })
+    builder.addCase(addContacto.fulfilled, (state, action) => {
+      const payload = action.payload
+      state.isAddContacto = OPERATIONS.FULFILLED
+      state.listClientesFinales.push({
+        ...payload.data,
+        nuevo: true
+      })
+      toast.success(payload.message)
+    })
+    builder.addCase(addContacto.rejected, (state, action) => {
+      state.isAddContacto = OPERATIONS.REJECTED
+      toast.error(action.error.message)
+    })
   }
 })
 
@@ -90,7 +112,8 @@ export const getListaClientesFinales = createAsyncThunk('clientesFinales/getList
 export const getClientesFinales = createAsyncThunk('clientesFinales/getClientesFinales', api.getClientesFinales)
 export const addClientesFinales = createAsyncThunk('clientesFinales/addClientesFinales', api.addClientesFinales)
 export const getGestionadosPor = createAsyncThunk('clientesFinales/getGestionadosPor', api.getGestionadosPor)
+export const addContacto = createAsyncThunk('clientesFinales/addContacto', api.addContacto)
 
-export const { stateResetOperation } = clientesFinalesSlice.actions
+export const { stateResetOperation, stateResetOperationAddContacto } = clientesFinalesSlice.actions
 
 export default clientesFinalesSlice.reducer

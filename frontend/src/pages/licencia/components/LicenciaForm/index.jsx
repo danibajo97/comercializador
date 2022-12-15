@@ -1,7 +1,6 @@
-import React from 'react'
-import { Col, Form, Button, ButtonToolbar, SelectPicker, DatePicker, Radio, RadioGroup } from 'rsuite'
+import { Col, Form, ButtonToolbar, SelectPicker, DatePicker, Radio, RadioGroup, Checkbox } from 'rsuite'
 
-import { FormField, Textarea, Loader } from 'components'
+import { FormField, Textarea, Loader, Button } from 'components'
 import useLicenciaForm from './useLicenciaForm'
 
 export default function LicenciaForm ({ closeModal, solicitudLicencia }) {
@@ -46,7 +45,7 @@ export default function LicenciaForm ({ closeModal, solicitudLicencia }) {
             value: convenio.id
           }))}
           block
-          required
+          required={formValue.tipo === 'venta'}
           hidden={formValue.tipo !== 'venta'}
         />
         <FormField name='fecha' label='Fecha' accepter={DatePicker} block required />
@@ -78,16 +77,24 @@ export default function LicenciaForm ({ closeModal, solicitudLicencia }) {
         />
         <FormField name='claveRegistro' label='Clave de Registro' required />
         <FormField name='observaciones' label='Observaciones' accepter={Textarea} rows={3} />
+        <Checkbox name='problemaRegistroLicencia' value='Aprob'>Problemas con el registro licencia anterior</Checkbox>
       </Col>
       <Col xs={24} className='mt-4'>
         <ButtonToolbar>
-          <Button appearance='primary' size='sm' onClick={handleSubmit}>
-            {!isUpdate() ? 'Guardar' : 'Editar'}
-          </Button>
+          <Button
+            icon='save'
+            text='Guardar'
+            appearance='primary'
+            onClick={handleSubmit}
+          />
           {closeModal &&
-            <Button appearance='subtle' color='red' size='sm' onClick={closeModal}>
-              Cerrar
-            </Button>}
+            <Button
+              icon='times'
+              text='Cerrar'
+              appearance='subtle'
+              color='red'
+              onClick={closeModal}
+            />}
         </ButtonToolbar>
       </Col>
     </Form>

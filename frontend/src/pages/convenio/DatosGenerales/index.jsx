@@ -1,4 +1,4 @@
-import React from 'react'
+import { useState } from 'react'
 import {
   Card,
   Row,
@@ -7,16 +7,36 @@ import {
   CardHeader,
   CardBody
 } from 'reactstrap'
-import { Button, Panel } from 'rsuite'
-import { useNavigate } from 'react-router-dom'
+import { Panel } from 'rsuite'
+import { useNavigate, useParams } from 'react-router-dom'
 
-import { DefaultHeader } from 'components'
+import { DefaultHeader, Button } from 'components'
 import DatosGeneralesForm from './DatosGeneralesForm'
 import useHeader from 'hooks/useHeader'
 
 function DatosGenerales (props) {
+  const [countBD, setCountBD] = useState(1)
   useHeader({ title: 'Convenios' })
   const navigate = useNavigate()
+
+  const params = useParams()
+  const { id } = params
+
+  const botonSiguiente = (db) => {
+    if (id === undefined) return <></>
+    else {
+      const botonText = parseInt(db) === 1 ? 'servicios contratados' : 'clientes finales'
+      const botonURL = parseInt(db) === 1 ? 'servicios-contratados' : 'clientes-finales'
+      return (
+        <Button
+          icon='arrow-right'
+          text={`Ir a ${botonText}`}
+          appearance='primary'
+          onClick={() => navigate(`/${botonURL}/${id}`)}
+        />
+      )
+    }
+  }
 
   return (
     <>
@@ -27,18 +47,18 @@ function DatosGenerales (props) {
             <Card className='bg-secondary shadow'>
               <CardHeader className='bg-white border-0'>
                 <Row className='align-items-center'>
-                  <Col xs='8'>
+                  <Col xs='6'>
                     <h3 className='mb-0'>Convenios <span className='text-muted'>(Datos Generales)</span></h3>
                   </Col>
-                  <Col className='text-right' xs='4'>
+                  <Col className='text-right' xs='6'>
                     <Button
-                      size='sm'
+                      icon='arrow-left'
+                      text='Atrás'
+                      className='mr-2'
                       appearance='default'
                       onClick={() => navigate(-1)}
-                    >
-                      <i className='d-sm-block d-md-none fa fa-arrow-left' />
-                      <div className='mf-2 d-none d-md-inline-block'>Atrás</div>
-                    </Button>
+                    />
+                    {botonSiguiente(countBD)}
                   </Col>
                 </Row>
               </CardHeader>
@@ -46,7 +66,7 @@ function DatosGenerales (props) {
                 <Row>
                   <Col xs='12'>
                     <Panel bordered>
-                      <DatosGeneralesForm />
+                      <DatosGeneralesForm setCountBD={setCountBD} />
                     </Panel>
                   </Col>
                 </Row>

@@ -1,8 +1,7 @@
-import React from 'react'
 import { Row, Col } from 'reactstrap'
-import { Form, ButtonToolbar, Button, CheckPicker } from 'rsuite'
+import { Form, ButtonToolbar, CheckPicker, Badge } from 'rsuite'
 
-import { FormField, Loader } from 'components'
+import { Loader, Button, FormFieldAddon } from 'components'
 import Table from 'components/table/Table'
 
 import useClientesFinalesForm from './useClientesFinalesForm'
@@ -12,14 +11,16 @@ function ClientesFinalesPanel () {
     formRef,
     formValue,
     formModel,
-    isComfirmado,
+    isConfirmado,
     isLoading,
     listClientesFinales,
+    nuevoContacto,
     tableData,
     onSelectClienteFinal,
     onClean,
     isClientesFinalesRelacionados,
-    handleSubmit
+    handleSubmit,
+    modalInfo
   } = useClientesFinalesForm()
 
   const renderForm = () => (
@@ -28,15 +29,39 @@ function ClientesFinalesPanel () {
       ref={formRef}
       formValue={formValue}
       model={formModel}
-      plaintext={isComfirmado()}
+      plaintext={isConfirmado()}
     >
-      <Row hidden={isComfirmado()}>
+      <Row hidden={isConfirmado()}>
         <Col xs='12'>
-          <FormField
-            name='cliente_final' label='Cliente Final' accepter={CheckPicker} data={listClientesFinales.map(cliente => ({
+          <FormFieldAddon
+            name='cliente_final'
+            label='Cliente Final'
+            accepter={CheckPicker}
+            data={listClientesFinales.map(cliente => ({
               label: cliente.nombre,
               value: cliente.id
-            }))} onSelect={onSelectClienteFinal} onClean={onClean} required block
+            }))}
+            renderValue={(value, item) => {
+              const context = `${item.length} cliente${item.length === 1 ? '' : 's'}`
+              let text = item.map(i => i.label).join(', ')
+              if (text.length > 40) text = text.substring(0, 40) + '...'
+              return (
+                <>
+                  <span className='d-none d-md-inline-block'>{text}</span>
+                  <Badge style={{ backgroundColor: '#3498FF', fontSize: 14, margin: 1 }} content={context} />
+                </>
+              )
+            }}
+            onSelect={onSelectClienteFinal}
+            onClean={onClean}
+            disabledItemValues={nuevoContacto}
+            required
+            block
+            buttonInfo={{
+              icon: 'plus',
+              text: 'Nuevo Cliente',
+              onClick: modalInfo.openModal
+            }}
           />
         </Col>
       </Row>
@@ -44,17 +69,21 @@ function ClientesFinalesPanel () {
         <Col className='mt-4'>
           {tableData().length > 0 &&
             <Table data={tableData()} autoHeight>
-              {Table.Column({ header: 'Nombre Completo Cliente', dataKey: 'nombre_completo', flex: 1, white: true })}
-              {Table.Column({ header: 'Correo', dataKey: 'correo', flex: 1, white: true })}
+              {Table.Column({ header: 'Nombre Completo Cliente', dataKey: 'nombre_completo', flex: 1, white: true, minWidth: 250 })}
+              {Table.Column({ header: 'Correo', dataKey: 'correo', flex: 1, white: true, minWidth: 200 })}
             </Table>}
         </Col>
       </Row>
       <Row>
         <Col xs='12' className='mt-4'>
           <ButtonToolbar>
-            <Button appearance='primary' size='sm' onClick={handleSubmit} hidden={isComfirmado()}>
-              Guardar
-            </Button>
+            <Button
+              icon='save'
+              text='Guardar'
+              appearance='primary'
+              onClick={handleSubmit}
+              hidden={isConfirmado()}
+            />
           </ButtonToolbar>
         </Col>
       </Row>
@@ -63,10 +92,11 @@ function ClientesFinalesPanel () {
 
   return (
     <>
+      {modalInfo.modal}
       {isLoading()
         ? (
           <>
-            {!isComfirmado() && isClientesFinalesRelacionados()}
+            {!isConfirmado() && isClientesFinalesRelacionados()}
             {renderForm()}
           </>)
         : <Loader.Paragraph rows={5} />}

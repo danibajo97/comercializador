@@ -28,6 +28,7 @@ class SolicitudLicenciaViewSet(viewsets.GenericViewSet):
         url = 'cmz/solicitud_licencia_externo/'
         params = {
             'authenticated-user': user.id_erp,
+            **request.GET
         }
         response = self.responsebase.get(url=url, params=params)
         return Response(data=response.json(), status=response.status_code)
@@ -69,11 +70,10 @@ class SolicitudLicenciaViewSet(viewsets.GenericViewSet):
 
     @action(detail=False, methods=['put'])
     def otorgar_licencia(self, request):
-        # request.data = [ iddetalle, .....]  lista con los iddetalle de las solicitudes a generar
-        url = 'cmz/solicitud_licencia_externo/otorgar_licencia'
-        response = self.responsebase.get(url=url, json=request.data)
+        url = 'cmz/solicitud_licencia_externo/otorgar_licencia/'
+        response = self.responsebase.put(url=url, json=request.data)
         if response.status_code == 200:
-            return Response(response.json(), status=response.status_code)
+            return Response(status=response.status_code)
         else:
             return Response({'Versat-response': response.json()},
                             status=response.status_code)
@@ -84,7 +84,7 @@ class SolicitudLicenciaViewSet(viewsets.GenericViewSet):
         url = '%s' % ('cmz/solicitud_licencia_externo/servicios/')
         params = {
             'authenticated-user': user.id_erp,
-            'cliente': request.GET.get('cliente_final'),
+            'cliente': request.GET.get('cliente'),
         }
         response = self.responsebase.get(url=url, params=params)
         if response.status_code == 200:
@@ -92,3 +92,13 @@ class SolicitudLicenciaViewSet(viewsets.GenericViewSet):
         else:
             return Response({'message': "Hubo problemas al conectar con el servidor"},
                             status=response.status_code)
+
+    @action(detail=False, methods=['get'])
+    def widges_info(self, request):
+        user = authenticated_user(request)
+        url = 'cmz/solicitud_licencia_externo/widges_info/'
+        params = {
+            'authenticated-user': user.id_erp,
+        }
+        response = self.responsebase.get(url=url, params=params)
+        return Response(response.json(), status=response.status_code)

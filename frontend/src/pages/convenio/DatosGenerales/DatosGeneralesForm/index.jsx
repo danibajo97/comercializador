@@ -1,10 +1,9 @@
-import React from 'react'
-import { Row, Col, Form, Button, Divider, ButtonToolbar, SelectPicker, DatePicker } from 'rsuite'
+import { Row, Col, Form, Divider, ButtonToolbar, SelectPicker, DatePicker } from 'rsuite'
 
-import { FormField, Textarea, InputNumber, Loader } from 'components'
+import { Button, FormField, Textarea, InputNumber, Loader, FormFieldAddon } from 'components'
 import useDatosGeneralesForm from './useDatosGeneralesForm'
 
-function DatosGeneralesForm () {
+function DatosGeneralesForm ({ setCountBD }) {
   const {
     formRef,
     formModel,
@@ -16,8 +15,9 @@ function DatosGeneralesForm () {
     clientesFinales,
     contrato,
     personasAsociadas,
+    nuevoClienteModal,
     isLoading
-  } = useDatosGeneralesForm()
+  } = useDatosGeneralesForm({ setCountBD })
 
   const renderForm = () => (
     <Form
@@ -36,7 +36,7 @@ function DatosGeneralesForm () {
       {contrato?.fecha_inicial !== undefined &&
         <>
           <Row>
-            <Col xs={24} sm={12} md={12} lg={12}>
+            <Col xs={24} sm={12} md={12} lg={12} className='mb-4'>
               <FormField name='fechaEmision' label='Fecha Emisión' accepter={DatePicker} plaintext block />
             </Col>
             <Col xs={24} sm={12} md={12} lg={12}>
@@ -48,13 +48,30 @@ function DatosGeneralesForm () {
             Datos Convenio
           </h6>
           <Row>
-            <Col xs={24} sm={12} md={12} lg={12}>
-              <FormField
-                name='cliente' label='Cliente' accepter={SelectPicker} data={clientesFinales.map(cliente => ({
+            <Col xs={24} sm={12} md={12} lg={12} className='mb-4'>
+              <FormFieldAddon
+                name='cliente'
+                label='Cliente'
+                accepter={SelectPicker}
+                data={clientesFinales.map(cliente => ({
                   label: cliente.nombre,
                   value: cliente.id
-                }))} required block
+                }))}
+                renderValue={(value, item) => {
+                  if (!item) return <span className='text-muted'>Seleccionar</span>
+                  let text = item.label
+                  if (text.length > 10) text = text.substring(0, 10) + '...'
+                  return <div title={item.label}>{text}</div>
+                }}
+                buttonInfo={{
+                  icon: 'plus',
+                  text: 'Nuevo Cliente',
+                  onClick: () => nuevoClienteModal.openModal()
+                }}
+                required
+                block
               />
+              <div style={{ marginTop: 20 }} />
               <FormField
                 name='solicitadoPor' label='Solicitado Por' accepter={SelectPicker} data={personasAsociadas.map(persona => ({
                   label: persona.nombre_completo,
@@ -77,14 +94,13 @@ function DatosGeneralesForm () {
         <Col xs={24} className='mt-4'>
           <ButtonToolbar>
             <Button
+              icon='save'
+              text='Guardar'
               appearance='primary'
-              size='sm'
               onClick={handleSubmit}
               hidden={isConfirmado()}
               disabled={contrato?.fecha_inicial === undefined}
-            >
-              {!isUpdate() ? 'Guardar' : 'Editar'}
-            </Button>
+            />
           </ButtonToolbar>
         </Col>
       </Row>
@@ -93,6 +109,7 @@ function DatosGeneralesForm () {
 
   return (
     <>
+      {nuevoClienteModal.modal}
       {isLoading()
         ? renderForm()
         : <Loader.Paragraph rows={3} />}
