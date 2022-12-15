@@ -28,7 +28,9 @@ class RegisterUsersFromVersatErpView(generics.GenericAPIView):
                 msg.append("El usuario %s ya existe en el sistema" %
                            request.data['email'])
             else:
+                request.data._mutable = True
                 request.data['username'] = generate_username()
+                request.data._mutable = False
                 usernames.append(request.data['username'])
             user_serializer = self.serializer_class(data=request.data)
         else:
@@ -37,7 +39,9 @@ class RegisterUsersFromVersatErpView(generics.GenericAPIView):
                     msg.append("El usuario %s ya existe en el sistema" %
                                user['email'])
                 else:
-                    user['username'] = generate_username()
+                    request.data._mutable = True
+                    request.data['username'] = generate_username()
+                    request.data._mutable = False
                     usernames.append(user['username'])
             user_serializer = self.serializer_class(
                 data=request.data, many=True)
