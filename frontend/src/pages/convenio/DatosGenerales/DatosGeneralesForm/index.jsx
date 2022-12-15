@@ -61,13 +61,14 @@ function DatosGeneralesForm ({ setCountBD }) {
                   if (!item) return <span className='text-muted'>Seleccionar</span>
                   let text = item.label
                   if (text.length > 10) text = text.substring(0, 10) + '...'
-                  return <div title={item.label}>{text}</div>
+                  return <div title={item.label}>{isConfirmado() ? item.label : text}</div>
                 }}
                 buttonInfo={{
                   icon: 'plus',
                   text: 'Nuevo Cliente',
                   onClick: () => nuevoClienteModal.openModal()
                 }}
+                plaintext={isConfirmado()}
                 required
                 block
               />
