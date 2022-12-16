@@ -1,6 +1,5 @@
 {
   "name": "comercializador",
-  "homepage": "api-comerc.versat.azcuba.cu",
   "version": "1.0.0",
   "private": true,
   "dependencies": {
