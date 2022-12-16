@@ -1,6 +1,7 @@
-from rest_framework.response import Response
+from django.contrib.auth import authenticate
 from rest_framework import generics, status
-from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
 
 from apps.users.api.serializers.users_serializers import (
     ChangePasswordSerializer, UpdateUserSerializer
@@ -42,3 +43,15 @@ class ChangePasswordView(generics.UpdateAPIView):
             return Response(response)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class PasswordUser(generics.GenericAPIView):
+
+    def get(self, request):
+        password = request.GET.get('password')
+        current_user = request.user
+        user = authenticate(request, username=current_user, password=password)
+        if user is None:
+            return Response({"response": "No User exist"}, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            return Response({"response": "correct Password"}, status=status.HTTP_200_OK)
