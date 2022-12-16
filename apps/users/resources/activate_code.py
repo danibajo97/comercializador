@@ -5,11 +5,13 @@ from email.mime.text import MIMEText
 from django.conf import settings
 from django.contrib.auth.tokens import default_token_generator
 from django.contrib.sites.shortcuts import get_current_site
+from django.db import transaction
 from django.template.loader import render_to_string
 from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode
 
 
+@transaction.atomic()
 def activate_code(user, request):
     current_site = get_current_site(request)
     mailServer = smtplib.SMTP(settings.EMAIL_HOST, settings.EMAIL_PORT)

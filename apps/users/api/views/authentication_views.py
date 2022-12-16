@@ -16,7 +16,6 @@ from apps.users.resources.random_user import generate_username
 class RegisterUsersFromVersatErpView(generics.GenericAPIView):
     model = User
     serializer_class = RegisterSerializer
-    permission_classes = (AllowAny,)
 
     @transaction.atomic
     def post(self, request):
@@ -37,7 +36,7 @@ class RegisterUsersFromVersatErpView(generics.GenericAPIView):
                     msg.append("El usuario %s ya existe en el sistema" %
                                user['email'])
                 else:
-                    user['username'] = generate_username()
+                    request.data['username'] = generate_username()
                     usernames.append(user['username'])
             user_serializer = self.serializer_class(
                 data=request.data, many=True)

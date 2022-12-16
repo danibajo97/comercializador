@@ -23,7 +23,7 @@ from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 from apps.users.api.views.authentication_views import RegisterUsersFromVersatErpView, ActivationCodeView, \
     AuthenticatedUser
-from apps.users.api.views.users_views import ChangePasswordView, UpdateProfileView
+from apps.users.api.views.users_views import ChangePasswordView, UpdateProfileView, PasswordUser
 
 schema_view = get_schema_view(
     openapi.Info(
@@ -50,6 +50,8 @@ local_urlpatterns = [
          name='register_users_from_versaterp'),
     path('usuario-autenticado/', AuthenticatedUser.as_view(),
          name='authenticated_user'),
+    path('usuario-password/', PasswordUser.as_view(),
+         name='usuario_password'),
     path('activacion/<uidb64>/<token>/',
          ActivationCodeView.as_view(), name='activation_code')
 ]
@@ -73,4 +75,4 @@ react_urlpatterns = [
 ]
 
 urlpatterns = local_urlpatterns + swagger_urlpatterns + \
-    jwt_urlpatterns + react_urlpatterns
+              jwt_urlpatterns + react_urlpatterns
