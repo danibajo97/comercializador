@@ -35,19 +35,21 @@ export default function useLicenciaForm ({ solicitudLicencia, closeModal }) {
     clienteFinal: isUpdate() ? solicitudLicencia.cliente : '',
     servicio: isUpdate() ? solicitudLicencia.servicio : '',
     claveRegistro: isUpdate() ? solicitudLicencia.semilla : '',
-    observaciones: isUpdate() ? solicitudLicencia.observaciones : ''
+    observaciones: isUpdate() ? solicitudLicencia.observaciones : '',
+    problemaRegAnterior: isUpdate() ? solicitudLicencia.problema_reg_anterior : false
   })
 
-  const { StringType, DateType } = Schema.Types
+  const { StringType, DateType, BooleanType } = Schema.Types
   const formModel = Schema.Model({
     tipo: StringType().isRequired('Este campo es obligatorio.'),
-    convenio: StringType(), // .isRequired('Este campo es obligatorio.'),
+    convenio: StringType(),
     fecha: DateType().isRequired('Este campo es obligatorio.'),
     clienteSolicita: StringType().isRequired('Este campo es obligatorio.'),
     clienteFinal: StringType().isRequired('Este campo es obligatorio.'),
     servicio: StringType().isRequired('Este campo es obligatorio.'),
     claveRegistro: StringType().isRequired('Este campo es obligatorio.'),
-    observaciones: StringType()
+    observaciones: StringType(),
+    problemaRegAnterior: BooleanType()
   })
 
   const { convenio } = formValue
@@ -110,7 +112,8 @@ export default function useLicenciaForm ({ solicitudLicencia, closeModal }) {
         cliente: formValue.clienteFinal,
         semilla: formValue.claveRegistro,
         servicio: formValue.servicio,
-        observaciones: formValue.observaciones
+        observaciones: formValue.observaciones,
+        problema_reg_anterior: formValue.problemaRegAnterior
       }
       if (!isUpdate()) {
         dispatch(addSolicitudLicencia({ params }))
@@ -159,6 +162,14 @@ export default function useLicenciaForm ({ solicitudLicencia, closeModal }) {
     }
   }, [formValue.clienteFinal])
 
+  const changeProblemaRegAnterior = (value, checked) => {
+    console.log({ value, checked })
+    setFormValue({
+      ...formValue,
+      problemaRegAnterior: checked
+    })
+  }
+
   const isFormClienteFinal = () => isListClientesFinales === OPERATIONS.PENDING || isListGestionadosPor === OPERATIONS.PENDING
   const isFormServicios = () => isListServiciosContratados === OPERATIONS.PENDING || isListServiciosActualizacion === OPERATIONS.PENDING
 
@@ -175,6 +186,7 @@ export default function useLicenciaForm ({ solicitudLicencia, closeModal }) {
     servicioData,
     handleSubmit,
     isFormClienteFinal,
-    isFormServicios
+    isFormServicios,
+    changeProblemaRegAnterior
   }
 }

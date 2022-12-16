@@ -1,4 +1,5 @@
 import axios from 'axios'
+import axiosError from 'utils/axiosError'
 
 const API_URL = process.env.REACT_APP_API_URL
 
@@ -45,8 +46,7 @@ async function addSolicitudLicencia ({ params }) {
     await axios(options)
     return 'Se adicionó la solicitud de licencia correctamente.'
   } catch (error) {
-    const data = JSON.parse(error.response.data[0])
-    throw new Error(data[0])
+    axiosError.addUpdateSolicitudLicencia({ error, method: 'POST' })
   }
 }
 
@@ -62,7 +62,7 @@ async function updateSolicitudLicencia ({ id, params }) {
     await axios(options)
     return 'Se actualizó la solicitud de licencia correctamente.'
   } catch (error) {
-    throw new Error('Error al actualizar la solicitud de licencia.')
+    axiosError.addUpdateSolicitudLicencia({ error, method: 'PUT' })
   }
 }
 

@@ -19,7 +19,12 @@
     "react-toastify": "9.0.8",
     "reactstrap": "9.1.4",
     "rsuite": "5.17.1",
-    "web-vitals": "2.1.4"
+    "web-vitals": "2.1.4",
+    "workbox-core": "6.5.4",
+    "workbox-expiration": "6.5.4",
+    "workbox-precaching": "6.5.4",
+    "workbox-routing": "6.5.4",
+    "workbox-strategies": "6.5.4"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -56,7 +61,7 @@
       "no-alert": "warn",
       "no-unused-vars": "warn",
       "react/jsx-uses-react": "off",
-      "react/react-in-jsx-scope": "off"
+      "prefer-regex-literals": "off"
     }
   }
 }
