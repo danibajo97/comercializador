@@ -7,17 +7,31 @@ import {
   changePassword as changePasswordAuth,
   stateResetChangePassword as stateResetChangePasswordAuth,
   activateAccount as activateAccountAuth,
-  stateResetActivateAccount as stateResetActivateAccountAuth
+  stateResetActivateAccount as stateResetActivateAccountAuth,
+  verifyPassword as verifyPasswordAuth,
+  stateVerifyPassword as stateVerifyPasswordAuth
 } from 'redux/auth/authSlice'
 
 export default function useAuth () {
   const dispatch = useDispatch()
+
+  // usuario registrado en el sistema
   const user = useSelector(state => state.auth.user)
+
+  // accion de hacer login
   const isAuth = useSelector(state => state.auth.isAuth)
   const isLoading = useSelector(state => state.auth.isLoading)
   const hasError = useSelector(state => state.auth.hasError)
+
+  // accion de cambiar password
   const isChangePassword = useSelector(state => state.auth.isChangePassword)
+
+  // accion de activar cuenta
   const isActivateAccount = useSelector(state => state.auth.isActivateAccount)
+
+  // accion de verificar password
+  const isVerifyPassword = useSelector(state => state.auth.isVerifyPassword)
+  const hasPassword = useSelector(state => state.auth.hasPassword)
 
   const login = ({ username, password }) => {
     dispatch(loginAuth({ username, password }))
@@ -47,6 +61,14 @@ export default function useAuth () {
     dispatch(stateResetActivateAccountAuth())
   }
 
+  const verifyPassword = ({ password }) => {
+    dispatch(verifyPasswordAuth({ password }))
+  }
+
+  const stateVerifyPassword = () => {
+    dispatch(stateVerifyPasswordAuth())
+  }
+
   return {
     user,
     isAuth,
@@ -60,6 +82,10 @@ export default function useAuth () {
     stateResetChangePassword,
     isActivateAccount,
     activateAccount,
-    stateResetActivateAccount
+    stateResetActivateAccount,
+    isVerifyPassword,
+    hasPassword,
+    verifyPassword,
+    stateVerifyPassword
   }
 }

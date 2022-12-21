@@ -14,10 +14,11 @@ class SolicitudLicenciaViewSet(viewsets.GenericViewSet):
     def create(self, request):
         user = authenticated_user(request)
         url = 'cmz/solicitud_licencia_externo/'
-        request.data._mutable = True
-        request.data['cliente_solicita'] = user.id_erp
-        request.data._mutable = False
-        response = self.responsebase.post(url=url, json=request.data)
+        json_data = {
+            **request.data,
+            'cliente_solicita': user.id_erp
+        }
+        response = self.responsebase.post(url=url, json=json_data)
         if response.status_code == 201:
             return Response({'Comercializador-response': 'Creado correctamente'}, status=response.status_code)
         else:
@@ -37,10 +38,11 @@ class SolicitudLicenciaViewSet(viewsets.GenericViewSet):
     def update(self, request, pk):
         user = authenticated_user(request)
         url = 'cmz/solicitud_licencia_externo/%s/' % pk
-        request.data._mutable = True
-        request.data['cliente_solicita'] = user.id_erp
-        request.data._mutable = False
-        response = self.responsebase.put(url=url, json=request.data)
+        json_data = {
+            **request.data,
+            'cliente_solicita': user.id_erp
+        }
+        response = self.responsebase.put(url=url, json=json_data)
         if response.status_code == 200:
             return Response({'Comercializador-response': 'Actualizado Correctamente',
                              'versat_response': response.json()}, status=response.status_code)

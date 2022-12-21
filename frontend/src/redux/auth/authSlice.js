@@ -10,7 +10,9 @@ const initialState = {
   isLoading: null,
   hasError: false,
   isChangePassword: OPERATIONS.NONE,
-  isActivateAccount: OPERATIONS.NONE
+  isActivateAccount: OPERATIONS.NONE,
+  isVerifyPassword: OPERATIONS.NONE,
+  hasPassword: false
 }
 
 export const authSlice = createSlice({
@@ -22,6 +24,10 @@ export const authSlice = createSlice({
     },
     stateResetActivateAccount: (state) => {
       state.isActivateAccount = OPERATIONS.NONE
+    },
+    stateVerifyPassword: (state) => {
+      state.isVerifyPassword = OPERATIONS.NONE
+      state.hasPassword = false
     }
   },
   extraReducers: (builder) => {
@@ -101,8 +107,21 @@ export const authSlice = createSlice({
       state.isActivateAccount = OPERATIONS.REJECTED
       toast.error(action.error.message)
     })
-  }
 
+    // VERIFY PASSWORD ACCION
+    builder.addCase(verifyPassword.pending, (state, action) => {
+      state.isVerifyPassword = OPERATIONS.PENDING
+    })
+    builder.addCase(verifyPassword.fulfilled, (state, action) => {
+      state.isVerifyPassword = OPERATIONS.FULFILLED
+      state.hasPassword = true
+    })
+    builder.addCase(verifyPassword.rejected, (state, action) => {
+      state.isVerifyPassword = OPERATIONS.REJECTED
+      state.hasPassword = false
+      toast.error(action.error.message)
+    })
+  }
 })
 
 export const getUser = createAsyncThunk('auth/getUser', api.getUser)
@@ -110,7 +129,8 @@ export const login = createAsyncThunk('auth/login', api.login)
 export const logout = createAsyncThunk('auth/logout', api.logout)
 export const changePassword = createAsyncThunk('auth/changePassword', api.changePassword)
 export const activateAccount = createAsyncThunk('auth/activateAccount', api.activateAccount)
+export const verifyPassword = createAsyncThunk('auth/verifyPassword', api.verifyPassword)
 
-export const { stateResetChangePassword, stateResetActivateAccount } = authSlice.actions
+export const { stateResetChangePassword, stateResetActivateAccount, stateVerifyPassword } = authSlice.actions
 
 export default authSlice.reducer
