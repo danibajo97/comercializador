@@ -78,7 +78,7 @@ export default function LicenciaForm ({ closeModal, solicitudLicencia }) {
         />
         <FormField name='claveRegistro' label='Clave de Registro' required />
         <FormField name='observaciones' label='Observaciones' accepter={Textarea} rows={3} />
-        <Checkbox name='problemaRegAnterior' onChange={changeProblemaRegAnterior}>Problemas con el registro licencia anterior</Checkbox>
+        <Checkbox name='problemaRegAnterior' checked={formValue.problemaRegAnterior} onChange={changeProblemaRegAnterior}>Problemas con el registro licencia anterior</Checkbox>
       </Col>
       <Col xs={24} className='mt-4'>
         <ButtonToolbar>

@@ -11,6 +11,7 @@ const PAGINATION_LIMIT = parseInt(process.env.REACT_APP_PAGINATION_LIMIT)
 
 export default function useActionCell ({ rowData }) {
   const isOtorgada = rowData.otorgada
+  const isProblemaRegAnterior = rowData.problema_reg_anterior
   const dispatch = useDispatch()
 
   const isOtorgar = useSelector(state => state.solicitudLicencia.isOtorgar)
@@ -39,7 +40,7 @@ export default function useActionCell ({ rowData }) {
 
   const modalCopiarLicencia = useModal({
     title: 'Copiar Licencia',
-    size: 'sm',
+    size: 'xs',
     renderBody: ({ closeModal }) => {
       return (
         <CopiarLicencia closeModal={closeModal} textLicencia={rowData.licencia} />
@@ -103,6 +104,7 @@ export default function useActionCell ({ rowData }) {
 
   return {
     isOtorgada,
+    isProblemaRegAnterior,
     modalCopiarLicencia,
     modalSolicitud,
     deleteAlert,

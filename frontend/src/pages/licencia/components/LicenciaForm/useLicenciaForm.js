@@ -163,7 +163,6 @@ export default function useLicenciaForm ({ solicitudLicencia, closeModal }) {
   }, [formValue.clienteFinal])
 
   const changeProblemaRegAnterior = (value, checked) => {
-    console.log({ value, checked })
     setFormValue({
       ...formValue,
       problemaRegAnterior: checked
