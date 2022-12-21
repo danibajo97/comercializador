@@ -6,7 +6,8 @@ export default {
   login,
   logout,
   changePassword,
-  activateAccount
+  activateAccount,
+  verifyPassword
 }
 
 async function login ({ username, password }) {
@@ -89,5 +90,20 @@ async function activateAccount ({ tokenInfo, user }) {
   } catch (error) {
     const message = error?.response?.data?.message
     throw new Error(message || 'Error al activar la cuenta.')
+  }
+}
+
+async function verifyPassword ({ password }) {
+  const access = await window.sessionStorage.getItem('access')
+  const options = {
+    method: 'POST',
+    url: `${API_URL}/usuario-password/`,
+    headers: { Authorization: `Bearer ${access}` },
+    data: { password }
+  }
+  try {
+    await axios(options)
+  } catch (error) {
+    throw new Error('La contraseña no es validas.')
   }
 }
