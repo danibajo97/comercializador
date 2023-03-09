@@ -8,6 +8,7 @@ Este proyecto es creado con las tecnologías [Django](https://www.djangoproject.
 - [Desarrollo Local](#desarrollo-local)
   - [Pasos para instalar las dependencias e inicial el servidor del backend](#1---pasos-para-instalar-las-dependencias-e-inicial-el-servidor-del-backend)
   - [Pasos para instalar las dependencias e inicial el servidor del frontend](#2---pasos-para-instalar-las-dependencias-e-inicial-el-servidor-del-frontend)
+- [Información Extra](#información-extra)
 - [Enlaces Útiles](#enlaces-útiles)
 
 ## Desarrollo Local
@@ -68,6 +69,12 @@ Instalar las dependencias indicadas en el package.json
 npm install
 ```
 
+Crear la carpeta build
+
+```
+npm run build
+```
+
 Inicial servidor del frontend
 
 ```
@@ -75,6 +82,54 @@ npm start
 ```
 
 Se ejecutará la aplicación en el modo de desarrollo, abra http://localhost:3000 para verlo en su navegador.
+
+## Información extra
+
+El fichero .env contiene todas las variables necesarias para que el proyecto funcione adecuadamente:
+
+El SECRET KEY del proyecto de django:
+
+```
+SECRET_KEY='example-secret-key'
+```
+
+Poner el debug en False cuando ya este en producción:
+
+```
+DEBUG=True
+```
+
+Configuración del correo del proyecto que envía las notificaciones de autenticación:
+
+```
+EMAIL_HOST=smtp.gmail.com
+EMAIL_PORT=587
+EMAIL_USE_TLS=True
+EMAIL_HOST_USER=example@gmail.com
+EMAIL_HOST_PASSWORD=example-password
+```
+
+Url del Versat Erp donde se obtiene la información:
+
+```
+ERP_URL=http://example-versat-erp.cu
+```
+
+Credenciales del usuario seleccionado en el Versat Erp para hacer la autenticación:
+
+```
+ERP_USERNAME=implantadora
+ERP_PASSWORD=M*123456.m
+```
+
+Tiempo que toma la web del Comercializador en verificar la autenticación con el Versat Erp:
+
+```
+ERP_TIME_MINUTES_AUTHENTICATED=10
+```
+
+- Versión de Python: 3.8.2
+- Para hacer pruebas con la base de datos db.sqlite3 utilizar las credenciales user: comercializador y password: A*123456
 
 ## Enlaces Útiles
 
