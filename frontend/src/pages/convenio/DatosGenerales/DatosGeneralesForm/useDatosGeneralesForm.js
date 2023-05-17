@@ -2,8 +2,18 @@ import { useEffect, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Schema } from 'rsuite'
 
-import { getBuscarContrato, getClientesFinales, getPersonasAsociadas, stateResetOperation as stateResetOperationDatosGenerales } from 'redux/datosGenerales/datosGeneralesSlice'
-import { addConvenio, updateConvenio, retrieveConvenio, stateResetOperation as stateResetOperationConvenio } from 'redux/convenio/convenioSlice'
+import {
+  getBuscarContrato,
+  getClientesFinales,
+  getPersonasAsociadas,
+  stateResetOperation as stateResetOperationDatosGenerales
+} from 'redux/datosGenerales/datosGeneralesSlice'
+import {
+  addConvenio,
+  retrieveConvenio,
+  stateResetOperation as stateResetOperationConvenio,
+  updateConvenio
+} from 'redux/convenio/convenioSlice'
 import { useParams } from 'react-router-dom'
 import useAuth from 'hooks/useAuth'
 import { date } from 'utils'
@@ -124,6 +134,19 @@ export default function useDatosGeneralesForm ({ setCountBD }) {
     }
   }, [isAdd])
 
+  const getTimezoneOffset = (value) => value.getTimezoneOffset() * 60000
+
+  const localToDateUTC = (dateTime) => {
+    dateTime = new Date(
+      dateTime.getFullYear(),
+      dateTime.getMonth(),
+      dateTime.getDate()
+    )
+    return new Date(
+      dateTime.getTime() - getTimezoneOffset(dateTime)
+    )
+  }
+
   const handleSubmit = async () => {
     if (formRef.current.check()) {
       const params = {
@@ -131,7 +154,7 @@ export default function useDatosGeneralesForm ({ setCountBD }) {
         cliente_final: formValue.cliente,
         contrato: contrato.idcontrato,
         facturese_a: user.distribuidor.id,
-        fecha_emision: date.toISODate({ date: formValue.fechaEmisionConvenio }),
+        fecha_emision: date.toISODate({ date: localToDateUTC(formValue.fechaEmisionConvenio) }),
         no_convenio: formValue.nroConvenio,
         observaciones: formValue.observaciones,
         solicitado_por: formValue.solicitadoPor
