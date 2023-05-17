@@ -41,7 +41,13 @@ class RegisterUsersFromVersatErpView(generics.GenericAPIView):
             user_serializer = self.serializer_class(
                 data=request.data, many=True)
         if user_serializer.is_valid(raise_exception=True):
-            user_serializer.save()
+            user_obj = None
+            if request_type:
+                user_obj = User.objects.filter(id_erp=request.data['id_erp']).first()
+            if user_obj:
+                user_serializer.update(user_obj, user_serializer.validated_data)
+            else:
+                user_serializer.save()
             users = self.model.objects.filter(username__in=usernames)
             for user in users:
                 activate_code(user, request)
@@ -66,7 +72,7 @@ class ActivationCodeView(generics.GenericAPIView):
         if serializer.is_valid(raise_exception=True):
             if default_token_generator.check_token(user, token):
                 user.is_active = True
-                user.save()
+                serializer.update(user, serializer.validated_data)
                 return Response({
                     'message': 'Su cuenta ha sido activada correctamente.',
                 }, status=status.HTTP_200_OK)

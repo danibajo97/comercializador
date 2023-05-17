@@ -40,9 +40,17 @@ export default function ActivateAccount () {
                         <FormField name='firstname' label='Nombre' />
                         <FormField name='lastname' label='Apellidos' />
                         <FormField name='username' label='Usuario' />
-                        <InputPassword name='password' label='Contraseña' />
+                        <InputPassword
+                          name='password'
+                          label='Contraseña'
+                          information='Tiene que incluir una letra mayúscula, una minúscula, un número, un caracter especial y tener 8 caracteres o más.'
+                        />
                         <div className='mb-4' />
-                        <InputPassword name='repassword' label='Repetir Contraseña' />
+                        <InputPassword
+                          name='repassword'
+                          label='Repetir Contraseña'
+                          information='Tiene que incluir una letra mayúscula, una minúscula, un número, un caracter especial y tener 8 caracteres o más.'
+                        />
                       </Col>
                       <Col className='text-center mt-4'>
                         <Button appearance='primary' size='sm' onClick={onClickActivateAccount}>

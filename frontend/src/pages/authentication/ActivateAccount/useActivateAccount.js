@@ -31,10 +31,11 @@ export default function useActivateAccount () {
     lastname: StringType()
       .isRequired('Este campo es obligatorio.'),
     password: StringType()
+      .pattern(REG_PASSWORD, 'La contraseña no es valida.')
       .isRequired('Este campo es obligatorio.'),
     repassword: StringType()
-      .pattern(REG_PASSWORD, 'La contraseñas no es valida.')
-      .isOneOf([formValue.password], 'La contraseñas no coinciden.')
+      .pattern(REG_PASSWORD, 'La contraseña no es valida.')
+      .isOneOf([formValue.password], 'Las contraseñas no coinciden.')
       .isRequired('Este campo es obligatorio.')
   })
 

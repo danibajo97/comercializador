@@ -1,9 +1,10 @@
 import { useState } from 'react'
-import { Form, InputGroup } from 'rsuite'
+import { Form, InputGroup, Whisper, Tooltip } from 'rsuite'
 import EyeIcon from '@rsuite/icons/legacy/Eye'
 import EyeSlashIcon from '@rsuite/icons/legacy/EyeSlash'
+import InfoIcon from '@rsuite/icons/legacy/Info'
 
-export default function InputPassword ({ name, label, accepter, required, error, ...rest }) {
+export default function InputPassword ({ name, label, accepter, required, error, information, ...rest }) {
   const [visible, setVisible] = useState(false)
 
   return (
@@ -14,6 +15,12 @@ export default function InputPassword ({ name, label, accepter, required, error,
         <InputGroup.Button onClick={() => setVisible(!visible)}>
           {visible ? <EyeIcon /> : <EyeSlashIcon />}
         </InputGroup.Button>
+        {information && (
+          <InputGroup.Addon style={{ right: 25 }}>
+            <Whisper placement='top' speaker={<Tooltip>{information}</Tooltip>}>
+              <InfoIcon />
+            </Whisper>
+          </InputGroup.Addon>)}
       </InputGroup>
       {error && <Form.HelpText className='text-danger'>{error}</Form.HelpText>}
     </>
