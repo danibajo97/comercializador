@@ -65,7 +65,7 @@ async function addContacto ({ params }) {
   const access = await window.sessionStorage.getItem('access')
   const options = {
     method: 'POST',
-    url: `${API_URL}/api-acceso/usuario_final/`,
+    url: `${API_URL}/api-acceso/contacto_externo/`,
     headers: { Authorization: `Bearer ${access}` },
     data: params
   }

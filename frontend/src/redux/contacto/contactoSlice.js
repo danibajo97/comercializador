@@ -8,7 +8,9 @@ const initialState = {
   provincias: [],
   isListProvincia: OPERATIONS.NONE,
   municipios: [],
-  isListMunicipio: OPERATIONS.NONE
+  isListMunicipio: OPERATIONS.NONE,
+  organismos: [],
+  isListOrganismo: OPERATIONS.NONE
 }
 
 export const contratoSlice = createSlice({
@@ -20,6 +22,8 @@ export const contratoSlice = createSlice({
       state.isListProvincia = OPERATIONS.NONE
       state.municipios = []
       state.isListMunicipio = OPERATIONS.NONE
+      state.organismos = []
+      state.isListOrganismo = OPERATIONS.NONE
     }
   },
   extraReducers: (builder) => {
@@ -50,11 +54,26 @@ export const contratoSlice = createSlice({
       state.municipios = []
       toast.error(action.error)
     })
+
+    // GET_LISTA_ORGANISMO ACCION
+    builder.addCase(getOrganismos.pending, (state, action) => {
+      state.isListOrganismo = OPERATIONS.PENDING
+    })
+    builder.addCase(getOrganismos.fulfilled, (state, action) => {
+      state.isListOrganismo = OPERATIONS.FULFILLED
+      state.organismos = action.payload
+    })
+    builder.addCase(getOrganismos.rejected, (state, action) => {
+      state.isListOrganismo = OPERATIONS.REJECTED
+      state.organismos = []
+      toast.error(action.error)
+    })
   }
 })
 
 export const getProvincias = createAsyncThunk('contrato/getProvincias', api.getProvincias)
 export const getMunicipios = createAsyncThunk('contrato/getMunicipios', api.getMunicipios)
+export const getOrganismos = createAsyncThunk('contrato/getOrganismos', api.getOrganismos)
 
 export const { stateResetOperation } = contratoSlice.actions
 
