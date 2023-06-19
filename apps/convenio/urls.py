@@ -1,5 +1,6 @@
 from rest_framework.routers import DefaultRouter
 
+from apps.convenio.api.views.contacto_externo_views import ContactoExternoWebViewSet
 from apps.convenio.api.views.contrato_views import ContratoWebViewSet
 from apps.convenio.api.views.convenio_views import ConvenioWebViewSet
 from apps.convenio.api.views.servicio_contratado_views import ServicioContratadoViewSet
@@ -21,5 +22,7 @@ router.register('usuario_final', UsuarioFinalWebViewSet,
                 basename="usuario_final")
 router.register('solicitud_licencia', SolicitudLicenciaViewSet,
                 basename="solicitud_licencia")
+router.register('contacto_externo', ContactoExternoWebViewSet,
+                basename="contacto_externo")
 
 urlpatterns = router.urls
