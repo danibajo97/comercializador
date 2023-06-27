@@ -1,7 +1,7 @@
 from django.db import transaction
 from rest_framework import viewsets
-from rest_framework.response import Response
 from rest_framework.decorators import action
+from rest_framework.response import Response
 
 from apps.base.response_base import ResponseBase
 from apps.users.resources.authenticated_user import authenticated_user
@@ -108,6 +108,20 @@ class SolicitudLicenciaViewSet(viewsets.GenericViewSet):
         else:
             return Response({'message': "Hubo problemas al conectar con el servidor"},
                             status=response.status_code)
+
+    @action(methods=['get'], detail=False)
+    def servicios_venta(self, request):
+        user = authenticated_user(request)
+        url = '%s' % ('cmz/solicitud_licencia_externo/servicios_venta/')
+        params = {
+            'authenticated-user': user.id_erp,
+            'convenio': request.GET.get('convenio'),
+        }
+        response = self.responsebase.get(url=url, params=params)
+        if response.status_code == 200:
+            return Response(data=response.json(), status=response.status_code)
+        else:
+            return Response({'message': "Hubo problemas al conectar con el servidor"}, status=response.status_code)
 
     @action(detail=False, methods=['get'])
     def widges_info(self, request):
