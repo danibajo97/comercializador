@@ -71,7 +71,11 @@ class UsuarioFinalWebViewSet(viewsets.GenericViewSet):
     @transaction.atomic
     def retrieve(self, request, pk):
         url = 'cmz/usuario_final/%s/' % pk
-        response = self.responsebase.get(url=url)
+        user = authenticated_user(request)
+        params = {
+            'authenticated-user': user.id_erp,
+        }
+        response = self.responsebase.get(url=url, params=params)
         if response.status_code == 200:
             return Response({'Versat-response': response.json()}, status=response.status_code)
         else:
@@ -126,7 +130,9 @@ class UsuarioFinalWebViewSet(viewsets.GenericViewSet):
     @action(methods=['get'], detail=False)
     def lista_personas_asociadas(self, request):
         url = 'cmz/cliente_final/personas_asociadas/'
+        user = authenticated_user(request)
         params = {
+            'authenticated-user': user.id_erp,
             'cliente': request.GET.get('cliente'),
             'negocio': request.GET.get('convenio')
         }
