@@ -60,8 +60,12 @@ class ConvenioWebViewSet(viewsets.GenericViewSet):
 
     @transaction.atomic
     def retrieve(self, request, pk):
+        user = authenticated_user(request)
+        params = {
+            'authenticated-user': user.id_erp,
+        }
         url = 'cmz/convenio_externo/%s/' % pk
-        response = self.responsebase.get(url=url)
+        response = self.responsebase.get(url=url, params=params)
         if response.status_code == 200:
             return Response(response.json(), status=response.status_code)
         else:
@@ -70,8 +74,12 @@ class ConvenioWebViewSet(viewsets.GenericViewSet):
 
     @transaction.atomic
     def destroy(self, request, pk):
+        user = authenticated_user(request)
+        params = {
+            'authenticated-user': user.id_erp,
+        }
         url = 'cmz/convenio_externo/%s/' % pk
-        response = self.responsebase.delete(url=url)
+        response = self.responsebase.delete(url=url, params=params)
         if response.status_code == 204:
             return Response({'Comercializador-response': 'Eliminado correctamente'},
                             status=response.status_code)
@@ -83,6 +91,7 @@ class ConvenioWebViewSet(viewsets.GenericViewSet):
     def usuarios_finales(self, request):
         user = authenticated_user(request)
         params = {
+            'authenticated-user': user.id_erp,
             'idcontacto': user.id_erp,
         }
         url = 'cmz/convenio_externo/usuarios_finales/'
@@ -97,6 +106,7 @@ class ConvenioWebViewSet(viewsets.GenericViewSet):
     def list_servicios(self, request):
         user = authenticated_user(request)
         params = {
+            'authenticated-user': user.id_erp,
             'idcontacto': user.id_erp,
             'idplazopago': request.GET.get('id_plazopago'),
             'idconvenio': request.GET.get('id_convenio'),
@@ -112,8 +122,10 @@ class ConvenioWebViewSet(viewsets.GenericViewSet):
     @swagger_auto_schema(manual_parameters=[id])
     @action(detail=False, methods=['get'])
     def validar_convenio(self, request):
+        user = authenticated_user(request)
         params = {
-            'id': request.GET.get('id'),
+            'authenticated-user': user.id_erp,
+            'idcontacto': user.id_erp,
         }
         url = 'cmz/convenio_externo/validar_convenio/'
         response = self.responsebase.get(url=url, params=params)
@@ -126,7 +138,9 @@ class ConvenioWebViewSet(viewsets.GenericViewSet):
     @swagger_auto_schema(manual_parameters=[id])
     @action(detail=False, methods=['get'])
     def terminar_convenio(self, request):
+        user = authenticated_user(request)
         params = {
+            'authenticated-user': user.id_erp,
             'id': request.GET.get('id'),
         }
         url = 'cmz/convenio_externo/terminar_convenio/'

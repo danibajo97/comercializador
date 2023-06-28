@@ -21,6 +21,7 @@ class ContratoWebViewSet(viewsets.GenericViewSet):
     def buscar_contrato(self, request):
         user = authenticated_user(request)
         params = {
+            'authenticated-user': user.id_erp,
             'idcontacto': user.id_erp,
             'numero': request.GET.get('contrato'),
         }
@@ -36,6 +37,7 @@ class ContratoWebViewSet(viewsets.GenericViewSet):
     def cliente_final(self, request):
         user = authenticated_user(request)
         params = {
+            'authenticated-user': user.id_erp,
             'idcontacto': user.id_erp,
         }
         url = 'cmz/contrato_externo/cliente_final/'

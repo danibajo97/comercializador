@@ -23,7 +23,11 @@ class ServicioContratadoViewSet(viewsets.GenericViewSet):
     @transaction.atomic
     def retrieve(self, request, pk):
         url = 'cmz/servicio_contratado_externo/%s/' % pk
-        response = self.responsebase.get(url=url)
+        user = authenticated_user(request)
+        params = {
+            'authenticated-user': user.id_erp,
+        }
+        response = self.responsebase.get(url=url, params=params)
         if response.status_code == 200:
             return Response(response.json(), status=response.status_code)
         else:
@@ -33,7 +37,11 @@ class ServicioContratadoViewSet(viewsets.GenericViewSet):
     @transaction.atomic
     def destroy(self, request, pk):
         url = 'cmz/servicio_contratado_externo/%s/' % pk
-        response = self.responsebase.delete(url=url)
+        user = authenticated_user(request)
+        params = {
+            'authenticated-user': user.id_erp,
+        }
+        response = self.responsebase.delete(url=url, params=params)
         if response.status_code == 204:
             return Response({'Comercializador-response': 'Eliminado correctamente'},
                             status=response.status_code)

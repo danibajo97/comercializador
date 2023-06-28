@@ -1,7 +1,7 @@
 from django.db import transaction
 from rest_framework import viewsets
-from rest_framework.response import Response
 from rest_framework.decorators import action
+from rest_framework.response import Response
 
 from apps.base.response_base import ResponseBase
 from apps.users.resources.authenticated_user import authenticated_user
@@ -15,6 +15,7 @@ class SolicitudLicenciaViewSet(viewsets.GenericViewSet):
         user = authenticated_user(request)
         url = 'cmz/solicitud_licencia_externo/'
         json_data = {
+            'authenticated-user': user.id_erp,
             **request.data,
             'cliente_solicita': user.id_erp
         }
@@ -39,6 +40,7 @@ class SolicitudLicenciaViewSet(viewsets.GenericViewSet):
         user = authenticated_user(request)
         url = 'cmz/solicitud_licencia_externo/%s/' % pk
         json_data = {
+            'authenticated-user': user.id_erp,
             **request.data,
             'cliente_solicita': user.id_erp
         }
@@ -52,7 +54,11 @@ class SolicitudLicenciaViewSet(viewsets.GenericViewSet):
     @transaction.atomic
     def retrieve(self, request, pk):
         url = 'cmz/solicitud_licencia_externo/%s/' % pk
-        response = self.responsebase.get(url=url)
+        user = authenticated_user(request)
+        params = {
+            'authenticated-user': user.id_erp,
+        }
+        response = self.responsebase.get(url=url, params=params)
         if response.status_code == 200:
             return Response(response.json(), status=response.status_code)
         else:
@@ -62,7 +68,11 @@ class SolicitudLicenciaViewSet(viewsets.GenericViewSet):
     @transaction.atomic
     def destroy(self, request, pk):
         url = 'cmz/solicitud_licencia_externo/%s/' % pk
-        response = self.responsebase.delete(url=url)
+        user = authenticated_user(request)
+        params = {
+            'authenticated-user': user.id_erp,
+        }
+        response = self.responsebase.delete(url=url, params=params)
         if response.status_code == 204:
             return Response({'Comercializador-response': 'Eliminado correctamente'},
                             status=response.status_code)
@@ -73,7 +83,11 @@ class SolicitudLicenciaViewSet(viewsets.GenericViewSet):
     @action(detail=False, methods=['put'])
     def otorgar_licencia(self, request):
         url = 'cmz/solicitud_licencia_externo/otorgar_licencia/'
-        response = self.responsebase.put(url=url, json=request.data)
+        user = authenticated_user(request)
+        params = {
+            'authenticated-user': user.id_erp,
+        }
+        response = self.responsebase.put(url=url, json=request.data, params=params)
         if response.status_code == 200:
             return Response(status=response.status_code)
         else:
@@ -94,6 +108,20 @@ class SolicitudLicenciaViewSet(viewsets.GenericViewSet):
         else:
             return Response({'message': "Hubo problemas al conectar con el servidor"},
                             status=response.status_code)
+
+    @action(methods=['get'], detail=False)
+    def servicios_venta(self, request):
+        user = authenticated_user(request)
+        url = '%s' % ('cmz/solicitud_licencia_externo/servicios_venta/')
+        params = {
+            'authenticated-user': user.id_erp,
+            'convenio': request.GET.get('convenio'),
+        }
+        response = self.responsebase.get(url=url, params=params)
+        if response.status_code == 200:
+            return Response(data=response.json(), status=response.status_code)
+        else:
+            return Response({'message': "Hubo problemas al conectar con el servidor"}, status=response.status_code)
 
     @action(detail=False, methods=['get'])
     def widges_info(self, request):
