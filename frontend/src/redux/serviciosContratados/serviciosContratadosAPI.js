@@ -11,10 +11,10 @@ async function getServiciosContratadosAll ({ convenio }) {
   const access = await window.sessionStorage.getItem('access')
   const options = {
     method: 'GET',
-    url: `${API_URL}/api-acceso/servicio_contratado/`,
+    url: `${API_URL}/api-acceso/solicitud_licencia/servicios_venta/`,
     headers: { Authorization: `Bearer ${access}` },
     params: {
-      id_convenio: convenio
+      convenio
     }
   }
   try {
