@@ -6,7 +6,7 @@ import { getPersonasAsociadas, stateResetOperation as stateResetOperationDatosGe
 import { getConveniosAll } from 'redux/convenio/convenioSlice'
 import { addSolicitudLicencia, updateSolicitudLicencia, getServiciosActualizacion, getSolicitudLicenciaAll, stateResetOperation as stateResetOperationLicencia } from 'redux/solicitudLicencia/solicitudLicenciaSlice'
 import { getClientesFinales, getGestionadosPor, stateResetOperation as stateResetOperationClientesFinales } from 'redux/clientesFinales/clientesFinalesSlice'
-import { getServiciosContratadosAll, stateResetOperation as stateResetOperationServiciosContratados } from 'redux/serviciosContratados/serviciosContratadosSlice'
+import { getServiciosContratadosSolicitudLicenciaAll, stateResetOperation as stateResetOperationServiciosContratados } from 'redux/serviciosContratados/serviciosContratadosSlice'
 
 import OPERATIONS from 'constants/operationsRedux'
 import date from 'utils/date'
@@ -96,7 +96,7 @@ export default function useLicenciaForm ({ solicitudLicencia, closeModal }) {
 
   useEffect(() => {
     if (convenio) {
-      dispatch(getServiciosContratadosAll({ convenio }))
+      dispatch(getServiciosContratadosSolicitudLicenciaAll({ convenio }))
       dispatch(getClientesFinales({ convenio }))
     }
   }, [convenio])
@@ -137,8 +137,8 @@ export default function useLicenciaForm ({ solicitudLicencia, closeModal }) {
         value: cliente.id
       }))
       const servicios = serviciosContratados.map(servicio => ({
-        label: servicio.producto_nombre,
-        value: servicio.servicio
+        label: servicio.servicio_descripcion,
+        value: servicio.servicio_id
       }))
       setClienteData(cliente)
       setServicioData(servicios)
