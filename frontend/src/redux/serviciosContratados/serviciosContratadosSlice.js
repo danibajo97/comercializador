@@ -34,6 +34,19 @@ export const serviciosContratadosSlice = createSlice({
       toast.error(action.error)
     })
 
+    // ADD_SERVICIO_CONTRATADO SOLICITUD LICENCIA ACCION
+    builder.addCase(getServiciosContratadosSolicitudLicenciaAll.pending, (state, action) => {
+      state.isList = OPERATIONS.PENDING
+    })
+    builder.addCase(getServiciosContratadosSolicitudLicenciaAll.fulfilled, (state, action) => {
+      state.isList = OPERATIONS.FULFILLED
+      state.serviciosContratados = action.payload
+    })
+    builder.addCase(getServiciosContratadosSolicitudLicenciaAll.rejected, (state, action) => {
+      state.isList = OPERATIONS.REJECTED
+      toast.error(action.error)
+    })
+
     // ADD_SERVICIO_CONTRATADO ACCION
     builder.addCase(addServiciosContratados.pending, (state, action) => {
       state.isAdd = OPERATIONS.PENDING
@@ -50,6 +63,7 @@ export const serviciosContratadosSlice = createSlice({
 })
 
 export const getServiciosContratadosAll = createAsyncThunk('serviciosContratados/getServiciosContratadosAll', api.getServiciosContratadosAll)
+export const getServiciosContratadosSolicitudLicenciaAll = createAsyncThunk('serviciosContratados/getServiciosContratadosSolicitudLicenciaAll', api.getServiciosContratadosSolicitudLicenciaAll)
 export const addServiciosContratados = createAsyncThunk('serviciosContratados/addServiciosContratados', api.addServiciosContratados)
 
 export const { stateResetOperation } = serviciosContratadosSlice.actions
