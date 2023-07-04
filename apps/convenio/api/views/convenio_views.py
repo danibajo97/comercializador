@@ -125,7 +125,7 @@ class ConvenioWebViewSet(viewsets.GenericViewSet):
         user = authenticated_user(request)
         params = {
             'authenticated-user': user.id_erp,
-            'idcontacto': user.id_erp,
+            'id': request.GET.get('id'),
         }
         url = 'cmz/convenio_externo/validar_convenio/'
         response = self.responsebase.get(url=url, params=params)
