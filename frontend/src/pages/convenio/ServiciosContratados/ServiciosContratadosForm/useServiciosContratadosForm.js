@@ -49,7 +49,8 @@ export default function useServiciosContratadosForm () {
           servicio: servicio.id,
           cantidad: sc.cantidad_bd,
           a_facturar: servicio.precio_moneda,
-          precio: servicio.precio_moneda
+          precio: servicio.precio_moneda,
+          deduccion: servicio.deduccion
         }
       })
       dispatch(addServiciosContratados({ convenio: convenio.id, params }))
