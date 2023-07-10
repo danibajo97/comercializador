@@ -55,7 +55,8 @@ export default function useLicencia () {
       solicitud__fecha__range: fecha,
       solicitud__cliente__contacto__nombre__icontains: value?.cliente.length > 0 ? value.cliente : undefined,
       servicio__in: value?.servicio?.length ? value.servicio.join(',') : undefined,
-      licencia__isnull: licencia
+      licencia__isnull: licencia,
+      semilla__icontains: value?.semilla.length > 0 ? value.semilla : undefined
     }
     setSortColumn('')
     setSortType('desc')

@@ -13,7 +13,8 @@ const INIT_FILTER = {
   persona: '',
   cliente: '',
   servicio: [],
-  licencia: []
+  licencia: [],
+  semilla: ''
 }
 
 export default function useFilterLicencia ({ setValueFilter }) {
@@ -81,6 +82,7 @@ export default function useFilterLicencia ({ setValueFilter }) {
               }))} block
             />
             <FormField name='licencia' label='Licencia' accepter={CheckPicker} data={estadoData} block />
+            <FormField name='semilla' label='Clave de registro' />
           </Col>
         </Form>
       </Drawer.Body>
