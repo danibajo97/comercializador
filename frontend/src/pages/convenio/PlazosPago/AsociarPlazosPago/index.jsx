@@ -64,7 +64,8 @@ export default function AsociarPlazosPago ({ setSelectedId, isConfirmado }) {
     pagination,
     checkedKeys,
     handleCheck,
-    isLoading
+    isLoading,
+    isDeleting
   } = useAsociarPlazosPago({ setSelectedId })
 
   const renderCheckCell = () => {
@@ -95,6 +96,7 @@ export default function AsociarPlazosPago ({ setSelectedId, isConfirmado }) {
       {isLoading()
         ? renderTable()
         : <Loader.Grid rows={4} columns={5} />}
+      <Loader.Dialog loading={isDeleting()} content='Eliminando...' />
     </>
   )
 }

@@ -16,7 +16,8 @@ function DatosGeneralesForm ({ setCountBD }) {
     contrato,
     personasAsociadas,
     nuevoClienteModal,
-    isLoading
+    isLoading,
+    isAddUpdateConvenio
   } = useDatosGeneralesForm({ setCountBD })
 
   const renderForm = () => (
@@ -101,6 +102,7 @@ function DatosGeneralesForm ({ setCountBD }) {
               onClick={handleSubmit}
               hidden={isConfirmado()}
               disabled={contrato?.fecha_inicial === undefined}
+              loading={isAddUpdateConvenio()}
             />
           </ButtonToolbar>
         </Col>
@@ -114,6 +116,7 @@ function DatosGeneralesForm ({ setCountBD }) {
       {isLoading()
         ? renderForm()
         : <Loader.Paragraph rows={3} />}
+      <Loader.Dialog loading={isAddUpdateConvenio()} content='Guardando...' />
     </>
   )
 }

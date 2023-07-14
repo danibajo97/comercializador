@@ -8,6 +8,7 @@ import ROL from 'constants/rol'
 import { getSolicitudLicenciaAll, getWidgesInfo, stateResetOperation } from 'redux/solicitudLicencia/solicitudLicenciaSlice'
 import usePaginationServer from 'hooks/usePaginationServer'
 import date from 'utils/date'
+import OPERATIONS from 'constants/operationsRedux'
 
 export default function useLicencia () {
   const { user } = useAuth()
@@ -28,6 +29,8 @@ export default function useLicencia () {
   const solicitudLicencias = useSelector(state => state.solicitudLicencia.solicitudLicencias)
   const solicitudLicenciasLimit = useSelector(state => state.solicitudLicencia.solicitudLicenciasLimit)
   const isList = useSelector(state => state.solicitudLicencia.isList)
+  const isDelete = useSelector(state => state.solicitudLicencia.isDelete)
+  const isOtorgar = useSelector(state => state.solicitudLicencia.isOtorgar)
   const widges = useSelector(state => state.solicitudLicencia.widges)
 
   const { pagination, page, limit } = usePaginationServer({ length: solicitudLicenciasLimit })
@@ -96,6 +99,8 @@ export default function useLicencia () {
   }
 
   const title = () => user?.rol === ROL.CLIENTE ? 'Inicio' : 'Solicitud Licencia'
+  const deleting = () => isDelete === OPERATIONS.PENDING
+  const otorgando = () => isOtorgar === OPERATIONS.PENDING
 
   return {
     user,
@@ -104,6 +109,8 @@ export default function useLicencia () {
     openModal,
     solicitudLicencias,
     isList,
+    deleting,
+    otorgando,
     totalLicencia: widges?.total || 0,
     totalOtorgada: widges?.otorgada || 0,
     totalPendiente: widges?.pendiente || 0,

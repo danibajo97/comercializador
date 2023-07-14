@@ -9,6 +9,7 @@ import OPERATIONS from 'constants/operationsRedux'
 export default function useAsociarPlazosPago ({ setSelectedId }) {
   const dispatch = useDispatch()
   const isList = useSelector(state => state.plazoPago.isList)
+  const isDelete = useSelector(state => state.plazoPago.isDelete)
   const plazosPagos = useSelector(state => state.plazoPago.plazosPagos)
   const [checkedKeys, setCheckedKeys] = useState(null)
 
@@ -32,12 +33,14 @@ export default function useAsociarPlazosPago ({ setSelectedId }) {
   }
 
   const isLoading = () => isList === OPERATIONS.FULFILLED
+  const isDeleting = () => isDelete === OPERATIONS.PENDING
 
   return {
     dataPage,
     pagination,
     checkedKeys,
     handleCheck,
-    isLoading
+    isLoading,
+    isDeleting
   }
 }

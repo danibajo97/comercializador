@@ -79,6 +79,7 @@ export default function usePlazosPagoForm ({ closeModal, convenioId, plazoPago =
   }
 
   const isLoading = () => isRetrieve === OPERATIONS.FULFILLED
+  const isAddUpdate = () => isAdd === OPERATIONS.PENDING || isUpdate === OPERATIONS.PENDING
 
   return {
     formRef,
@@ -88,6 +89,7 @@ export default function usePlazosPagoForm ({ closeModal, convenioId, plazoPago =
     convenio,
     onChangeDays,
     handleSubmit,
-    isLoading
+    isLoading,
+    isAddUpdate
   }
 }

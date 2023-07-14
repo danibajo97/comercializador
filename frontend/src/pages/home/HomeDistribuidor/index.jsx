@@ -11,9 +11,34 @@ import useFilterConvenio from './useFilterConvenio'
 export default function HomeDistribuidor () {
   useHeader({ title: 'Inicio' })
   const navigate = useNavigate()
-  const { data, loading, totalConvenio, totalTerminado, totalEdicion, pagination, setValueFilter, onSortColumn, sortInfo } = useHomeDistribuidor()
+  const {
+    data,
+    loading,
+    validando,
+    terminando,
+    deleting,
+    totalConvenio,
+    totalTerminado,
+    totalEdicion,
+    pagination,
+    setValueFilter,
+    onSortColumn,
+    sortInfo
+  } = useHomeDistribuidor()
 
   const { drawerFilter, open } = useFilterConvenio({ setValueFilter })
+
+  const loadingText = () => {
+    if (validando) {
+      return 'Validando...'
+    }
+    if (terminando) {
+      return 'Terminando...'
+    }
+    if (deleting) {
+      return 'Eliminando...'
+    }
+  }
 
   return (
     <>
@@ -56,6 +81,10 @@ export default function HomeDistribuidor () {
           </Col>
         </Row>
       </Container>
+      <Loader.Dialog
+        loading={validando || terminando || deleting}
+        content={loadingText()}
+      />
     </>
   )
 }

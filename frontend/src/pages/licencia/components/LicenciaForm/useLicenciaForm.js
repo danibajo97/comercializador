@@ -171,6 +171,7 @@ export default function useLicenciaForm ({ solicitudLicencia, closeModal }) {
 
   const isFormClienteFinal = () => isListClientesFinales === OPERATIONS.PENDING || isListGestionadosPor === OPERATIONS.PENDING
   const isFormServicios = () => isListServiciosContratados === OPERATIONS.PENDING || isListServiciosActualizacion === OPERATIONS.PENDING
+  const isAddUpdateLic = () => isAddLicencia === OPERATIONS.PENDING || isUpdateLicencia === OPERATIONS.PENDING
 
   return {
     formRef,
@@ -179,6 +180,7 @@ export default function useLicenciaForm ({ solicitudLicencia, closeModal }) {
     formModel,
     isUpdate,
     isLoading,
+    isAddUpdateLic,
     convenios,
     personasAsociadas,
     clienteData,

@@ -12,6 +12,7 @@ export default function ClienteForm ({ closeModal, type }) {
     provincias,
     handleSubmit,
     isLoading,
+    isAdd,
     organismos
   } = useClienteForm({ closeModal, type })
 
@@ -35,7 +36,7 @@ export default function ClienteForm ({ closeModal, type }) {
           <FormField name='correo' label='Correo' required />
         </Col>
         <Col xs={24} sm={12}>
-          <FormField name='abreviatura' label='Abreviatura' />
+          <FormField name='abreviatura' label='Abreviatura' required />
           <FormField name='telefono' label='Teléfono' required />
           <FormField
             name='municipio_id' label='Provincia y Municipio' accepter={SelectPicker} data={provincias.map(d => ({
@@ -57,6 +58,7 @@ export default function ClienteForm ({ closeModal, type }) {
               text='Guardar'
               appearance='primary'
               onClick={handleSubmit}
+              loading={isAdd()}
             />
             {closeModal &&
               <Button
@@ -79,6 +81,7 @@ export default function ClienteForm ({ closeModal, type }) {
           ? renderForm()
           : <Loader.Paragraph rows={7} />
       }
+      <Loader.Dialog loading={isAdd()} content='Guardando' />
     </>
   )
 }

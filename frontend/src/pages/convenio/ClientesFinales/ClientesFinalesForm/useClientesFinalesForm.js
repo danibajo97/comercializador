@@ -27,6 +27,7 @@ export default function useClientesFinalesForm () {
   const isListClientesFinales = useSelector(state => state.clientesFinales.isListClientesFinales)
   const isList = useSelector(state => state.clientesFinales.isList)
   const clientesFinales = useSelector(state => state.clientesFinales.clientesFinales)
+  const isAdd = useSelector(state => state.clientesFinales.isAdd)
 
   const [db, serDB] = useState(0)
   const [nuevoContacto, serNuevoContacto] = useState([])
@@ -122,6 +123,7 @@ export default function useClientesFinalesForm () {
   const isConfirmado = () => convenio && convenio.estado >= 3
 
   const isLoading = () => isList === OPERATIONS.FULFILLED && isListClientesFinales === OPERATIONS.FULFILLED
+  const isAddClientesFinales = () => isAdd === OPERATIONS.PENDING
 
   return {
     formRef,
@@ -137,6 +139,7 @@ export default function useClientesFinalesForm () {
     onClean,
     isClientesFinalesRelacionados,
     handleSubmit,
+    isAddClientesFinales,
     modalInfo: { modal, openModal }
   }
 }

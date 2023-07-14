@@ -57,6 +57,7 @@ export default function useDatosGeneralesForm ({ setCountBD }) {
   const listPersonasAsociadas = useSelector(state => state.datosGenerales.listPersonasAsociadas)
 
   const isAdd = useSelector(state => state.convenio.isAdd)
+  const isUpdateConvenio = useSelector(state => state.convenio.isUpdate)
   const convenio = useSelector(state => state.convenio.convenio)
 
   const { nroContrato, fechaEmision, fechaVencimiento } = formValue
@@ -171,6 +172,7 @@ export default function useDatosGeneralesForm ({ setCountBD }) {
   const isConfirmado = () => convenio && convenio.estado >= 3
   const isUpdate = () => id !== undefined
   const isLoading = () => isClienteFinal === OPERATIONS.FULFILLED || listPersonasAsociadas === OPERATIONS.FULFILLED
+  const isAddUpdateConvenio = () => isAdd === OPERATIONS.PENDING || isUpdateConvenio === OPERATIONS.PENDING
 
   return {
     formRef,
@@ -184,6 +186,7 @@ export default function useDatosGeneralesForm ({ setCountBD }) {
     isLoading,
     isConfirmado,
     isUpdate,
+    isAddUpdateConvenio,
     nuevoClienteModal: { modal, openModal }
   }
 }
