@@ -15,7 +15,8 @@ export function AsociarServiciosForm ({ closeModal, convenioId, plazoPagoId, ser
     onChangeClienteFinal,
     tableData,
     handleSubmit,
-    isLoading
+    isLoading,
+    isAddUpdate
   } = useAsociarServiciosForm({ closeModal, convenioId, plazoPagoId, servicioAsociado })
 
   const renderForm = () => (
@@ -81,6 +82,7 @@ export function AsociarServiciosForm ({ closeModal, convenioId, plazoPagoId, ser
             text='Guardar'
             appearance='primary'
             onClick={handleSubmit}
+            loading={isAddUpdate()}
           />
           {closeModal &&
             <Button
@@ -100,6 +102,7 @@ export function AsociarServiciosForm ({ closeModal, convenioId, plazoPagoId, ser
       {isLoading()
         ? renderForm()
         : <Loader.Paragraph rows={4} />}
+      <Loader.Dialog loading={isAddUpdate()} content='Guardando...' />
     </>
   )
 }

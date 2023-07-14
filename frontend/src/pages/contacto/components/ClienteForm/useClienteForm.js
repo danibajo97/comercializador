@@ -72,6 +72,7 @@ export default function useClienteForm ({ closeModal, type }) {
   }
 
   const isLoading = () => isListProvincia === OPERATIONS.FULFILLED || isListOrganismo === OPERATIONS.FULFILLED
+  const isAdd = () => isAddContactoDG === OPERATIONS.PENDING || isAddContactoCF === OPERATIONS.PENDING
 
-  return { formModel, formRef, formValue, setFormValue, provincias, organismos, handleSubmit, isLoading }
+  return { formModel, formRef, formValue, setFormValue, provincias, organismos, handleSubmit, isLoading, isAdd }
 }

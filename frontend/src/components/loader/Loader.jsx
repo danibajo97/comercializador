@@ -1,6 +1,6 @@
 import { Component } from 'react'
 
-import { Loader as LoaderRS, Placeholder } from 'rsuite'
+import { Loader as LoaderRS, Placeholder, Modal } from 'rsuite'
 
 function LoaderGrid ({ rows, columns }) {
   return (
@@ -20,6 +20,16 @@ function LoaderParagraph ({ rows }) {
   )
 }
 
+function LoaderDialog ({ loading, content }) {
+  return (
+    <Modal open={loading}>
+      <Modal.Body>
+        <LoaderRS content={content} size='md' />
+      </Modal.Body>
+    </Modal>
+  )
+}
+
 function LoaderDefault ({ ...props }) {
   return (
     <div {...props}>
@@ -32,4 +42,5 @@ export default class Loader extends Component {
   static Grid = LoaderGrid
   static Paragraph = LoaderParagraph
   static Default = LoaderDefault
+  static Dialog = LoaderDialog
 }

@@ -9,6 +9,7 @@ export default function useAsociarServicios ({ id }) {
   const dispatch = useDispatch()
   const plazoPagoServicio = useSelector(state => state.plazoPagoServicio.plazoPagoServicio)
   const isList = useSelector(state => state.plazoPagoServicio.isList)
+  const isDelete = useSelector(state => state.plazoPagoServicio.isDelete)
 
   const { pagination, dataPage } = usePagination({ data: id ? plazoPagoServicio : [] })
 
@@ -25,10 +26,12 @@ export default function useAsociarServicios ({ id }) {
   }, [])
 
   const isLoading = () => isList === OPERATIONS.FULFILLED
+  const isDeleting = () => isDelete === OPERATIONS.PENDING
 
   return {
     dataPage,
     pagination,
-    isLoading
+    isLoading,
+    isDeleting
   }
 }

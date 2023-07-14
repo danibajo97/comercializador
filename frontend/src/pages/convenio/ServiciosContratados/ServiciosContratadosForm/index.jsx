@@ -127,7 +127,8 @@ function ServiciosContratadosForm () {
     isComfirmado,
     isLoading,
     isServiciosContratadosRelacionado,
-    guardarForm
+    guardarForm,
+    isAddServContratados
   } = useServiciosContratadosForm()
 
   const renderForm = () => {
@@ -161,6 +162,7 @@ function ServiciosContratadosForm () {
               disabled={hasError()}
               hidden={isComfirmado()}
               onClick={guardarForm}
+              loading={isAddServContratados()}
             />
           </Col>
         </Row>
@@ -177,6 +179,7 @@ function ServiciosContratadosForm () {
             {renderForm()}
           </>)
         : <Loader.Paragraph rows={3} />}
+      <Loader.Dialog loading={isAddServContratados()} content='Guardando...' />
     </>
   )
 }

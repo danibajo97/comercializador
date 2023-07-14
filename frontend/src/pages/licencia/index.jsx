@@ -24,6 +24,8 @@ export default function SolicitudLicencia () {
     openModal,
     solicitudLicencias,
     isList,
+    deleting,
+    otorgando,
     totalLicencia,
     totalOtorgada,
     totalPendiente,
@@ -36,6 +38,15 @@ export default function SolicitudLicencia () {
   useHeader({ title: title() })
 
   const { drawerFilter, open } = useFilterLicencia({ setValueFilter })
+
+  const loadingText = () => {
+    if (deleting()) {
+      return 'Eliminando...'
+    }
+    if (otorgando()) {
+      return 'Otorgando...'
+    }
+  }
 
   return (
     <>
@@ -81,6 +92,7 @@ export default function SolicitudLicencia () {
           </Col>
         </Row>
       </Container>
+      <Loader.Dialog loading={deleting() || otorgando()} content={loadingText()} />
     </>
   )
 }

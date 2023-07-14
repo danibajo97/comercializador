@@ -11,6 +11,7 @@ export default function LicenciaForm ({ closeModal, solicitudLicencia }) {
     formModel,
     isUpdate,
     isLoading,
+    isAddUpdateLic,
     convenios,
     personasAsociadas,
     clienteData,
@@ -87,6 +88,7 @@ export default function LicenciaForm ({ closeModal, solicitudLicencia }) {
             text='Guardar'
             appearance='primary'
             onClick={handleSubmit}
+            loading={isAddUpdateLic()}
           />
           {closeModal &&
             <Button
@@ -106,6 +108,7 @@ export default function LicenciaForm ({ closeModal, solicitudLicencia }) {
       {isLoading()
         ? renderForm()
         : <Loader.Paragraph rows={16} />}
+      <Loader.Dialog loading={isAddUpdateLic()} content='Guardando...' />
     </>
   )
 }

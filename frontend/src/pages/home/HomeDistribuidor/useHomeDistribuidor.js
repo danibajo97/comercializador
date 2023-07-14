@@ -15,6 +15,9 @@ export default function useHomeDistribuidor () {
   const convenios = useSelector(state => state.convenio.convenios)
   const conveniosLimit = useSelector(state => state.convenio.conveniosLimit)
   const isConvenios = useSelector(state => state.convenio.isConvenios)
+  const isValidar = useSelector(state => state.convenio.isValidar)
+  const isTerminar = useSelector(state => state.convenio.isTerminar)
+  const isDelete = useSelector(state => state.convenio.isDelete)
   const widges = useSelector(state => state.convenio.widges)
 
   const { pagination, page, limit } = usePaginationServer({ length: conveniosLimit })
@@ -81,10 +84,16 @@ export default function useHomeDistribuidor () {
   }
 
   const loading = isConvenios === OPERATIONS.FULFILLED
+  const validando = isValidar === OPERATIONS.PENDING
+  const terminando = isTerminar === OPERATIONS.PENDING
+  const deleting = isDelete === OPERATIONS.PENDING
 
   return {
     data: convenios,
     loading,
+    validando,
+    terminando,
+    deleting,
     totalConvenio: widges?.total || 0,
     totalTerminado: widges?.terminado || 0,
     totalEdicion: widges?.edicion || 0,

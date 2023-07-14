@@ -69,7 +69,8 @@ export default function AsociarServicios ({ id, isConfirmado }) {
   const {
     dataPage,
     pagination,
-    isLoading
+    isLoading,
+    isDeleting
   } = useAsociarServicios({ id })
 
   const renderEmpty = () => {
@@ -108,6 +109,7 @@ export default function AsociarServicios ({ id, isConfirmado }) {
       {isLoading()
         ? renderTable()
         : <Loader.Grid rows={4} columns={5} />}
+      <Loader.Dialog loading={isDeleting()} content='Eliminando...' />
     </>
   )
 }
