@@ -81,10 +81,10 @@ export default function useLicencia () {
 
     // ? Arregar los filtros que no funcionan
     const columns = {
-      no_solicitud: 'solicitud', //! solicitud__no_solicitud
-      fecha: 'solicitud', //! solicitud__fecha
-      cliente_final_nombre: 'solicitud', //! solicitud__fecha
-      servicio_nombre: 'servicio',
+      no_solicitud: 'solicitud__no_solicitud',
+      fecha: 'solicitud__fecha',
+      cliente_final_nombre: 'solicitud__cliente__contacto__nombre',
+      servicio_nombre: 'servicio__nombre',
       licencia: 'licencia',
       observacion: 'observacion'
     }
