@@ -10,6 +10,7 @@ from apps.users.api.serializers.authentication_serializers import ActivateUserSe
 from apps.users.api.serializers.users_serializers import RegisterSerializer
 from apps.users.models import User
 from apps.users.resources.activate_code import activate_code
+from apps.users.resources.authenticated_user import authenticated_user
 from apps.users.resources.random_user import generate_username
 
 
@@ -86,10 +87,13 @@ class AuthenticatedUser(generics.GenericAPIView):
     responsebase = ResponseBase()
 
     def get(self, request):
-        current_user = request.user
-        if current_user:
-            url = '%s%s/' % ('cmz/contacto_externo/', current_user.id_erp)
-            response = self.responsebase.get(url=url)
+        user = authenticated_user(request)
+        if user:
+            params = {
+                'authenticated-user': user.id_erp,
+            }
+            url = '%s%s/' % ('cmz/contacto_externo/', user.id_erp)
+            response = self.responsebase.get(url=url, params=params)
             if response.status_code == 200:
                 return Response({'versat': response.json(),
                                  'comercializador': {
