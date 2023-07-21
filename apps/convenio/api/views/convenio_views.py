@@ -145,7 +145,6 @@ class ConvenioWebViewSet(viewsets.GenericViewSet):
         }
         url = 'cmz/convenio_externo/terminar_convenio/'
         response = self.responsebase.get(url=url, params=params)
-        print(response)
         if response.status_code == 202:
             return Response(status=response.status_code)
         else:

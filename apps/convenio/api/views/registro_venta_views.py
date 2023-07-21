@@ -19,75 +19,13 @@ class RegistroVentaViewSet(viewsets.GenericViewSet):
         response = self.responsebase.get(url=url, params=params)
         return Response(response.json(), status=response.status_code)
 
-    @transaction.atomic
-    def retrieve(self, request, pk):
-        url = 'cmz/registro_venta_externo/%s/' % pk
+    @action(detail=False, methods=['get'])
+    def servicios_contratados(self, request):
         user = authenticated_user(request)
-        params = {
-            'authenticated-user': user.id_erp,
-        }
-        response = self.responsebase.get(url=url, params=params)
-        if response.status_code == 200:
-            return Response(response.json(), status=response.status_code)
-        else:
-            return Response({'Versat-response': response.json()},
-                            status=response.status_code)
-
-    @transaction.atomic
-    def destroy(self, request, pk):
-        url = 'cmz/registro_venta_externo/%s/' % pk
-        user = authenticated_user(request)
-        params = {
-            'authenticated-user': user.id_erp,
-        }
-        response = self.responsebase.delete(url=url, params=params)
-        if response.status_code == 204:
-            return Response({'Comercializador-response': 'Eliminado correctamente'},
-                            status=response.status_code)
-        else:
-            return Response({'Versat-response': response.json()},
-                            status=response.status_code)
-
-    @transaction.atomic
-    def create(self, request):
-        user = authenticated_user(request)
-        url = 'cmz/registro_venta_externo/'
+        url = 'cmz/registro_venta_externo/servicios_contratados/'
         json_data = {
             'authenticated-user': user.id_erp,
-            **request.data,
+            'cliente_final': request.GET.get('cliente_final'),
         }
-        response = self.responsebase.post(url=url, json=json_data)
-        if response.status_code == 201:
-            return Response({'Comercializador-response': 'Creado correctamente'}, status=response.status_code)
-        else:
-            return Response(response, status=response.status_code)
-
-    @transaction.atomic
-    def update(self, request, pk):
-        user = authenticated_user(request)
-        url = 'cmz/registro_venta_externo/%s/' % pk
-        json_data = {
-            'authenticated-user': user.id_erp,
-            **request.data,
-        }
-        response = self.responsebase.put(url=url, json=json_data)
-        if response.status_code == 200:
-            return Response({'Comercializador-response': 'Actualizado Correctamente',
-                             'versat_response': response.json()}, status=response.status_code)
-        else:
-            return Response(response, status=response.status_code)
-
-    @action(detail=False, methods=['post'])
-    def solicitar_pago(self, request):
-        user = authenticated_user(request)
-        url = 'cmz/registro_venta_externo/solicitar_pago/'
-        json_data = {
-            'authenticated-user': user.id_erp,
-            **request.data,
-        }
-        response = self.responsebase.post(url=url, json=json_data)
-        if response.status_code == 200:
-            return Response({'Comercializador-response': 'Actualizado Correctamente',
-                             'versat_response': response.json()}, status=response.status_code)
-        else:
-            return Response(response, status=response.status_code)
+        response = self.responsebase.get(url=url, params=json_data)
+        return Response(response.json(), status=response.status_code)

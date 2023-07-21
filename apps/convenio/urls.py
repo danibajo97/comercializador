@@ -7,6 +7,7 @@ from apps.convenio.api.views.servicio_contratado_views import ServicioContratado
 from apps.convenio.api.views.plazo_pago_servicio_views import PlazoPagoServicioViewSet
 from apps.convenio.api.views.plazo_pago_view import PlazoPagoViewSet
 from apps.convenio.api.views.registro_venta_views import RegistroVentaViewSet
+from apps.convenio.api.views.solicitud_pago_views import SolicitudPagoViewSet
 from apps.convenio.api.views.usuario_final_views import UsuarioFinalWebViewSet
 from apps.convenio.api.views.solicitud_licencia_views import SolicitudLicenciaViewSet
 
@@ -27,5 +28,7 @@ router.register('contacto_externo', ContactoExternoWebViewSet,
                 basename="contacto_externo")
 router.register('registro_venta_externo', RegistroVentaViewSet,
                 basename="registro_venta_externo")
+router.register('solicitud_pago_externo', SolicitudPagoViewSet,
+                basename="solicitud_pago_externo")
 
 urlpatterns = router.urls
