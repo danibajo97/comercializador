@@ -20,6 +20,7 @@ export default function useServiciosContratadosForm () {
 
   const serviciosContratados = useSelector(state => state.serviciosContratados.serviciosContratados)
   const isList = useSelector(state => state.serviciosContratados.isList)
+  const isAdd = useSelector(state => state.serviciosContratados.isAdd)
 
   const formRef = useRef()
   const [formError, setFormError] = useState({})
@@ -49,7 +50,8 @@ export default function useServiciosContratadosForm () {
           servicio: servicio.id,
           cantidad: sc.cantidad_bd,
           a_facturar: servicio.precio_moneda,
-          precio: servicio.precio_moneda
+          precio: servicio.precio_moneda,
+          deduccion: servicio.deduccion
         }
       })
       dispatch(addServiciosContratados({ convenio: convenio.id, params }))
@@ -96,6 +98,7 @@ export default function useServiciosContratadosForm () {
   const isComfirmado = () => convenio && convenio.estado >= 3
 
   const isLoading = () => isList === OPERATIONS.FULFILLED && isListServicios === OPERATIONS.FULFILLED
+  const isAddServContratados = () => isAdd === OPERATIONS.PENDING
 
   return {
     formRef,
@@ -109,6 +112,7 @@ export default function useServiciosContratadosForm () {
     isLoading,
     isServiciosContratadosRelacionado,
     guardarForm,
+    isAddServContratados,
     listadoServicios
   }
 }

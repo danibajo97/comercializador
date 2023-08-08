@@ -4,7 +4,8 @@ const API_URL = process.env.REACT_APP_API_URL
 
 export default {
   getProvincias,
-  getMunicipios
+  getMunicipios,
+  getOrganismos
 }
 
 async function getProvincias () {
@@ -34,5 +35,20 @@ async function getMunicipios () {
     return data
   } catch (error) {
     throw new Error('Error al listar los municipios.')
+  }
+}
+
+async function getOrganismos () {
+  const access = await window.sessionStorage.getItem('access')
+  const options = {
+    method: 'GET',
+    url: `${API_URL}/api-acceso/contacto_externo/organismos/`,
+    headers: { Authorization: `Bearer ${access}` }
+  }
+  try {
+    const { data } = await axios(options)
+    return data
+  } catch (error) {
+    throw new Error('Error al listar los organismos.')
   }
 }

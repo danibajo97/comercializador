@@ -4,7 +4,8 @@ const API_URL = process.env.REACT_APP_API_URL
 
 export default {
   getServiciosContratadosAll,
-  addServiciosContratados
+  addServiciosContratados,
+  getServiciosContratadosSolicitudLicenciaAll
 }
 
 async function getServiciosContratadosAll ({ convenio }) {
@@ -20,6 +21,24 @@ async function getServiciosContratadosAll ({ convenio }) {
   try {
     const { data } = await axios(options)
     return data.results
+  } catch (error) {
+    throw new Error('Error al listar los convenios.')
+  }
+}
+
+async function getServiciosContratadosSolicitudLicenciaAll ({ convenio }) {
+  const access = await window.sessionStorage.getItem('access')
+  const options = {
+    method: 'GET',
+    url: `${API_URL}/api-acceso/solicitud_licencia/servicios_venta/`,
+    headers: { Authorization: `Bearer ${access}` },
+    params: {
+      convenio
+    }
+  }
+  try {
+    const { data } = await axios(options)
+    return data
   } catch (error) {
     throw new Error('Error al listar los convenios.')
   }

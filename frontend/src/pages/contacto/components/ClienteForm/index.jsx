@@ -12,7 +12,8 @@ export default function ClienteForm ({ closeModal, type }) {
     provincias,
     handleSubmit,
     isLoading,
-    dataOrganismo
+    isAdd,
+    organismos
   } = useClienteForm({ closeModal, type })
 
   const renderForm = () => (
@@ -26,12 +27,17 @@ export default function ClienteForm ({ closeModal, type }) {
       >
         <Col xs={24} sm={12} className='mb-4'>
           <FormField name='nombre' label='Nombre' required />
-          <FormField name='organismo_id' label='Organismo' accepter={SelectPicker} data={dataOrganismo} block required />
+          <FormField
+            name='organismo_id' label='Organismo' accepter={SelectPicker} data={organismos.map(d => ({
+              label: d.nombre,
+              value: d.id
+            }))} block required
+          />
           <FormField name='correo' label='Correo' required />
         </Col>
         <Col xs={24} sm={12}>
-          <FormField name='abreviatura' label='Abreviatura' />
-          <FormField name='telefono' label='Teléfono' />
+          <FormField name='abreviatura' label='Abreviatura' required />
+          <FormField name='telefono' label='Teléfono' required />
           <FormField
             name='municipio_id' label='Provincia y Municipio' accepter={SelectPicker} data={provincias.map(d => ({
               label: d.municipio_nombre,
@@ -43,7 +49,7 @@ export default function ClienteForm ({ closeModal, type }) {
           />
         </Col>
         <Col xs={24} className='mt-4'>
-          <FormField name='direccion' label='Dirección' accepter={Textarea} rows={3} />
+          <FormField name='direccion' label='Dirección' accepter={Textarea} rows={3} required />
         </Col>
         <Col xs={24} className='mt-4'>
           <ButtonToolbar>
@@ -52,6 +58,7 @@ export default function ClienteForm ({ closeModal, type }) {
               text='Guardar'
               appearance='primary'
               onClick={handleSubmit}
+              loading={isAdd()}
             />
             {closeModal &&
               <Button
@@ -74,6 +81,7 @@ export default function ClienteForm ({ closeModal, type }) {
           ? renderForm()
           : <Loader.Paragraph rows={7} />
       }
+      <Loader.Dialog loading={isAdd()} content='Guardando' />
     </>
   )
 }

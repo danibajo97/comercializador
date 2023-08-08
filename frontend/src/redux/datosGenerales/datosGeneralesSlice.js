@@ -81,8 +81,10 @@ export const datosGeneralesSlice = createSlice({
     builder.addCase(addContacto.fulfilled, (state, action) => {
       const payload = action.payload
       state.isAddContacto = OPERATIONS.FULFILLED
+      const dataStr = payload.data.join('')
+      const dataObj = JSON.parse(dataStr)
       state.clientesFinales.push({
-        ...payload.data,
+        ...dataObj,
         nuevo: true
       })
       toast.success(payload.message)

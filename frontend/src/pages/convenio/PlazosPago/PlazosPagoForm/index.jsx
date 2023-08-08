@@ -12,7 +12,8 @@ export function PlazosPagoForm ({ closeModal, convenioId, plazoPago = null }) {
     convenio,
     onChangeDays,
     handleSubmit,
-    isLoading
+    isLoading,
+    isAddUpdate
   } = usePlazosPagoForm({ closeModal, convenioId, plazoPago })
 
   const renderForm = () => (
@@ -48,6 +49,7 @@ export function PlazosPagoForm ({ closeModal, convenioId, plazoPago = null }) {
             text='Guardar'
             appearance='primary'
             onClick={handleSubmit}
+            loading={isAddUpdate()}
           />
           {closeModal &&
             <Button
@@ -67,6 +69,7 @@ export function PlazosPagoForm ({ closeModal, convenioId, plazoPago = null }) {
       {isLoading()
         ? renderForm()
         : <Loader.Paragraph rows={4} />}
+      <Loader.Dialog loading={isAddUpdate()} content='Guardando...' />
     </>
   )
 }

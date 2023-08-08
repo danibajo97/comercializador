@@ -20,6 +20,7 @@ function ClientesFinalesPanel () {
     onClean,
     isClientesFinalesRelacionados,
     handleSubmit,
+    isAddClientesFinales,
     modalInfo
   } = useClientesFinalesForm()
 
@@ -83,6 +84,7 @@ function ClientesFinalesPanel () {
               appearance='primary'
               onClick={handleSubmit}
               hidden={isConfirmado()}
+              loading={isAddClientesFinales()}
             />
           </ButtonToolbar>
         </Col>
@@ -100,6 +102,7 @@ function ClientesFinalesPanel () {
             {renderForm()}
           </>)
         : <Loader.Paragraph rows={5} />}
+      <Loader.Dialog loading={isAddClientesFinales()} content='Guardando...' />
     </>
   )
 }

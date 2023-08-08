@@ -44,8 +44,8 @@ export default function Login () {
                   >
                     <Row>
                       <Col xs='12'>
-                        <FormField name='username' label='Usuario' />
-                        <InputPassword name='password' label='Contraseña' />
+                        <FormField name='username' label='Usuario' disabled={isLoading} />
+                        <InputPassword name='password' label='Contraseña' disabled={isLoading} />
                       </Col>
                       <Col xs='12'>
                         <div className='text-center'>
@@ -65,7 +65,7 @@ export default function Login () {
                 <a
                   style={{ cursor: 'pointer' }}
                   className='text-muted'
-                  onClick={() => navigate('/forgot-password')}
+                  onClick={() => !isLoading ? navigate('/forgot-password') : null}
                 >
                   <small>¿Se te olvidó tu contraseña?</small>
                 </a>

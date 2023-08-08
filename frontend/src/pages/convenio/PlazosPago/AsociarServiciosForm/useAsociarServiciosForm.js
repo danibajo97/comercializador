@@ -106,6 +106,7 @@ export default function useAsociarServiciosForm ({ closeModal, convenioId, plazo
   }
 
   const isLoading = () => isListClientesFinales === OPERATIONS.FULFILLED && isListServiciosContratados === OPERATIONS.FULFILLED
+  const isAddUpdate = () => isAdd === OPERATIONS.PENDING || isUpdate === OPERATIONS.PENDING
 
   return {
     formRef,
@@ -118,6 +119,7 @@ export default function useAsociarServiciosForm ({ closeModal, convenioId, plazo
     onChangeClienteFinal,
     tableData,
     handleSubmit,
-    isLoading
+    isLoading,
+    isAddUpdate
   }
 }

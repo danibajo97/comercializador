@@ -8,6 +8,7 @@ import ROL from 'constants/rol'
 import { getSolicitudLicenciaAll, getWidgesInfo, stateResetOperation } from 'redux/solicitudLicencia/solicitudLicenciaSlice'
 import usePaginationServer from 'hooks/usePaginationServer'
 import date from 'utils/date'
+import OPERATIONS from 'constants/operationsRedux'
 
 export default function useLicencia () {
   const { user } = useAuth()
@@ -28,6 +29,8 @@ export default function useLicencia () {
   const solicitudLicencias = useSelector(state => state.solicitudLicencia.solicitudLicencias)
   const solicitudLicenciasLimit = useSelector(state => state.solicitudLicencia.solicitudLicenciasLimit)
   const isList = useSelector(state => state.solicitudLicencia.isList)
+  const isDelete = useSelector(state => state.solicitudLicencia.isDelete)
+  const isOtorgar = useSelector(state => state.solicitudLicencia.isOtorgar)
   const widges = useSelector(state => state.solicitudLicencia.widges)
 
   const { pagination, page, limit } = usePaginationServer({ length: solicitudLicenciasLimit })
@@ -55,7 +58,8 @@ export default function useLicencia () {
       solicitud__fecha__range: fecha,
       solicitud__cliente__contacto__nombre__icontains: value?.cliente.length > 0 ? value.cliente : undefined,
       servicio__in: value?.servicio?.length ? value.servicio.join(',') : undefined,
-      licencia__isnull: licencia
+      licencia__isnull: licencia,
+      semilla__icontains: value?.semilla.length > 0 ? value.semilla : undefined
     }
     setSortColumn('')
     setSortType('desc')
@@ -77,10 +81,10 @@ export default function useLicencia () {
 
     // ? Arregar los filtros que no funcionan
     const columns = {
-      no_solicitud: 'solicitud', //! solicitud__no_solicitud
-      fecha: 'solicitud', //! solicitud__fecha
-      cliente_final_nombre: 'solicitud', //! solicitud__fecha
-      servicio_nombre: 'servicio',
+      no_solicitud: 'solicitud__no_solicitud',
+      fecha: 'solicitud__fecha',
+      cliente_final_nombre: 'solicitud__cliente__contacto__nombre',
+      servicio_nombre: 'servicio__nombre',
       licencia: 'licencia',
       observacion: 'observacion'
     }
@@ -95,6 +99,8 @@ export default function useLicencia () {
   }
 
   const title = () => user?.rol === ROL.CLIENTE ? 'Inicio' : 'Solicitud Licencia'
+  const deleting = () => isDelete === OPERATIONS.PENDING
+  const otorgando = () => isOtorgar === OPERATIONS.PENDING
 
   return {
     user,
@@ -103,6 +109,8 @@ export default function useLicencia () {
     openModal,
     solicitudLicencias,
     isList,
+    deleting,
+    otorgando,
     totalLicencia: widges?.total || 0,
     totalOtorgada: widges?.otorgada || 0,
     totalPendiente: widges?.pendiente || 0,
