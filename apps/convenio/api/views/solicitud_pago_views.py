@@ -15,6 +15,9 @@ class SolicitudPagoViewSet(viewsets.GenericViewSet):
         url = 'cmz/solicitud_pago_externo/'
         params = {
             'authenticated-user': user.id_erp,
+            'cliente_final': request.GET.get('cliente_final', None),
+            'fecha': request.GET.get('fecha', None),
+            'facturada': request.GET.get('facturada', None),
         }
         response = self.responsebase.get(url=url, params=params)
         return Response(response.json(), status=response.status_code)
@@ -91,3 +94,13 @@ class SolicitudPagoViewSet(viewsets.GenericViewSet):
                             status=response.status_code)
         else:
             return Response(response, status=response.status_code)
+
+    @action(detail=False, methods=['get'])
+    def para_crear_solicitud_pago_cliente_final(self, request):
+        user = authenticated_user(request)
+        url = 'cmz/solicitud_pago_externo/para_crear_solicitud_pago_cliente_final/'
+        params = {
+            'authenticated-user': user.id_erp,
+        }
+        response = self.responsebase.get(url=url, params=params)
+        return Response(response.json(), status=response.status_code)
