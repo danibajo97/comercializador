@@ -1,10 +1,11 @@
 from django.db import transaction
-from rest_framework import viewsets
+from rest_framework import viewsets, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
 from apps.base.response_base import ResponseBase
 from apps.users.resources.authenticated_user import authenticated_user
+from apps.users.resources.solicitud_licencia_correo import solicitud_licencia_correo
 
 
 class SolicitudLicenciaViewSet(viewsets.GenericViewSet):
@@ -132,3 +133,24 @@ class SolicitudLicenciaViewSet(viewsets.GenericViewSet):
         }
         response = self.responsebase.get(url=url, params=params)
         return Response(response.json(), status=response.status_code)
+
+    @action(detail=False, methods=['get'])
+    def solicitud_licencia_correo(self, request):
+        solicitud_licencia = request.GET.get('solicitud_licencia')
+        url = 'cmz/solicitud_licencia_externo/%s/' % solicitud_licencia
+        user = authenticated_user(request)
+        params = {
+            'authenticated-user': user.id_erp,
+        }
+        response = self.responsebase.get(url=url, params=params)
+        if response.status_code == 200:
+            if not response.json()['cliente_final_correo']:
+                return Response(
+                    {'Versat-response': 'El cliente: {} no tiene correo'.format(response.json()['cliente_final_nombre'])},
+                    status=status.HTTP_400_BAD_REQUEST)
+            else:
+                solicitud_licencia_correo(response.json(), request)
+                return Response({'message': 'Correo enviado correctamente!'}, status=status.HTTP_200_OK)
+        else:
+            return Response({'Versat-response': response.json()},
+                            status=response.status_code)
