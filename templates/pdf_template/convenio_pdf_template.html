@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Informe de Convenio</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        h1 {
+            text-align: center;
+            font-size: 24px;
+        }
+        .empresa-info {
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-bottom: 20px;
+        }
+        .plazo-pago {
+            margin-bottom: 20px;
+        }
+        ul {
+            list-style-type: disc;
+            margin-left: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Informe de Convenio</h1>
+
+    <div class="empresa-info">
+        <p><strong>Número de Convenio:</strong> {{ convenio_dict.no_convenio }}</p>
+        <p><strong>Número de Contrato:</strong> {{ convenio_dict.no_contrato }}</p>
+        <p><strong>Cliente Final:</strong> {{ convenio_dict.cliente_final }}</p>
+        <p><strong>Facturado a:</strong> {{ convenio_dict.facturese_a }}</p>
+        <p><strong>Solicitado por:</strong> {{ convenio_dict.solicitado_por }}</p>
+        <p><strong>Fecha de Emisión:</strong> {{ convenio_dict.fecha_emision }}</p>
+        <p><strong>Importe:</strong> {{ convenio_dict.importe }}</p>
+        <p><strong>Cantidad de Base de Datos:</strong> {{ convenio_dict.cantidad_bd }}</p>
+    </div>
+    <br>
+    {% for plazo in plazo_pago_list %}
+    <div class="plazo-pago">
+        <h2>Plazo de Pago {{ plazo.fecha }}:</h2>
+        <ul>
+            {% for servicio in plazo.plazo_pago_servicio_list %}
+            <li>
+                <strong>Nombre del Servicio:</strong> {{ servicio.nombre_servicio }}<br>
+                <strong>Cantidad:</strong> {{ servicio.cantidad }}<br>
+                <strong>Precio:</strong> {{ servicio.precio_servicio }}
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endfor %}
+</body>
+</html>

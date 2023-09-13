@@ -1,10 +1,13 @@
 from django.db import transaction
+from django.http import HttpResponse
+from django.template.loader import get_template
 from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
 from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
+from xhtml2pdf import pisa
 
 from apps.base.response_base import ResponseBase
 from apps.base.swagger_schema import parameter
@@ -160,3 +163,35 @@ class ConvenioWebViewSet(viewsets.GenericViewSet):
         }
         response = self.responsebase.get(url=url, params=params)
         return Response(response.json(), status=response.status_code)
+
+    @action(detail=False, methods=['get'])
+    def convenio_pdf(self, request):
+        user = authenticated_user(request)
+        params = {
+            'authenticated-user': user.id_erp,
+            'idconvenio': request.GET.get('id_convenio'),
+        }
+        url = 'cmz/convenio_externo/convenio_pdf/'
+        response = self.responsebase.get(url=url, params=params)
+        if response.status_code == 200:
+            template = get_template('pdf_template/convenio_pdf_template.html')
+            context = {
+                'convenio_dict': response.json()['convenio_dict'],
+                'plazo_pago_list': response.json()['plazo_pago_list']
+            }
+            html = template.render(context)
+
+            response_pdf = HttpResponse(content_type='application/pdf')
+            response_pdf['Content-Disposition'] = 'attachment; filename="report.pdf"'
+
+            pisa_status = pisa.CreatePDF(
+                html, dest=response_pdf,
+                encoding='utf-8'
+            )
+
+            if pisa_status.err:
+                return HttpResponse('Error al generar el PDF', content_type='text/plain')
+            return response_pdf
+        else:
+            return Response({'Versat-response': response.json()},
+                            status=response.status_code)
