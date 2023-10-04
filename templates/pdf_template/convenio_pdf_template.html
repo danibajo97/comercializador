@@ -8,51 +8,87 @@
             font-family: Arial, sans-serif;
             margin: 20px;
         }
+
         h1 {
             text-align: center;
             font-size: 24px;
         }
+
         .empresa-info {
             border: 1px solid #ccc;
             padding: 10px;
             margin-bottom: 20px;
         }
+
         .plazo-pago {
             margin-bottom: 20px;
         }
+
         ul {
             list-style-type: disc;
             margin-left: 20px;
         }
+
+        table {
+            font-family: arial, sans-serif;
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        td, th {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 10px;
+        }
+
+        tr:nth-child(even) {
+            background-color: #dddddd;
+        }
     </style>
 </head>
 <body>
-    <h1>Informe de Convenio</h1>
+<h1>Informe de Convenio</h1>
 
-    <div class="empresa-info">
-        <p><strong>Número de Convenio:</strong> {{ convenio_dict.no_convenio }}</p>
-        <p><strong>Número de Contrato:</strong> {{ convenio_dict.no_contrato }}</p>
-        <p><strong>Cliente Final:</strong> {{ convenio_dict.cliente_final }}</p>
-        <p><strong>Facturado a:</strong> {{ convenio_dict.facturese_a }}</p>
-        <p><strong>Solicitado por:</strong> {{ convenio_dict.solicitado_por }}</p>
-        <p><strong>Fecha de Emisión:</strong> {{ convenio_dict.fecha_emision }}</p>
-        <p><strong>Importe:</strong> {{ convenio_dict.importe }}</p>
-        <p><strong>Cantidad de Base de Datos:</strong> {{ convenio_dict.cantidad_bd }}</p>
-    </div>
-    <br>
+<div class="empresa-info">
+    <p><strong>Número de Convenio:</strong> {{ convenio_dict.no_convenio }}
+        <br><strong>Número de Contrato:</strong> {{ convenio_dict.no_contrato }}
+        <br><strong>Cliente:</strong> {{ convenio_dict.cliente_final }}
+        <br><strong>Facturado a:</strong> {{ convenio_dict.facturese_a }}
+        <br><strong>Facturado a:</strong> {{ convenio_dict.facturese_a }}
+        <br><strong>Solicitado por:</strong> {{ convenio_dict.solicitado_por }}
+        <br><strong>Fecha de Emisión:</strong> {{ convenio_dict.fecha_emision }}
+        <br><strong>Importe:</strong> {{ convenio_dict.importe }}
+        <br><strong>Cantidad de Base de Datos:</strong> {{ convenio_dict.cantidad_bd }}
+        <br><strong>Estado:</strong> {{ convenio_dict.estado }}
+        <br><strong>Clientes Finales:</strong>
+        {% for usuario_final in convenio_dict.usuariosfinales %}
+            <br> {{ usuario_final }}
+        {% endfor %}
+    </p>
+</div>
+<br>
+
+<div class="plazo-pago">
     {% for plazo in plazo_pago_list %}
-    <div class="plazo-pago">
         <h2>Plazo de Pago {{ plazo.fecha }}:</h2>
-        <ul>
+        <table class="default">
+            <tr>
+                <th>Nombre del Servicio</th>
+                <th>Cantidad</th>
+                <th>A Facturar</th>
+                <th>Precio</th>
+            </tr>
             {% for servicio in plazo.plazo_pago_servicio_list %}
-            <li>
-                <strong>Nombre del Servicio:</strong> {{ servicio.nombre_servicio }}<br>
-                <strong>Cantidad:</strong> {{ servicio.cantidad }}<br>
-                <strong>Precio:</strong> {{ servicio.precio_servicio }}
-            </li>
+                <tr>
+                    <td>{{ servicio.nombre_servicio }}</td>
+                    <td>{{ servicio.cantidad }}</td>
+                    <td>${{ servicio.a_facturar }}</td>
+                    <td>${{ servicio.precio_servicio }}</td>
+                </tr>
             {% endfor %}
-        </ul>
-    </div>
+        </table>
     {% endfor %}
+</div>
+
 </body>
 </html>
