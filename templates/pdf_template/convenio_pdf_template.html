@@ -38,7 +38,7 @@
         td, th {
             border: 1px solid #dddddd;
             text-align: left;
-            padding: 10px;
+            padding: 5px;
         }
 
         tr:nth-child(even) {
@@ -60,7 +60,9 @@
         <br><strong>Importe:</strong> {{ convenio_dict.importe }}
         <br><strong>Cantidad de Base de Datos:</strong> {{ convenio_dict.cantidad_bd }}
         <br><strong>Estado:</strong> {{ convenio_dict.estado }}
-        <br><strong>Clientes Finales:</strong>
+    </p>
+    <p>
+        <strong>Clientes Finales:</strong>
         {% for usuario_final in convenio_dict.usuariosfinales %}
             <br> {{ usuario_final }}
         {% endfor %}
@@ -73,7 +75,7 @@
         <h2>Plazo de Pago {{ plazo.fecha }}:</h2>
         <table class="default">
             <tr>
-                <th>Nombre del Servicio</th>
+                <th style="width:50%">Nombre del Servicio</th>
                 <th>Cantidad</th>
                 <th>A Facturar</th>
                 <th>Precio</th>
